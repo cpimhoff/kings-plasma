@@ -3,6 +3,8 @@ import { Player } from "./Player";
 
 export type Board = Array<Array<BoardTile>>;
 
+/** Board coordinates are 0-indexed, starting at the bottom left corner. */
+
 export type BoardTile = {
   position: { x: number; y: number };
   pips: number;
