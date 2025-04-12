@@ -38,11 +38,11 @@ export function process(
 }
 
 function processPhase(state: GameState, action: Action, ctx: ProcessCtx) {
-  const phase = state.phase.type;
+  const phase = state.phase;
   ({
     deckSelection: processDeckSelection,
     setup: processSetup,
     play: processPlay,
     end: processEnd,
-  })[phase](state as any, action, ctx);
+  })[phase](state, action, ctx);
 }

@@ -1,12 +1,8 @@
-import { GameState, Phase, Action, Player } from "../state";
+import { GameState, Action, Player } from "../state";
 import { ProcessCtx } from "./ctx";
 
-export function processPlay(
-  state: GameState & { phase: Phase.Play },
-  action: Action,
-  ctx: ProcessCtx,
-) {
-  if (state.phase.type !== "play") return;
+export function processPlay(state: GameState, action: Action, ctx: ProcessCtx) {
+  if (state.phase !== "play") return;
   if (action.type === "playCard") processPlayCard(state, action, ctx);
   else if (action.type === "pass") processPlayPass(state, action, ctx);
 }
@@ -23,10 +19,9 @@ function processPlayPass(state: GameState, action: Action, _ctx: ProcessCtx) {
   markPlayerPassed(state, action.playerId, true);
 
   // check if all players have passed, if so, move to next phase, else to next player
-  const allPassed =
-    (state.phase as Phase.Play).passedPlayerIds.length === state.players.length;
+  const allPassed = state.players.every((p) => p.phase.play.passed);
   if (allPassed) {
-    state.phase = { type: "end", rematchPlayerIds: [] };
+    state.phase = "end";
   } else {
     nextPlayer(state);
   }
@@ -37,17 +32,13 @@ function markPlayerPassed(
   playerId: Player["id"],
   passed: boolean,
 ) {
-  const phase = state.phase as Phase.Play;
-  if (passed) {
-    if (!phase.passedPlayerIds.includes(playerId))
-      phase.passedPlayerIds.push(playerId);
-  } else {
-    phase.passedPlayerIds = phase.passedPlayerIds.filter((p) => p !== playerId);
-  }
+  const player = state.players.find((p) => p.id === playerId)!;
+  player.phase.play.passed = passed;
 }
 
 function nextPlayer(state: GameState) {
-  const phase = state.phase as Phase.Play;
-  const nextPlayer = state.players.find((p) => p.id !== phase.activePlayerId)!;
-  phase.activePlayerId = nextPlayer.id;
+  const nextPlayer = state.players.find(
+    (p) => p.id !== state.playPhaseActivePlayerId,
+  )!;
+  state.playPhaseActivePlayerId = nextPlayer.id;
 }

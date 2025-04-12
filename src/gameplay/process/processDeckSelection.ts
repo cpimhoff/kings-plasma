@@ -6,7 +6,7 @@ export function processDeckSelection(
   action: Action,
   _ctx: ProcessCtx,
 ) {
-  if (state.phase.type !== "deckSelection") return;
+  if (state.phase !== "deckSelection") return;
   if (action.type !== "deckReady") return;
 
   const { playerId, deck } = action;
@@ -15,9 +15,9 @@ export function processDeckSelection(
 
   // assign the deck to this player and mark them as readied up
   player.deck = deck;
-  state.phase.donePlayerIds.push(playerId);
+  player.phase.deckSelection.done = true;
 
   // if all players are done, move to setup phase
-  if (state.phase.donePlayerIds.length === state.players.length)
-    state.phase = { type: "setup", mulliganDonePlayerIds: [] };
+  if (state.players.every((p) => p.phase.deckSelection.done))
+    state.phase = "setup";
 }
