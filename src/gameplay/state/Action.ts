@@ -51,5 +51,6 @@ export namespace Action {
   export type Rematch = {
     type: "rematch";
     playerId: Player["id"];
+    rematch: boolean;
   };
 }

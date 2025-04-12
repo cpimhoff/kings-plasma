@@ -1,21 +1,22 @@
 import { ProcessCtx } from "./ctx";
 import { Action, GameState } from "../state";
+import { processEnterSetup } from "./processSetup";
 
 export function processDeckSelection(
   state: GameState,
   action: Action,
-  _ctx: ProcessCtx,
+  ctx: ProcessCtx,
 ) {
   if (state.phase !== "deckSelection") return;
-  if (action.type === "deckReady") processDeckReady(state, action, _ctx);
+  if (action.type === "deckReady") processDeckReady(state, action, ctx);
   else if (action.type === "deckUnready")
-    processDeckUnready(state, action, _ctx);
+    processDeckUnready(state, action, ctx);
 }
 
 function processDeckReady(
   state: GameState,
   action: Action.DeckReady,
-  _ctx: ProcessCtx,
+  ctx: ProcessCtx,
 ) {
   const { playerId, deck } = action;
   const player = state.players.find((p) => p.id === playerId);
@@ -27,7 +28,7 @@ function processDeckReady(
 
   // if all players are done, move to setup phase
   if (state.players.every((p) => p.phase.deckSelection.done))
-    state.phase = "setup";
+    processEnterSetup(state, ctx);
 }
 
 function processDeckUnready(
