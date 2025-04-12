@@ -1,5 +1,4 @@
 import { Card } from "./Card";
-import { Phase } from "./Phase";
 import { Player } from "./Player";
 
 /** An action represents a single transaction a player can dispatch
@@ -9,15 +8,8 @@ export type Action =
   | Action.Pass
   | Action.Mulligan
   | Action.DeckReady
+  | Action.DeckUnready
   | Action.Rematch;
-
-/** Mapping between phase and actions that can be performed. */
-export type PhaseAction<P extends Phase> = {
-  deckSelection: Action.DeckReady;
-  setup: Action.Mulligan;
-  play: Action.PlayCard | Action.Pass;
-  end: Action.Rematch;
-}[P["type"]];
 
 export namespace Action {
   /** Play a card from the player's hand to the board. */
@@ -46,6 +38,13 @@ export namespace Action {
     type: "deckReady";
     playerId: Player["id"];
     deck: Card[];
+  };
+
+  /** Signal that the player is no longer ready to begin the game.
+   * Their current deck should be cleared. */
+  export type DeckUnready = {
+    type: "deckUnready";
+    playerId: Player["id"];
   };
 
   /** Signal that the player is ready to begin a rematch. */

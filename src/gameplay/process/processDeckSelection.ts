@@ -7,8 +7,16 @@ export function processDeckSelection(
   _ctx: ProcessCtx,
 ) {
   if (state.phase !== "deckSelection") return;
-  if (action.type !== "deckReady") return;
+  if (action.type === "deckReady") processDeckReady(state, action, _ctx);
+  else if (action.type === "deckUnready")
+    processDeckUnready(state, action, _ctx);
+}
 
+function processDeckReady(
+  state: GameState,
+  action: Action.DeckReady,
+  _ctx: ProcessCtx,
+) {
   const { playerId, deck } = action;
   const player = state.players.find((p) => p.id === playerId);
   if (!player) return;
@@ -20,4 +28,18 @@ export function processDeckSelection(
   // if all players are done, move to setup phase
   if (state.players.every((p) => p.phase.deckSelection.done))
     state.phase = "setup";
+}
+
+function processDeckUnready(
+  state: GameState,
+  action: Action.DeckUnready,
+  _ctx: ProcessCtx,
+) {
+  const { playerId } = action;
+  const player = state.players.find((p) => p.id === playerId);
+  if (!player) return;
+
+  // clear the deck and mark them as unready
+  player.deck = [];
+  player.phase.deckSelection.done = false;
 }
