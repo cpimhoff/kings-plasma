@@ -11,13 +11,14 @@ export type GameState = {
 
 export function createGameState(): GameState {
   const players = [createPlayer("Left"), createPlayer("Right")];
+  const board = createBoard(
+    { width: 5, height: 3 },
+    { leading: players[0].id, trailing: players[1].id },
+  );
   return {
     phase: "deckSelection",
     players,
     playPhaseActivePlayerId: players[0].id,
-    board: createBoard(
-      { width: 5, height: 3 },
-      { leading: players[0].id, trailing: players[1].id },
-    ),
+    board,
   };
 }
