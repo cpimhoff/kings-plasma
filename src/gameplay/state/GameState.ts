@@ -1,12 +1,14 @@
 import { Phase } from "./Phase";
 import { Board, createBoard } from "./Board";
 import { createPlayer, Player } from "./Player";
+import { StableRandom, StableRandomState } from "@/utils/random";
 
 export type GameState = {
   phase: Phase;
   players: Player[];
   playPhaseActivePlayerId: Player["id"];
   board: Board;
+  rng: StableRandomState;
 };
 
 export function createGameState(): GameState {
@@ -20,5 +22,6 @@ export function createGameState(): GameState {
     players,
     playPhaseActivePlayerId: players[0].id,
     board,
+    rng: StableRandom.init(),
   };
 }

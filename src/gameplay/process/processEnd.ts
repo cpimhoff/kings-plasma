@@ -13,7 +13,8 @@ export function processEnd(state: GameState, action: Action, _ctx: ProcessCtx) {
     (p) => p.phase.end.requestRematch,
   );
   if (allPlayersRequestedRematch) {
-    const freshGameState = createGameState();
+    const freshGameState: Partial<GameState> = createGameState();
+    delete freshGameState.rng; // don't reset the RNG
     Object.assign(state, freshGameState);
   }
 }
