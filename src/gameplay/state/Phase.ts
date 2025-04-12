@@ -1,11 +1,6 @@
 import { Player } from "./Player";
 
-export type Phase =
-  | Phase.DeckSelection
-  | Phase.Setup
-  | Phase.Mulligan
-  | Phase.Play
-  | Phase.End;
+export type Phase = Phase.DeckSelection | Phase.Setup | Phase.Play | Phase.End;
 
 export namespace Phase {
   export type DeckSelection = {
@@ -15,11 +10,7 @@ export namespace Phase {
 
   export type Setup = {
     type: "setup";
-  };
-
-  export type Mulligan = {
-    type: "mulligan";
-    donePlayerIds: Player["id"][];
+    mulliganDonePlayerIds: Player["id"][];
   };
 
   export type Play = {
