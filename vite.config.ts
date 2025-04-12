@@ -6,7 +6,6 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import Fonts from "unplugin-fonts/vite";
-// @ts-ignore
 import imagemin from "unplugin-imagemin/vite";
 import { compression } from "vite-plugin-compression2";
 import Inspect from "vite-plugin-inspect";
@@ -26,7 +25,7 @@ export default defineConfig({
     AutoImport({
       imports: ["react", "react-router"],
       dts: "./auto-imports.d.ts",
-      eslintrc: { filepath: "./eslint.config.js" },
+      eslintrc: { filepath: "./.eslint.auto-import.json" },
       dirs: ["./src/components/ui"],
     }),
   ],

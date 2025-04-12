@@ -1,33 +1,25 @@
-import js from '@eslint/js';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import js from "@eslint/js";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import autoImportRules from "./.eslint.auto-import.json" assert { type: "json" };
 
 export default tseslint.config(
-  { ignores: ['dist', 'dev-dist'] },
+  { ignores: ["dist", "dev-dist"] },
+  js.configs.recommended,
+  tseslint.configs.recommended,
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-      './.eslintrc-auto-import.json',
-    ],
-    files: ['**/src/**/*.{ts,tsx}'],
+    files: ["**/src/**/*.{ts,tsx}"],
     languageOptions: {
+      parser: tseslint.parser,
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: { ...globals.browser, ...autoImportRules.globals },
     },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
+    plugins: { "react-hooks": reactHooks },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      '@typescript-eslint/no-empty-object-type': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      "@typescript-eslint/no-namespace": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
     },
   },
 );
