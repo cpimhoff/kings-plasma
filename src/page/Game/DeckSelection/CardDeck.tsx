@@ -1,24 +1,34 @@
-import { CardMultiSet } from './CardMultiSet';
+import { Card as ICard } from '@/gameplay/state/Card';
+import CardMultiSet from './CardMultiSet';
+import SelectableCardWrapper from './SelectableCardWrapper';
 import SmallCard from './SmallCard';
 
 interface Props {
   draftPlayerDeck: CardMultiSet;
+  setPreviewCard: (card: ICard) => void,
+  onClickCard: (card: ICard, count: number) => void;
 };
-const CardDeck = ({ draftPlayerDeck }: Props) => {
+const CardDeck = ({
+  draftPlayerDeck,
+  setPreviewCard,
+  onClickCard,
+}: Props) => {
   return (
     <div>
-      <h2> deck: </h2>
+      <h2> deck (count: {draftPlayerDeck.size()}) </h2>
       <div className="flex flex-wrap w-300 h-100">
-        { Object.keys(draftPlayerDeck.cardsById).map((cardId) => {
-          const card = draftPlayerDeck.cardsById[cardId];
-          const count = draftPlayerDeck.cardCountById[cardId];
-          return (
-            <div key={cardId} className="w-40">
-              <SmallCard {...card} />
-              { `x${count}` }
-            </div>
-          );
-        }) }
+        { draftPlayerDeck.asArray()
+            .map(({ card, count }) => (
+              <SelectableCardWrapper
+                key={card.id}
+                count={count}
+                onHover={() => setPreviewCard(card)}
+                onClick={() => onClickCard(card, count)}
+              >
+                <SmallCard {...card} />
+              </SelectableCardWrapper>
+            )
+        ) }
       </div>
     </div>
   );

@@ -1,41 +1,62 @@
 import { create } from 'zustand';
-import { produce } from 'immer';
 import { Card } from '@/gameplay/state/Card';
 import { Player, createPlayer } from '@/gameplay/state/Player';
-import { CardMultiSet, createEmpty, addCardToMultiSet } from './CardMultiSet';
+import CardMultiSet from './CardMultiSet';
 
 interface DeckSelectionStore {
   players: Player[],
+  draftPlayerName: string,
   draftPlayerDeck: CardMultiSet,
 
-  addPlayerFromDraft: (name: string) => void;
+  setDraftPlayerName: (name: string) => void;
+  addPlayerFromDraft: () => void;
   addCardToDraftPlayerDeck: (card: Card) => void;
+  removeCardFromDraftPlayerDeck: (card: Card) => void;
 };
 
 export const useDeckSelectionStore = create<DeckSelectionStore>((set) => ({
   players: [],
-  draftPlayerDeck: createEmpty(),
+  draftPlayerName: '',
+  draftPlayerDeck: new CardMultiSet(),
 
-  addPlayerFromDraft: (name) => set((state) => {
-    const player = createPlayer(name);
-    player.deck = createDeckFromDraft(state.draftPlayerDeck);
+  setDraftPlayerName: (newName) => set(() => ({
+    draftPlayerName: newName,
+  })),
+
+  addCardToDraftPlayerDeck: (card) => set((state) => {
+    const newDraftPlayerDeck = state.draftPlayerDeck.clone();
+    newDraftPlayerDeck.addCard(card);
     return {
-      players: [...state.players, player],
-      draftPlayerDeck: createEmpty(),
+      draftPlayerDeck: newDraftPlayerDeck,
     };
   }),
 
-  addCardToDraftPlayerDeck: (card) => set((state) => {
-    return produce(state, draft => {
-      addCardToMultiSet(card, draft.draftPlayerDeck);
-    });
+  removeCardFromDraftPlayerDeck: (card) => set((state) => {
+    const newDraftPlayerDeck = state.draftPlayerDeck.clone();
+    newDraftPlayerDeck.removeCard(card);
+    return {
+      draftPlayerDeck: newDraftPlayerDeck,
+    };
   }),
+
+  addPlayerFromDraft: () => set((state) => {
+    const player = createPlayer(state.draftPlayerName);
+    player.deck = createDeckFromDraft(state.draftPlayerDeck);
+    return {
+      players: [...state.players, player],
+      draftPlayerName: '',
+      draftPlayerDeck: new CardMultiSet(),
+    };
+  }),
+
 }));
 
 function createDeckFromDraft(draftDeck: CardMultiSet) {
   const deck: Player['deck']  = [];
-  Object.keys(draftDeck).forEach((cardId) => {
-    deck.push(draftDeck.cardsById[cardId]);
+  draftDeck.asArray().forEach(({ card, count }) => {
+    new Array(count).fill(0).forEach(() => {
+      deck.push(card);
+    });
   });
   return deck;
 };

@@ -1,25 +1,23 @@
-import { useMemo, useCallback, ReactNode } from 'react';
+import { useMemo, ReactNode } from 'react';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import { useCardLibraryStore } from './store';
 import SmallCard from '../SmallCard';
-
-type CardNodesById = Record<ICard['id'], ReactNode>;
+import SelectableCardWrapper from '../SelectableCardWrapper';
 
 interface Props {
-  addCardToDeck: (card: ICard) => void,
+  onClickCard: (card: ICard, count: number) => void,
   setPreviewCard: (card: ICard) => void,
 };
 const CardLibrary = ({
-  addCardToDeck,
+  onClickCard,
   setPreviewCard,
 }: Props) => {
-  const { cardLibrary, getCardsWithCounts, takeCard } = useCardLibraryStore();
-  const cardNodesById = useMemo<CardNodesById>(() => (
-    Object.keys(cardLibrary.cardsById).map((cardId) => {
-      const cardData = cardLibrary.cardsById[cardId];
-      const cardNode = <SmallCard {...cardData} />;
+  const { cardLibrary } = useCardLibraryStore();
+  const allCardNodesById = useMemo<Record<ICard['id'], ReactNode>>(() => (
+    Object.values(cardLibrary.getCardsById()).map((card) => {
+      const cardNode = <SmallCard {...card} />;
       return {
-        id: cardId,
+        id: card.id,
         node: cardNode,
       };
     }).reduce((accum, curr) => ({
@@ -27,27 +25,20 @@ const CardLibrary = ({
       [curr.id]: curr.node,
     }), {})
   ), []);
-  const handleCardClick = useCallback((card: ICard) => {
-    takeCard(card);
-    addCardToDeck(card);
-  }, []);
   return (
     <div>
       <h2> available cards </h2>
       <div className="flex flex-wrap overflow-auto">
-        { getCardsWithCounts().map(({ card, count }) => {
-          return (
-            <div
+        { cardLibrary.asArray({ includeZeroes: true }).map(({ card, count }) => (
+            <SelectableCardWrapper
               key={card.id}
-              className="min-w-30 m-4 hover:bg-slate-200 hover:cursor-pointer"
-              onClick={() => handleCardClick(card)}
-              onMouseOver={() => setPreviewCard(card)}
+              count={count}
+              onClick={() => onClickCard(card, count)}
+              onHover={() => setPreviewCard(card)}
             >
-              { cardNodesById[card.id] }
-              { `x${count}` }
-            </div>
-          );
-        })}
+              { allCardNodesById[card.id] }
+            </SelectableCardWrapper>
+        ))}
       </div>
     </div>
   );

@@ -1,29 +1,70 @@
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useDeckSelectionStore } from './store';
+import { useCardLibraryStore } from './CardLibrary/store';
+import { Input } from '@/components/ui/input';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import CardDeck from './CardDeck';
 import CardPreview from './CardPreview';
 import CardLibrary from './CardLibrary/CardLibrary';
 
-const CreatePlayer = () => {
-  const [ draftPlayerDeck, addCardToDraftPlayerDeck ] = useDeckSelectionStore(
-    useShallow(state => [state.draftPlayerDeck, state.addCardToDraftPlayerDeck]));
+interface Props {
+    playerDirection: string;
+};
+const CreatePlayer = ({ playerDirection }: Props) => {
+  const {
+    draftPlayerName,
+    draftPlayerDeck,
+    setDraftPlayerName,
+    addCardToDraftPlayerDeck,
+    removeCardFromDraftPlayerDeck
+  } = useDeckSelectionStore(
+    useShallow((state) => ({
+      draftPlayerName: state.draftPlayerName,
+      draftPlayerDeck: state.draftPlayerDeck,
+      setDraftPlayerName: state.setDraftPlayerName,
+      addCardToDraftPlayerDeck: state.addCardToDraftPlayerDeck,
+      removeCardFromDraftPlayerDeck: state.removeCardFromDraftPlayerDeck,
+    })));
+  const {
+    takeCard: removeCardFromLibrary,
+    replaceCard: addCardToLibrary,
+  } = useCardLibraryStore();
+  const onClickLibraryCard = useCallback((card: ICard, count: number) => {
+    if (count > 0) {
+      removeCardFromLibrary(card);
+      addCardToDraftPlayerDeck(card);
+    }
+  }, []);
+  const onClickDeckCard = useCallback((card: ICard, count: number) => {
+    if (count > 0) {
+      addCardToLibrary(card);
+      removeCardFromDraftPlayerDeck(card);
+    }
+  }, []);
   const [previewCard, setPreviewCard] = useState<ICard | null>(null);
   return (
     <div>
       <div className="flex">
         <div>
           <div>
-            Enter name: <input></input>
+            <Input
+              placeholder={`${playerDirection} player name`}
+              value={draftPlayerName}
+              onChange={(e) => setDraftPlayerName(e.target.value)}
+            />
           </div>
-          <CardDeck draftPlayerDeck={draftPlayerDeck} />
+          <CardDeck
+            draftPlayerDeck={draftPlayerDeck}
+            onClickCard={onClickDeckCard}
+            setPreviewCard={setPreviewCard}
+          />
         </div>
         <CardPreview previewCard={previewCard} />
       </div>
       <CardLibrary
-          addCardToDeck={addCardToDraftPlayerDeck}
-          setPreviewCard={setPreviewCard}
+        onClickCard={onClickLibraryCard}
+        setPreviewCard={setPreviewCard}
       />
     </div>
   );
