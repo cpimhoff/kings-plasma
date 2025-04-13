@@ -14,6 +14,12 @@ export type Card = {
 
   // effects associated with this card
   effects: CardEffect[];
+
+  // readable description of special effects
+  description?: string | undefined,
+
+  // if true, limit one per deck
+  isLegendary: boolean,
 };
 
 export type CardGridCell = {

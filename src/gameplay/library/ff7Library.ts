@@ -18,6 +18,7 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const RiotTrooper: Card = {
@@ -34,6 +35,7 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Grenadier: Card = {
@@ -46,6 +48,8 @@ export namespace FF7Library {
         CardEffect.addPower([{ dx: 2, dy: 0 }], -4, { opponent: true }),
       ),
     ],
+    description: `When played, lower the power of enemy cards on affected tiles by 4.`,
+    isLegendary: false,
   };
 
   export const JUnitSweeper: Card = {
@@ -61,6 +65,7 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const QueenBee: Card = {
@@ -74,6 +79,7 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Toxirat: Card = {
@@ -93,6 +99,8 @@ export namespace FF7Library {
         }),
       ),
     ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 3.`,
+    isLegendary: false,
   };
 
   export const Levrikon: Card = {
@@ -106,6 +114,7 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const GrasslandsWolf: Card = {
@@ -119,6 +128,7 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Mu: Card = {
@@ -135,6 +145,8 @@ export namespace FF7Library {
         allied: true,
       }),
     ],
+    description: `Raise the power of allied cards on affected tiles by 1 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const Mandragora: Card = {
@@ -159,9 +171,12 @@ export namespace FF7Library {
               { dx: 1, dy: 0 },
             ]),
           ],
+          isLegendary: false,
         }),
       ),
     ],
+    description: `When played, add Mandragora Minion to your hand.`,
+    isLegendary: false,
   };
 
   export const Elphadunk: Card = {
@@ -176,6 +191,7 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Cactuar: Card = {
@@ -192,6 +208,8 @@ export namespace FF7Library {
         allied: true,
       }),
     ],
+    description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const CrystallineCrab: Card = {
@@ -209,6 +227,8 @@ export namespace FF7Library {
         allied: true,
       }),
     ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const Quetzalcoatl: Card = {
@@ -224,6 +244,7 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Zu: Card = {
@@ -239,6 +260,7 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const DevilRider: Card = {
@@ -254,6 +276,7 @@ export namespace FF7Library {
         { dx: -2, dy: 1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Screamer: Card = {
@@ -273,6 +296,7 @@ export namespace FF7Library {
         { dx: -1, dy: 0 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Flan: Card = {
@@ -287,6 +311,7 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Crawler: Card = {
@@ -302,6 +327,7 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Archdragon: Card = {
@@ -321,6 +347,8 @@ export namespace FF7Library {
         }),
       ),
     ],
+    description: `When played, lower the power of enemy cards on affected tiles by 3.`,
+    isLegendary: false,
   };
 
   export const Ogre: Card = {
@@ -336,6 +364,7 @@ export namespace FF7Library {
         { dx: 1, dy: -2 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Deathwheel: Card = {
@@ -358,6 +387,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 3.`,
+    isLegendary: false,
   };
 
   export const Fleetwing: Card = {
@@ -373,6 +404,7 @@ export namespace FF7Library {
         { dx: -2, dy: -2 },
       ]),
     ],
+    isLegendary: false,
   };
 
   export const Zemzelett: Card = {
@@ -390,6 +422,8 @@ export namespace FF7Library {
         allied: true,
       }),
     ],
+    description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const Ignilisk: Card = {
@@ -411,6 +445,8 @@ export namespace FF7Library {
         { allied: true },
       ),
     ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const Capparwire: Card = {
@@ -435,6 +471,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
+    isLegendary: false,
   };
 
   export const MindFlayer: Card = {
@@ -459,6 +497,8 @@ export namespace FF7Library {
         { allied: true, opponent: true },
       ),
     ],
+    description: `Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const Scrutineye: Card = {
@@ -480,6 +520,8 @@ export namespace FF7Library {
         { allied: true, opponent: true },
       ),
     ],
+    description: `Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const HellRiderII: Card = {
@@ -507,6 +549,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When played, lower the power of enemy cards on affected tiles by 3.`,
+    isLegendary: false,
   };
 
   export const Flametrooper: Card = {
@@ -537,6 +581,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 3.`,
+    isLegendary: false,
   };
 
   export const Spearhawk: Card = {
@@ -554,6 +600,8 @@ export namespace FF7Library {
         allied: true,
       }),
     ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const SeaDevil: Card = {
@@ -572,6 +620,8 @@ export namespace FF7Library {
         actions: [{ id: "addPower", self: true, amount: +1 }],
       },
     ],
+    description: `When allied cards are played from hand, raise this card's power by 1.`,
+    isLegendary: false,
   };
 
   export const Shoalopod: Card = {
@@ -590,6 +640,8 @@ export namespace FF7Library {
         allied: true,
       }),
     ],
+    description: `Raise the power of allied cards on affected tiles by 4 while this card is in play.`,
+    isLegendary: false,
   };
 
   export const CrownLance: Card = {
@@ -614,6 +666,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 2.`,
+    isLegendary: false,
   };
 
   export const TonberryKing: Card = {
@@ -628,6 +682,8 @@ export namespace FF7Library {
         actions: [{ id: "addPower", self: true, amount: +2 }],
       },
     ],
+    description: `When allied cards are destroyed, raise this card's power by 2.`,
+    isLegendary: false,
   };
 
   export const SandhogPie: Card = {
@@ -651,6 +707,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When destroyed, raise the power of allied cards on affected tile by 3.`,
+    isLegendary: false,
   };
 
   export const Bloatfloat: Card = {
@@ -670,6 +728,8 @@ export namespace FF7Library {
         }),
       ),
     ],
+    description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 4.`,
+    isLegendary: false,
   };
 
   export const Bagnadrana: Card = {
@@ -687,6 +747,8 @@ export namespace FF7Library {
         actions: [{ id: "addPower", self: true, amount: +1 }],
       },
     ],
+    description: `When enemy cards are played from hand, raise this card's power by 1.`,
+    isLegendary: false,
   };
 
   export const Cockatrice: Card = {
@@ -701,6 +763,8 @@ export namespace FF7Library {
         tiles: [{ dx: 1, dy: 0 }],
       }),
     ],
+    description: `When played, destroy allied and enemy cards on affected tiles.`,
+    isLegendary: false,
   };
 
   export const Heatseeker: Card = {
@@ -732,11 +796,14 @@ export namespace FF7Library {
               { dx: 0, dy: -1 },
             ]),
           ],
+          isLegendary: false,
         },
         player: "allied",
         into: "hand",
       }),
     ],
+    description: `When destroyed, add Heatseeker Minion to your hand.`,
+    isLegendary: false,
   };
 
   export const Bomb: Card = {
@@ -771,6 +838,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 4.`,
+    isLegendary: false,
   };
 
   export const Thug: Card = {
@@ -786,6 +855,8 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
     ],
+    description: `When enemy cards are destroyed, raise this card's power by 1.`,
+    isLegendary: false,
   };
 
   export const DeathClaw: Card = {
@@ -803,6 +874,7 @@ export namespace FF7Library {
         actions: [{ id: "addPower", self: true, amount: +1 }],
       },
     ],
+    isLegendary: false,
   };
 
   export const Landworm: Card = {
@@ -821,6 +893,8 @@ export namespace FF7Library {
         actions: [{ id: "addPower", self: true, amount: +2 }],
       },
     ],
+    description: `When enemy cards are destroyed, raise this card's power by 2.`,
+    isLegendary: false,
   };
 
   export const Sandspitter: Card = {
@@ -854,6 +928,8 @@ export namespace FF7Library {
         ),
       ),
     ],
+    description: `When enemy cards are destroyed, raise this card's power by 2.`,
+    isLegendary: false,
   };
 
   // To be continued...
