@@ -1,6 +1,7 @@
 import { GameState, Action, Player } from "../state";
 import { ProcessCtx } from "./ctx";
 import { discardCardFromHand, drawCardToHand } from "./draw";
+import { processCardEvents } from "./processCardEvents";
 
 export function processPlay(state: GameState, action: Action, ctx: ProcessCtx) {
   if (state.phase !== "play") return;
@@ -11,7 +12,7 @@ export function processPlay(state: GameState, action: Action, ctx: ProcessCtx) {
 function processPlayCard(
   state: GameState,
   action: Action.PlayCard,
-  _ctx: ProcessCtx,
+  ctx: ProcessCtx,
 ) {
   const player = state.players.find((p) => p.id === action.playerId)!;
   const card = discardCardFromHand(player, action.fromHandIndex);
@@ -19,7 +20,7 @@ function processPlayCard(
 
   // put the card on the board
   state.board[action.toBoardPosition.x][action.toBoardPosition.y].card = card;
-  // TODO... run effects, etc.
+  processCardEvents(state, { type: "playCard", action }, ctx);
 
   markPlayerPassed(state, action.playerId, false);
   nextPlayer(state);
