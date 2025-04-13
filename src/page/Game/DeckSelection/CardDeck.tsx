@@ -1,8 +1,8 @@
-import { DraftPlayerDeck } from './DraftPlayerDeck';
+import { CardMultiSet } from './CardMultiSet';
 import SmallCard from './SmallCard';
 
 interface Props {
-  draftPlayerDeck: DraftPlayerDeck;
+  draftPlayerDeck: CardMultiSet;
 };
 const CardDeck = ({ draftPlayerDeck }: Props) => {
   return (

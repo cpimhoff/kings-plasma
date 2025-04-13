@@ -4,7 +4,7 @@ import { useDeckSelectionStore } from './store';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import CardDeck from './CardDeck';
 import CardPreview from './CardPreview';
-import CardLibrary from './CardLibrary';
+import CardLibrary from './CardLibrary/CardLibrary';
 
 const CreatePlayer = () => {
   const [ draftPlayerDeck, addCardToDraftPlayerDeck ] = useDeckSelectionStore(

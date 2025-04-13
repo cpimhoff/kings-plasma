@@ -2,11 +2,11 @@ import { create } from 'zustand';
 import { produce } from 'immer';
 import { Card } from '@/gameplay/state/Card';
 import { Player, createPlayer } from '@/gameplay/state/Player';
-import { DraftPlayerDeck, emptyDeck } from './DraftPlayerDeck';
+import { CardMultiSet, createEmpty, addCardToMultiSet } from './CardMultiSet';
 
 interface DeckSelectionStore {
   players: Player[],
-  draftPlayerDeck: DraftPlayerDeck,
+  draftPlayerDeck: CardMultiSet,
 
   addPlayerFromDraft: (name: string) => void;
   addCardToDraftPlayerDeck: (card: Card) => void;
@@ -14,30 +14,25 @@ interface DeckSelectionStore {
 
 export const useDeckSelectionStore = create<DeckSelectionStore>((set) => ({
   players: [],
-  draftPlayerDeck: emptyDeck(),
+  draftPlayerDeck: createEmpty(),
 
   addPlayerFromDraft: (name) => set((state) => {
     const player = createPlayer(name);
     player.deck = createDeckFromDraft(state.draftPlayerDeck);
     return {
       players: [...state.players, player],
-      draftPlayerDeck: emptyDeck(),
+      draftPlayerDeck: createEmpty(),
     };
   }),
 
   addCardToDraftPlayerDeck: (card) => set((state) => {
     return produce(state, draft => {
-      if (draft.draftPlayerDeck.cardsById[card.id]) {
-        draft.draftPlayerDeck.cardCountById[card.id]++;
-      } else {
-        draft.draftPlayerDeck.cardsById[card.id] = card;
-        draft.draftPlayerDeck.cardCountById[card.id] = 1;
-      }
+      addCardToMultiSet(card, draft.draftPlayerDeck);
     });
   }),
 }));
 
-function createDeckFromDraft(draftDeck) {
+function createDeckFromDraft(draftDeck: CardMultiSet) {
   const deck: Player['deck']  = [];
   Object.keys(draftDeck).forEach((cardId) => {
     deck.push(draftDeck.cardsById[cardId]);
