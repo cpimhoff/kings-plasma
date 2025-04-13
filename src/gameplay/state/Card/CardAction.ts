@@ -1,4 +1,5 @@
 import { Card } from "./Card";
+import { Vector2 } from '@/utils/vector';
 
 export type CardAction =
   | CardAction.AddControlledPips
@@ -12,7 +13,7 @@ export namespace CardAction {
   export type AddControlledPips = {
     id: "addControlledPips";
     // the tiles to add pips to
-    tiles: Array<{ dx: number; dy: number }>;
+    tiles: Array<Vector2>;
     // the amount of pips to add to a controlled tile; typically 1
     amount: number;
   };
@@ -27,7 +28,7 @@ export namespace CardAction {
     // if true, add power to opponent cards
     opponent?: boolean;
     // if set, add power only to played cards in these relative tiles
-    tiles?: Array<{ dx: number; dy: number }>;
+    tiles?: Array<Vector2>;
     // the amount of power to add -- can be negative for debuffs
     amount: number;
   };
@@ -41,7 +42,7 @@ export namespace CardAction {
     // if true, destroy opponent cards
     opponent?: boolean;
     // destroy the card at these locations
-    tiles: Array<{ dx: number; dy: number }>;
+    tiles: Array<Vector2>;
   };
 
   /** Create a card and add it to the target player's hand. */
