@@ -1,6 +1,6 @@
 import { Phase } from "./Phase";
 import { Board, createBoard } from "./Board";
-import { createPlayer, Player } from "./Player";
+import { Player } from "./Player";
 import { StableRandom, StableRandomState } from "@/utils/random";
 
 export type GameState = {
@@ -11,14 +11,14 @@ export type GameState = {
   rng: StableRandomState;
 };
 
-export function createGameState(): GameState {
-  const players = [createPlayer("Left"), createPlayer("Right")];
+export function resetGameState(oldGameState: GameState): GameState {
+  const { players } = oldGameState;
   const board = createBoard(
     { width: 5, height: 3 },
     { leading: players[0].id, trailing: players[1].id },
   );
   return {
-    phase: "deckSelection",
+    phase: "setup",
     players,
     playPhaseActivePlayerId: players[0].id,
     board,

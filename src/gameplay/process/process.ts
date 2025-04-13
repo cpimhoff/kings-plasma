@@ -2,7 +2,6 @@ import { createDraft, finishDraft, current as snapshotDraft } from "immer";
 
 import { Action, GameState } from "../state";
 import { ProcessCtx, ProcessKeyframe, ProcessResult } from "./ctx";
-import { processDeckSelection } from "./processDeckSelection";
 import { processSetup } from "./processSetup";
 import { processPlay } from "./processPlay";
 import { processEnd } from "./processEnd";
@@ -40,7 +39,6 @@ export function process(
 function processPhase(state: GameState, action: Action, ctx: ProcessCtx) {
   const phase = state.phase;
   ({
-    deckSelection: processDeckSelection,
     setup: processSetup,
     play: processPlay,
     end: processEnd,

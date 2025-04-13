@@ -1,5 +1,5 @@
 import { ProcessCtx } from "./ctx";
-import { Action, createGameState, GameState } from "../state";
+import { Action, resetGameState, GameState } from "../state";
 
 export function processEnd(state: GameState, action: Action, _ctx: ProcessCtx) {
   if (state.phase !== "end") return;
@@ -13,7 +13,7 @@ export function processEnd(state: GameState, action: Action, _ctx: ProcessCtx) {
     (p) => p.phase.end.requestRematch,
   );
   if (allPlayersRequestedRematch) {
-    const freshGameState: Partial<GameState> = createGameState();
+    const freshGameState: Partial<GameState> = resetGameState(state);
     delete freshGameState.rng; // don't reset the RNG
     Object.assign(state, freshGameState);
   }
