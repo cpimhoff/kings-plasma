@@ -1,7 +1,11 @@
+import { useMemo } from 'react';
 import { Card as ICard, getGridForCard, getCardHasSpecialEffect } from '@/gameplay/state/Card/Card';
 import CardGrid from './CardGrid';
 
 const Card = (card: ICard) => {
+  const [grid, hasSpecialEffect] = useMemo(() => {
+    return [getGridForCard(card), getCardHasSpecialEffect(card)];
+  }, [card]);
   return (
     <div className="w-full border rounded-md">
       <div className="flex justify-between">
@@ -9,9 +13,9 @@ const Card = (card: ICard) => {
         <span> { card.power } </span>
       </div>
       <div>
-        <CardGrid grid={getGridForCard(card)} />
+        <CardGrid grid={grid} />
       </div>
-      <div> { getCardHasSpecialEffect(card) ? "*" : null } { card.name } </div>
+      <div> { hasSpecialEffect ? "*" : null } { card.name } </div>
     </div>
   );
 }
