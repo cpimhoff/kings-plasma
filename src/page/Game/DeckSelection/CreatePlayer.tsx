@@ -1,7 +1,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useDeckSelectionStore } from './store';
 import CardLibrary from './CardLibrary';
-import Card from '@/components/Card/Card';
+import FullCard from '@/components/Card/FullCard';
 
 const CreatePlayer = () => {
   const [ draftPlayer, addCardToDraftPlayerDeck ] = useDeckSelectionStore(
@@ -19,7 +19,7 @@ const CreatePlayer = () => {
         <div className="flex">
           { draftPlayer.deck.map(card => (
             <div key={card.id}>
-              <Card {...card} />
+              <FullCard {...card} />
             </div>
           )) }
         </div>

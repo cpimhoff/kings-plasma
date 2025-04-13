@@ -22,7 +22,7 @@ export type CardGridCell = {
   affects: boolean,
 };
 export type CardGrid = CardGridCell[][];
-export const getGridForCard: (card: Card) => CardGridCell[][] = (card) => {
+export const getGridForCardEffects: (effects: Card['effects']) => CardGridCell[][] = (effects) => {
   const templateCell = {
     origin: false,
     claims: false,
@@ -34,7 +34,7 @@ export const getGridForCard: (card: Card) => CardGridCell[][] = (card) => {
     }))));
   const origin: Vector2 = { dx: 2, dy: 2};
   grid[origin.dy][origin.dx].origin = true;
-  card.effects.forEach((effect) => {
+  effects.forEach((effect) => {
     effect.actions.forEach((action) => {
         switch (action.id) {
           case 'addControlledPips':
@@ -59,9 +59,9 @@ export const getGridForCard: (card: Card) => CardGridCell[][] = (card) => {
   return grid;
 };
 
-export const getCardHasSpecialEffect = (card: Card) => {
+export const getCardHasSpecialEffect = (effects: Card['effects']) => {
   let ret = false;
-  card.effects.forEach((effect) => {
+  effects.forEach((effect) => {
     effect.actions.forEach((action) => {
       switch (action.id) {
         case 'addControlledPips': {

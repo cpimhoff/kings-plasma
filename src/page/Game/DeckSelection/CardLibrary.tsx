@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { FF7_LIBRARY } from '@/gameplay/library/ff7Library';
-import Card from '@/components/Card/Card';
+import FullCard from '@/components/Card/FullCard';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 
 interface Props {
@@ -10,7 +10,7 @@ const CardLibrary = ({ addCardToDeck }: Props) => {
   const allCards = useMemo(() => {
     return FF7_LIBRARY.map(card => (
       <div key={card.id} className="min-w-30 m-4 hover:bg-slate-200 hover:cursor-pointer" onClick={() => addCardToDeck(card)}>
-        <Card {...card} />
+        <FullCard {...card} />
       </div>
     ));
   }, [FF7_LIBRARY]);

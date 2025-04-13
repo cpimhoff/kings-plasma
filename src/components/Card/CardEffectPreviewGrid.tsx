@@ -1,10 +1,11 @@
-import { CardGrid as ICardGrid, CardGridCell } from '@/gameplay/state/Card';
+import { Card as ICard, getGridForCardEffects, CardGridCell } from '@/gameplay/state/Card';
 import { cn } from '@/utils/cn';
 
-interface Props {
-  grid: ICardGrid;
-}
-const CardGrid = ({ grid }: Props) => {
+type Props = Pick<ICard, 'effects'>;
+const CardEffectPreviewGrid = ({ effects }: Props) => {
+  const grid = useMemo(() => {
+    return getGridForCardEffects(effects);
+  }, [effects]);
   return (
     <div className="w-full border border-2 border-black grid grid-rows-5 grid-cols-5">
       { grid.map((row, i) => (
@@ -27,4 +28,4 @@ function classesForCell(cell: CardGridCell) {
   };
 }
 
-export default CardGrid;
+export default CardEffectPreviewGrid;
