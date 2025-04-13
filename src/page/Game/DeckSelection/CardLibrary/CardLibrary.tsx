@@ -5,10 +5,12 @@ import SmallCard from '../SmallCard';
 import SelectableCardWrapper from '../SelectableCardWrapper';
 
 interface Props {
-  onClickCard: (card: ICard, count: number) => void,
-  setPreviewCard: (card: ICard) => void,
+  canClickCard: boolean;
+  onClickCard: (card: ICard) => void;
+  setPreviewCard: (card: ICard) => void;
 };
 const CardLibrary = ({
+  canClickCard,
   onClickCard,
   setPreviewCard,
 }: Props) => {
@@ -33,7 +35,8 @@ const CardLibrary = ({
             <SelectableCardWrapper
               key={card.id}
               count={count}
-              onClick={() => onClickCard(card, count)}
+              enabled={canClickCard}
+              onClick={() => count > 0 && onClickCard(card)}
               onHover={() => setPreviewCard(card)}
             >
               { allCardNodesById[card.id] }

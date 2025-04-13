@@ -1,22 +1,36 @@
 import { useMemo } from 'react';
 import { useDeckSelectionStore } from './store';
+import { useGameplayStore } from '@/gameplay/store';
+import { createInitialState } from '@/gameplay/state/GameState';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import CreatePlayer from './CreatePlayer';
 
 const DeckSelection = () => {
-  const [ players, addPlayerFromDraft ] = useDeckSelectionStore(
-    useShallow(state => [state.players, state.addPlayerFromDraft]));
-  const playerDirection = useMemo(() => {
-    return players.length === 0 ? 'Left' : 'Right';
-  }, [players.length]);
+  const [ players ] = useDeckSelectionStore(
+    useShallow(state => [state.players]));
+  const [playerIdx, playerDirection, bothReady] = useMemo(() => {
+    const idx = players.length;
+    const dir = idx === 0 ? 'Left' : 'Right';
+    return [idx, dir, idx === 2]
+  }, [players]);
+  const { beginGame } = useGameplayStore();
+  const onClickStartGame = useCallback(() => {
+    const initialState = createInitialState(players);
+    beginGame(initialState);
+  }, [players]);
   return (
     <div>
       <div>
-        <CreatePlayer playerDirection={playerDirection} />
-      </div>
-      <div>
-        <Button onClick={() => addPlayerFromDraft()}> Next </Button>
+        { !bothReady && (
+          <div>
+            {`Player ${playerIdx} (${playerDirection}):`}
+            <CreatePlayer />
+          </div>
+        ) }
+        { bothReady && (
+          <Button onClick={() => onClickStartGame()}> Start game </Button>
+        ) }
       </div>
     </div>
   );

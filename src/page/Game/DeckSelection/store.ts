@@ -16,7 +16,7 @@ interface DeckSelectionStore {
 
 export const useDeckSelectionStore = create<DeckSelectionStore>((set) => ({
   players: [],
-  draftPlayerName: '',
+  draftPlayerName: 'Lefty',
   draftPlayerDeck: new CardMultiSet(),
 
   setDraftPlayerName: (newName) => set(() => ({
@@ -44,7 +44,7 @@ export const useDeckSelectionStore = create<DeckSelectionStore>((set) => ({
     player.deck = createDeckFromDraft(state.draftPlayerDeck);
     return {
       players: [...state.players, player],
-      draftPlayerName: '',
+      draftPlayerName: 'Righty',
       draftPlayerDeck: new CardMultiSet(),
     };
   }),

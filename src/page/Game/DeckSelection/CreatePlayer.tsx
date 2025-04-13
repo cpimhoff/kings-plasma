@@ -4,20 +4,23 @@ import { useDeckSelectionStore } from './store';
 import { useCardLibraryStore } from './CardLibrary/store';
 import { Input } from '@/components/ui/input';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
+import { Button } from '@/components/ui/button';
 import CardDeck from './CardDeck';
 import CardPreview from './CardPreview';
 import CardLibrary from './CardLibrary/CardLibrary';
 
-interface Props {
-    playerDirection: string;
-};
-const CreatePlayer = ({ playerDirection }: Props) => {
+// TODO put this somewhere good
+const MIN_CARDS_IN_DECK = 1;
+const MAX_CARDS_IN_DECK = 15;
+
+const CreatePlayer = () => {
   const {
     draftPlayerName,
     draftPlayerDeck,
     setDraftPlayerName,
     addCardToDraftPlayerDeck,
-    removeCardFromDraftPlayerDeck
+    removeCardFromDraftPlayerDeck,
+    addPlayerFromDraft,
   } = useDeckSelectionStore(
     useShallow((state) => ({
       draftPlayerName: state.draftPlayerName,
@@ -25,22 +28,30 @@ const CreatePlayer = ({ playerDirection }: Props) => {
       setDraftPlayerName: state.setDraftPlayerName,
       addCardToDraftPlayerDeck: state.addCardToDraftPlayerDeck,
       removeCardFromDraftPlayerDeck: state.removeCardFromDraftPlayerDeck,
+      addPlayerFromDraft: state.addPlayerFromDraft,
     })));
+  const deckSize = useMemo(() => draftPlayerDeck.size(), [draftPlayerDeck]);
   const {
     takeCard: removeCardFromLibrary,
     replaceCard: addCardToLibrary,
+    reset: resetLibrary,
   } = useCardLibraryStore();
-  const onClickLibraryCard = useCallback((card: ICard, count: number) => {
-    if (count > 0) {
-      removeCardFromLibrary(card);
-      addCardToDraftPlayerDeck(card);
-    }
+  const onClickLibraryCard = useCallback((card: ICard) => {
+    removeCardFromLibrary(card);
+    addCardToDraftPlayerDeck(card);
   }, []);
-  const onClickDeckCard = useCallback((card: ICard, count: number) => {
-    if (count > 0) {
-      addCardToLibrary(card);
-      removeCardFromDraftPlayerDeck(card);
-    }
+  const onClickDeckCard = useCallback((card: ICard) => {
+    addCardToLibrary(card);
+    removeCardFromDraftPlayerDeck(card);
+  }, []);
+  const isValid = useMemo(() => {
+    return deckSize >= MIN_CARDS_IN_DECK
+      && deckSize <= MAX_CARDS_IN_DECK
+      && !!draftPlayerName;
+  }, [deckSize, draftPlayerName]);
+  const onSubmit = useCallback(() => {
+    addPlayerFromDraft();
+    resetLibrary();
   }, []);
   const [previewCard, setPreviewCard] = useState<ICard | null>(null);
   return (
@@ -49,10 +60,13 @@ const CreatePlayer = ({ playerDirection }: Props) => {
         <div>
           <div>
             <Input
-              placeholder={`${playerDirection} player name`}
+              placeholder="Player name"
               value={draftPlayerName}
               onChange={(e) => setDraftPlayerName(e.target.value)}
             />
+          </div>
+          <div>
+            <Button disabled={!isValid} onClick={() => onSubmit()}> Next </Button>
           </div>
           <CardDeck
             draftPlayerDeck={draftPlayerDeck}
@@ -63,6 +77,7 @@ const CreatePlayer = ({ playerDirection }: Props) => {
         <CardPreview previewCard={previewCard} />
       </div>
       <CardLibrary
+        canClickCard={deckSize < MAX_CARDS_IN_DECK}
         onClickCard={onClickLibraryCard}
         setPreviewCard={setPreviewCard}
       />

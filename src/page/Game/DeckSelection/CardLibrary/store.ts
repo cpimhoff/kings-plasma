@@ -8,6 +8,7 @@ interface CardLibraryStore {
 
   takeCard: (card: Card) => void;
   replaceCard: (card: Card) => void;
+  reset: () => void;
 };
 
 export const useCardLibraryStore = create<CardLibraryStore>((set) => ({
@@ -28,6 +29,10 @@ export const useCardLibraryStore = create<CardLibraryStore>((set) => ({
       cardLibrary: newCardLibrary,
     };
   }),
+
+  reset: () => set(() => ({
+    cardLibrary: initLibrary(),
+  })),
 }));
 
 function initLibrary() {

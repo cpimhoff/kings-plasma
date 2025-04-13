@@ -6,7 +6,7 @@ import SmallCard from './SmallCard';
 interface Props {
   draftPlayerDeck: CardMultiSet;
   setPreviewCard: (card: ICard) => void,
-  onClickCard: (card: ICard, count: number) => void;
+  onClickCard: (card: ICard) => void;
 };
 const CardDeck = ({
   draftPlayerDeck,
@@ -23,7 +23,7 @@ const CardDeck = ({
                 key={card.id}
                 count={count}
                 onHover={() => setPreviewCard(card)}
-                onClick={() => onClickCard(card, count)}
+                onClick={() => onClickCard(card)}
               >
                 <SmallCard {...card} />
               </SelectableCardWrapper>
