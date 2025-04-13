@@ -4,17 +4,15 @@ import { Button } from '@/components/ui/button';
 import CreatePlayer from './CreatePlayer';
 
 const DeckSelection = () => {
-  const { draftPlayer } = useDeckSelectionStore();
-  const clickNext = useCallback(() => {
-  }, []);
+  const players = useDeckSelectionStore(state => state.players);
   return (
     <div>
       <h1>deck selection</h1>
       <div>
-        <CreatePlayer {...draftPlayer} />
+        <CreatePlayer />
       </div>
       <div>
-        <Button onClick={clickNext}> Next </Button>
+        <Button onClick={() => null}> Next </Button>
       </div>
     </div>
   );

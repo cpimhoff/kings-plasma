@@ -1,8 +1,11 @@
-import { Player } from '@/gameplay/state/Player';
+import { useShallow } from 'zustand/react/shallow';
+import { useDeckSelectionStore } from './store';
 import CardLibrary from './CardLibrary';
-import Card from '@/components/Card';
+import Card from '@/components/Card/Card';
 
-const CreatePlayer = (player: Player) => {
+const CreatePlayer = () => {
+  const [ draftPlayer, addCardToDraftPlayerDeck ] = useDeckSelectionStore(
+    useShallow(state => [state.draftPlayer, state.addCardToDraftPlayerDeck]));
   return (
     <div>
       <div>
@@ -13,13 +16,16 @@ const CreatePlayer = (player: Player) => {
       </div>
       <div>
         <h2> deck: </h2>
-        <div>
-          { player.deck.map(card => <Card {...card} />) }
+        <div className="flex">
+          { draftPlayer.deck.map(card => (
+            <div key={card.id}>
+              <Card {...card} />
+            </div>
+          )) }
         </div>
       </div>
       <div>
-        <h2> available cards: </h2>
-        <CardLibrary />
+        <CardLibrary addCardToDeck={addCardToDraftPlayerDeck} />
       </div>
     </div>
   );
