@@ -1,17 +1,24 @@
-import { Player } from '@/gameplay/state/Player';
+import { DraftPlayerDeck } from './DraftPlayerDeck';
 import SmallCard from './SmallCard';
 
-type Props = Pick<Player, 'deck'>;
-const CardDeck = ({ deck }: Props) => {
+interface Props {
+  draftPlayerDeck: DraftPlayerDeck;
+};
+const CardDeck = ({ draftPlayerDeck }: Props) => {
   return (
     <div>
       <h2> deck: </h2>
       <div className="flex flex-wrap w-300 h-100">
-        { deck.map(card => (
-          <div key={card.id} className="w-40">
-            <SmallCard {...card} />
-          </div>
-        )) }
+        { Object.keys(draftPlayerDeck.cardsById).map((cardId) => {
+          const card = draftPlayerDeck.cardsById[cardId];
+          const count = draftPlayerDeck.cardCountById[cardId];
+          return (
+            <div key={cardId} className="w-40">
+              <SmallCard {...card} />
+              { `x${count}` }
+            </div>
+          );
+        }) }
       </div>
     </div>
   );

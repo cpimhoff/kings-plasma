@@ -7,8 +7,8 @@ import CardPreview from './CardPreview';
 import CardLibrary from './CardLibrary';
 
 const CreatePlayer = () => {
-  const [ draftPlayer, addCardToDraftPlayerDeck ] = useDeckSelectionStore(
-    useShallow(state => [state.draftPlayer, state.addCardToDraftPlayerDeck]));
+  const [ draftPlayerDeck, addCardToDraftPlayerDeck ] = useDeckSelectionStore(
+    useShallow(state => [state.draftPlayerDeck, state.addCardToDraftPlayerDeck]));
   const [previewCard, setPreviewCard] = useState<ICard | null>(null);
   return (
     <div>
@@ -17,7 +17,7 @@ const CreatePlayer = () => {
           <div>
             Enter name: <input></input>
           </div>
-          <CardDeck {...draftPlayer} />
+          <CardDeck draftPlayerDeck={draftPlayerDeck} />
         </div>
         <CardPreview previewCard={previewCard} />
       </div>
