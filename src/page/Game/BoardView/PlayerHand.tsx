@@ -71,7 +71,7 @@ const PlayerHand = () => {
       <div className="flex">
         { player.hand.map((card, idx) => (
           <div
-            key={card.id}
+            key={`${player.id},${card.id},${idx}`}
             className="w-xs"
             onClick={() => clickHandIndex(idx, phase)}
           >
