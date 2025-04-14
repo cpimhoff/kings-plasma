@@ -19,8 +19,10 @@ function processPlayCard(
   if (!card) return;
 
   // put the card on the board
-  state.board[action.toBoardPosition.x][action.toBoardPosition.y].card = card;
-  processCardEvents(state, { type: "playCard", action }, ctx);
+  const tile = state.board[action.toBoardPosition.x][action.toBoardPosition.y];
+  tile.card = card;
+  tile.controllerPlayerId = action.playerId;
+  processCardEvents(state, { triggerId: "onPlay", tile }, ctx);
 
   markPlayerPassed(state, action.playerId, false);
   nextPlayer(state);
