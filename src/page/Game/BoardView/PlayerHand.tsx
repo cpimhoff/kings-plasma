@@ -53,6 +53,7 @@ const PlayerHand = () => {
       fromHandIndex: selectedHandIndexes[0],
       toBoardPosition: selectedBoardPosition!,
     });
+    reset();
   }, [selectedBoardPosition, selectedHandIndexes]);
 
   return (
