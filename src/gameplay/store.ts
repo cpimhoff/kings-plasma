@@ -6,6 +6,8 @@ import { process } from './process/process';
 
 interface GameplayStore {
   gameState: GameState | null;
+  historyStack: GameState[];
+  _pending: boolean;
 
   beginGame: (players: Player[]) => void;
   dispatchAction: (action: Action) => void;
@@ -13,23 +15,44 @@ interface GameplayStore {
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
+  historyStack: [],
+  _pending: false,
 
   beginGame: (players) => set(() => ({
     gameState: createInitialState(players),
   })),
 
   dispatchAction: (action) => {
-    const { state: newGameState, keyframes } = process(get().gameState!, action);
+    if (get()._pending) return;
+    set(() => ({ _pending: true }));
+    const oldGameState = get().gameState!;
+    const { state: newGameState, keyframes } = process(oldGameState, action);
     const keyframeStates = keyframes.map(kf => kf.snapshot);
-    const states = [ ...keyframeStates, newGameState ];
-    states.map(s => (
-      new Promise((resolve) => {
+    const keyframesPromise = keyframeStates.map(s => (
+      new Promise<void>((resolve) => {
         set(() => ({ gameState: s }));
-        setTimeout(resolve, 1000);
+        resolve();
       })
-    )).forEach(async p => {
-      await p;
+    )).reduce((accum, curr) => accum.then(() => curr), Promise.resolve());
+    keyframesPromise.then(() => {
+      set(() => ({
+        gameState: newGameState,
+        historyStack: [...get().historyStack, oldGameState],
+        _pending: false,
+      }));
     });
   },
+
+  undo: () => set((state) => {
+    const { historyStack, _pending } = state;
+    if (!historyStack.length || _pending) return {};
+    const stackSize = historyStack.length;
+    const newState = historyStack[stackSize - 1];
+    const newStack = [...historyStack].splice(0, stackSize);
+    return {
+      gameState: newState,
+      historyStack: newStack,
+    };
+  }),
 
 }));

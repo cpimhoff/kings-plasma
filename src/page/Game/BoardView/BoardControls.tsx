@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Controls = ({ player }: Props) => {
-  const { gameState, dispatchAction } = useGameplayStore();
+  const { gameState, dispatchAction, undo } = useGameplayStore();
   const { phase } = gameState!;
 
   const {
@@ -65,6 +65,9 @@ const Controls = ({ player }: Props) => {
           </Button>
           <Button onClick={() => onPass()}>
             Pass
+          </Button>
+          <Button onClick={() => undo()}>
+            Undo
           </Button>
         </>
       ) }
