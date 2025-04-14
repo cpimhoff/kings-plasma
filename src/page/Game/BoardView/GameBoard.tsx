@@ -1,4 +1,3 @@
-import { cn } from '@/utils/cn';
 import BoardTile from './BoardTile';
 import RowScoreTile from './RowScoreTile';
 import { BoardTile as IBoardTile, BoardPosition } from '@/gameplay/state/Board';
@@ -49,15 +48,12 @@ const GameBoard = () => {
 
   const playColumns = board.map((column) => (
     column.map((tile) => (
-      <div
+      <BoardTile
         key={`${tile.position.x},${tile.position.y}`}
-        className={cn({
-          'bg-sky-200': selectedBoardPosition && positionsEqual(tile.position, selectedBoardPosition),
-        })}
-        onClick={() => onClickTile(tile)}
-      >
-        <BoardTile {...tile} />
-      </div>
+        isSelected={selectedBoardPosition && positionsEqual(tile.position, selectedBoardPosition) || false}
+        tile={tile}
+        onClick={onClickTile}
+      />
     ))));
 
   const { rowScoresByPlayerId } = adaptGameState(state);
@@ -72,7 +68,7 @@ const GameBoard = () => {
   const tiles = columns.reduce((accum, curr) => [...accum, ...curr], []);
 
   return (
-    <div className="grid grid-flow-col grid-cols-7 grid-rows-3">
+    <div className="grid grid-flow-col grid-cols-7 grid-rows-3 w-[60rem] gap-5">
       { tiles }
     </div>
   );

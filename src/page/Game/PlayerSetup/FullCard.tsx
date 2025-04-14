@@ -12,7 +12,9 @@ const FullCard = (card: ICard) => {
     <div className="w-full flex flex-col items-center border rounded-md">
       <div className="w-full flex justify-between">
         <CardCost {...card} />
-        <CardPower {...card} />
+        <div className="w-10 h-10">
+          <CardPower {...card} />
+        </div>
       </div>
       <div className="w-1/2">
         <CardEffectPreviewGrid {...card} />

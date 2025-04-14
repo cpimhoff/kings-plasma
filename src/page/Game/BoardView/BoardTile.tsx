@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import { BoardTile as IBoardTile } from '@/gameplay/state/Board';
 import { useGameplayStore } from '@/gameplay/store';
 import { getPlayerWithId } from '@/gameplay/state/Player';
@@ -5,18 +6,39 @@ import TileContainer from './TileContainer';
 import TileCard from './TileCard';
 import TilePips from './TilePips';
 
-const BoardTile = (tile: IBoardTile) => {
+interface Props {
+  tile: IBoardTile;
+  isSelected: boolean;
+  onClick: (tile: IBoardTile) => void;
+  backgroundColor: string;
+}
+const BoardTile = ({ tile, isSelected, onClick, backgroundColor }: Props) => {
   const { card, pips, controllerPlayerId } = tile;
   const gameState = useGameplayStore((state) => state.gameState);
   const { players } = gameState!;
-  const playerName = controllerPlayerId ? getPlayerWithId(players, controllerPlayerId).name : 'empty';
+  const player = controllerPlayerId ? getPlayerWithId(players, controllerPlayerId) : null;
+  const color = player?.colorCssValue;
   return (
     <TileContainer>
-      { card && (
-        <TileCard {...card} />
-      ) }
-      { pips > 0 && <TilePips pips={pips} /> }
-      { playerName }
+      <div
+        className={cn('w-full', 'h-full', 'relative', {
+          'bg-sky-200': backgroundColor,
+        })}
+        onClick={() => onClick(tile)}
+      >
+        { color && (
+          <>
+            { card && (
+              <TileCard card={card} color={color} />
+            ) }
+            { pips > 0 && <TilePips pips={pips} color={color} /> }
+          </>
+        ) }
+        <div className={cn('absolute', 'w-full', 'h-full', 'top-0', 'opacity-60', {
+          'bg-sky-100': isSelected,
+        })}>
+        </div>
+      </div>
     </TileContainer>
   );
 };
