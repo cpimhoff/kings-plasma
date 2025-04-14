@@ -17,6 +17,12 @@ export function processSetup(
   );
   player.hand = heldCards;
   player.deck = [...discardedCards, ...player.deck];
+
+  // replace mulliganed cards
+  const numMulliganed = discardedCards.length;
+  const replacements = player.deck.splice(-numMulliganed, numMulliganed);
+  player.hand = [...player.hand, ...replacements];
+
   player.phase.setup.done = true;
 
   // if all players are done, move to play phase
