@@ -1,6 +1,6 @@
 import { useGameplayStore } from '@/gameplay/store';
 import PlayerSetup from '@/page/Game/PlayerSetup/PlayerSetup';
-import BoardView from '@/page/Game/BoardView';
+import BoardView from '@/page/Game/BoardView/BoardView';
 
 const Play = () => {
   const gameState = useGameplayStore(state => state.gameState);

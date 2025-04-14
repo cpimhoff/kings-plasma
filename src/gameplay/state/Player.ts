@@ -33,3 +33,7 @@ export function createPlayer(name: string): Player {
     },
   };
 }
+
+export function getPlayerWithId(players: Player[], id: Player['id']): Player {
+  return players.find(p => p.id === id) as Player;
+}
