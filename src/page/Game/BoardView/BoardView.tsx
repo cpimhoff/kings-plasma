@@ -1,24 +1,30 @@
-import GameBoard from './GameBoard';
-import BoardControls from './BoardControls';
-import PlayerHand from './PlayerHand';
-import Results from './Results';
+import SetupPhase from './SetupPhase';
+import PlayPhase from './PlayPhase';
+import EndPhase from './EndPhase';
 import { useGameplayStore } from '@/gameplay/store' ;
-import { getPlayerWithId } from '@/gameplay/state/Player';
 
 const BoardView = () => {
   const { gameState } = useGameplayStore();
-  const { phase, players, playPhaseActivePlayerId: playerId } = gameState!;
+  const { phase } = gameState!;
+
+  let phaseView;
+  switch (phase) {
+    case 'setup':
+      phaseView = <SetupPhase />;
+      break;
+    case 'play':
+      phaseView = <PlayPhase />;
+      break;
+    case 'end':
+      phaseView = <EndPhase />;
+      break;
+    default:
+      return null;
+  };
+
   return (
     <div>
-      { phase === 'play' && (
-        <div>
-          current player: { getPlayerWithId(players, playerId).name }
-        </div>
-      ) }
-      <GameBoard />
-      { ['setup', 'play'].includes(phase) && <BoardControls /> }
-      <PlayerHand />
-      { phase === 'end' && <Results /> }
+      { phaseView }
     </div>
   );
 };

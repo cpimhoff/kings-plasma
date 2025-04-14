@@ -19,6 +19,7 @@ const PlayerSetup = () => {
   }, []);
   return (
     <div>
+      <p> player setup </p>
       <div>
         { !bothReady && (
           <div>

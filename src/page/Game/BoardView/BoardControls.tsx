@@ -1,25 +1,17 @@
 import { useCallback } from 'react';
 import { useGameplayStore } from '@/gameplay/store' ;
+import { Player } from '@/gameplay/state/Player' ;
 import { useSelectionStore } from './selectionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 
-const Controls = () => {
+interface Props {
+  player: Player;
+}
+
+const Controls = ({ player }: Props) => {
   const { gameState, dispatchAction } = useGameplayStore();
-
-  const {
-    phase,
-    players,
-    playPhaseActivePlayerId,
-  } = gameState!;
-
-  let playerId;
-  if (phase === 'setup') {
-    playerId = players
-    .find((player) => !player.phase.setup.done)!.id;
-  } else {
-    playerId = playPhaseActivePlayerId;
-  }
+  const { phase } = gameState!;
 
   const {
     selectedHandIndexes,
@@ -34,17 +26,17 @@ const Controls = () => {
   const onMulligan = useCallback(() => {
     dispatchAction({
       type: 'mulligan',
-      playerId,
+      playerId: player.id,
       handIndexes: selectedHandIndexes,
     });
     reset();
-  }, [playerId, selectedHandIndexes]);
+  }, [player.id, selectedHandIndexes]);
 
   const onPlayCard = useCallback(() => {
     if (!selectedBoardPosition) return;
     dispatchAction({
       type: 'playCard',
-      playerId,
+      playerId: player.id,
       fromHandIndex: selectedHandIndexes[0],
       toBoardPosition: selectedBoardPosition!,
     });
@@ -54,10 +46,10 @@ const Controls = () => {
   const onPass = useCallback(() => {
     dispatchAction({
       type: 'pass',
-      playerId,
+      playerId: player.id,
     });
     reset();
-  }, [playerId]);
+  }, [player.id]);
 
   return (
     <div>

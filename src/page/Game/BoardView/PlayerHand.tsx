@@ -1,26 +1,17 @@
 import { useGameplayStore } from '@/gameplay/store' ;
 import { useSelectionStore } from './selectionStore';
 import { useShallow } from 'zustand/react/shallow';
-import { getPlayerWithId } from '@/gameplay/state/Player';
+import { Player } from '@/gameplay/state/Player';
 import HandCard from './HandCard';
 
-const PlayerHand = () => {
+interface Props {
+  player: Player,
+}
+const PlayerHand = ({ player }: Props) => {
   const { gameState } = useGameplayStore();
-  const {
-    phase,
-    players,
-    playPhaseActivePlayerId,
-  } = gameState!;
+  const { phase } = gameState!;
 
-  let playerId;
-  if (phase === 'setup') {
-    playerId = players
-      .find((player) => !player.phase.setup.done)!.id;
-  } else {
-    playerId = playPhaseActivePlayerId;
-  }
-
-  const { hand } = getPlayerWithId(players, playerId);
+  const { hand } = player;
 
   const {
     selectedHandIndexes,
@@ -31,18 +22,16 @@ const PlayerHand = () => {
   })));
 
   return (
-    <div>
-      <div className="flex">
-        { hand.map((card, idx) => (
-          <div
-            key={`${playerId},${card.id},${idx}`}
-            className="w-xs"
-            onClick={() => clickHandIndex(idx, phase)}
-          >
-            <HandCard card={card} isSelected={selectedHandIndexes.includes(idx)} />
-          </div>
-        )) }
-      </div>
+    <div className="flex">
+      { hand.map((card, idx) => (
+        <div
+          key={`${player.id},${card.id},${idx}`}
+          className="w-xs"
+          onClick={() => clickHandIndex(idx, phase)}
+        >
+          <HandCard card={card} isSelected={selectedHandIndexes.includes(idx)} />
+        </div>
+      )) }
     </div>
   );
 };
