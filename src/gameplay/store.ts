@@ -1,20 +1,21 @@
 import { create } from 'zustand';
-import { GameState } from './state/GameState';
+import { GameState, createInitialState } from './state/GameState';
+import { Player } from './state/Player';
 import { Action } from './state/Action';
 import { process } from './process/process';
 
 interface GameplayStore {
   gameState: GameState | null;
 
-  beginGame: (initialState: GameState) => void;
+  beginGame: (players: Player[]) => void;
   dispatchAction: (action: Action) => void;
 };
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
 
-  beginGame: (initialState) => set(() => ({
-    gameState: initialState,
+  beginGame: (players) => set(() => ({
+    gameState: createInitialState(players),
   })),
 
   dispatchAction: (action) => {

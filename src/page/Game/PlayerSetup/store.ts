@@ -14,9 +14,10 @@ interface PlayerSetupStor {
   addPlayerFromDraft: () => void;
   addCardToDraftPlayerDeck: (card: Card) => void;
   removeCardFromDraftPlayerDeck: (card: Card) => void;
+  submit: (beginGame: (players: Player[]) => void) => void;
 };
 
-export const usePlayerSetupStore = create<PlayerSetupStor>((set) => ({
+export const usePlayerSetupStore = create<PlayerSetupStor>((set, get) => ({
   players: [],
   draftPlayerName: DEFAULT_PLAYER_NAMES[0],
   draftPlayerDeck: new CardMultiSet(),
@@ -50,6 +51,10 @@ export const usePlayerSetupStore = create<PlayerSetupStor>((set) => ({
       draftPlayerDeck: new CardMultiSet(),
     };
   }),
+
+  submit: (beginGame) => {
+    beginGame(get().players);
+  },
 
 }));
 
