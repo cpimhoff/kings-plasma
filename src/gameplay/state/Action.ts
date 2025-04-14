@@ -7,8 +7,6 @@ export type Action =
   | Action.PlayCard
   | Action.Pass
   | Action.Mulligan
-  | Action.DeckReady
-  | Action.DeckUnready
   | Action.Rematch;
 
 export namespace Action {
@@ -31,20 +29,6 @@ export namespace Action {
     type: "mulligan";
     playerId: Player["id"];
     handIndexes: number[];
-  };
-
-  /** Signal that the player is ready to begin the game. */
-  export type DeckReady = {
-    type: "deckReady";
-    playerId: Player["id"];
-    deck: Card[];
-  };
-
-  /** Signal that the player is no longer ready to begin the game.
-   * Their current deck should be cleared. */
-  export type DeckUnready = {
-    type: "deckUnready";
-    playerId: Player["id"];
   };
 
   /** Signal that the player is ready to begin a rematch. */
