@@ -62,8 +62,19 @@ function doesEventSatisfyTriggerCondition(
   responder: BoardTile & { card: Card },
   triggerCond: CardTriggerCondition,
 ): boolean {
+  // first check if the trigger condition is the same as the event's
   if (event.triggerId !== triggerCond.id) return false;
 
+  // special cases for specific trigger conditions are represented as
+  // guard conditions and come first:
+  if (
+    triggerCond.id === "onPowerChange" &&
+    event.triggerId === "onPowerChange" &&
+    triggerCond.changeDirection !== event.changeDirection
+  )
+    return false;
+
+  // the rest are general conditions:
   if (
     triggerCond.self &&
     event.tile.position.x === responder.position.x &&
