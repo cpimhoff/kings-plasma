@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
-import { useDeckSelectionStore } from './store';
+import { usePlayerSetupStore } from './store';
 import { useGameplayStore } from '@/gameplay/store';
 import { createInitialState } from '@/gameplay/state/GameState';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import CreatePlayer from './CreatePlayer';
 
-const DeckSelection = () => {
-  const [ players ] = useDeckSelectionStore(
+const PlayerSetup = () => {
+  const [ players ] = usePlayerSetupStore(
     useShallow(state => [state.players]));
   const [playerIdx, playerDirection, bothReady] = useMemo(() => {
     const idx = players.length;
@@ -36,4 +36,4 @@ const DeckSelection = () => {
   );
 };
 
-export default DeckSelection;
+export default PlayerSetup;

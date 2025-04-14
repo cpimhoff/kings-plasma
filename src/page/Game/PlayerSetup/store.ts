@@ -3,7 +3,9 @@ import { Card } from '@/gameplay/state/Card';
 import { Player, createPlayer } from '@/gameplay/state/Player';
 import CardMultiSet from './CardMultiSet';
 
-interface DeckSelectionStore {
+const DEFAULT_PLAYER_NAMES = ['Lefty', 'Righty'];
+
+interface PlayerSetupStor {
   players: Player[],
   draftPlayerName: string,
   draftPlayerDeck: CardMultiSet,
@@ -14,9 +16,9 @@ interface DeckSelectionStore {
   removeCardFromDraftPlayerDeck: (card: Card) => void;
 };
 
-export const useDeckSelectionStore = create<DeckSelectionStore>((set) => ({
+export const usePlayerSetupStore = create<PlayerSetupStor>((set) => ({
   players: [],
-  draftPlayerName: 'Lefty',
+  draftPlayerName: DEFAULT_PLAYER_NAMES[0],
   draftPlayerDeck: new CardMultiSet(),
 
   setDraftPlayerName: (newName) => set(() => ({
@@ -44,7 +46,7 @@ export const useDeckSelectionStore = create<DeckSelectionStore>((set) => ({
     player.deck = createDeckFromDraft(state.draftPlayerDeck);
     return {
       players: [...state.players, player],
-      draftPlayerName: 'Righty',
+      draftPlayerName: DEFAULT_PLAYER_NAMES[1],
       draftPlayerDeck: new CardMultiSet(),
     };
   }),

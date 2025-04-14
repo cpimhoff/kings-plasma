@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { useDeckSelectionStore } from './store';
+import { usePlayerSetupStore } from './store';
 import { useCardLibraryStore } from './CardLibrary/store';
 import { Input } from '@/components/ui/input';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
@@ -21,7 +21,7 @@ const CreatePlayer = () => {
     addCardToDraftPlayerDeck,
     removeCardFromDraftPlayerDeck,
     addPlayerFromDraft,
-  } = useDeckSelectionStore(
+  } = usePlayerSetupStore(
     useShallow((state) => ({
       draftPlayerName: state.draftPlayerName,
       draftPlayerDeck: state.draftPlayerDeck,

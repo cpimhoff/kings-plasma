@@ -1,5 +1,5 @@
 import { useGameplayStore } from '@/gameplay/store';
-import DeckSelection from '@/page/Game/DeckSelection/DeckSelection';
+import PlayerSetup from '@/page/Game/PlayerSetup/PlayerSetup';
 import BoardView from '@/page/Game/BoardView';
 
 const Play = () => {
@@ -7,7 +7,7 @@ const Play = () => {
   if (gameState) {
     return <BoardView />;
   }
-  return <DeckSelection />;
+  return <PlayerSetup />;
 };
 
 export default Play;
