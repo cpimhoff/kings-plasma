@@ -68,7 +68,7 @@ const Controls = () => {
       ) }
       { phase === 'play' && (
         <>
-          <Button onClick={() => onPlayCard()}>
+          <Button disabled={selectedHandIndexes.length === 0} onClick={() => onPlayCard()}>
             Play card
           </Button>
           <Button onClick={() => onPass()}>

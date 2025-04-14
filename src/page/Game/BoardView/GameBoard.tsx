@@ -57,10 +57,10 @@ const GameBoard = () => {
       </div>
     ))));
 
-  const { rowScoresByPlayerIdx } = adaptGameState(state);
+  const { rowScoresByPlayerId } = adaptGameState(state);
 
   const scoreColumns = players.map((player) => (
-    buildScoreColumnForPlayer(player.id, rowScoresByPlayerIdx[player.id])
+    buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id])
   ));
 
   const columns = [scoreColumns[0], ...playColumns, scoreColumns[1]];
