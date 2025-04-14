@@ -1,7 +1,15 @@
-const RowScoreTile = () => {
+import TileContainer from './TileContainer';
+
+interface Props {
+  score: number,
+}
+const RowScoreTile = ({ score }: Props) => {
   return (
-    <div>
-    </div>
+    <TileContainer>
+      <div>
+        { score }
+      </div>
+    </TileContainer>
   );
 };
 

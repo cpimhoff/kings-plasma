@@ -3,10 +3,15 @@ import { Player } from "./Player";
 
 export type Board = Array<Array<BoardTile>>;
 
-/** Board coordinates are 0-indexed, starting at the bottom left corner. */
+/** Board coordinates are 0-indexed, starting at the bottom left corner, columns first. */
+
+export type BoardPosition = {
+  x: number;
+  y: number;
+};
 
 export type BoardTile = {
-  position: { x: number; y: number };
+  position: BoardPosition;
   pips: number;
   card: Card | null;
   controllerPlayerId: Player["id"] | null;

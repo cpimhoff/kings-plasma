@@ -1,12 +1,10 @@
-import { useCallback, useState } from 'react';
-import { Vector2 } from '@/utils/vector';
+import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { useGameplayStore } from '@/gameplay/store' ;
-import { Card as ICard } from '@/gameplay/state/Card';
+import { useSelectionStore } from './selectionStore';
+import { useShallow } from 'zustand/react/shallow';
 import { getPlayerWithId } from '@/gameplay/state/Player';
-import FullCard from '../PlayerSetup/FullCard'; // TODO either move this or make a new component
-
-const MAX_CARDS_TO_MULLIGAN = 3;
+import HandCard from './HandCard';
 
 const PlayerHand = () => {
   const { gameState, dispatchAction } = useGameplayStore();
@@ -15,38 +13,62 @@ const PlayerHand = () => {
     players,
     playPhaseActivePlayerId,
   } = gameState!;
-  const { id: playerId, hand } = getPlayerWithId(players, playPhaseActivePlayerId);
-  const [selectedCardIndexes, setSelectedCardIndexes] = useState<number[]>([]);
-  // const [targetBoardtile, setTargetBoardTile] = useState<Vector2 | null>(null);
-  const onClickCardAtIndex = useCallback<(idx: number) => void>((idx) => {
-    if (phase === 'setup') {
-      if (selectedCardIndexes.length < MAX_CARDS_TO_MULLIGAN) {
-        setSelectedCardIndexes([...selectedCardIndexes, idx]);
-      }
-    } else {
-      setSelectedCardIndexes([idx]);
-    }
-  }, [phase]);
+  let playerId;
+  if (phase === 'setup') {
+    playerId = players
+      .find((player) => !player.phase.setup.done)!.id;
+  } else {
+    playerId = playPhaseActivePlayerId;
+  }
+  const player = getPlayerWithId(players, playerId);
+  const {
+    selectedHandIndexes,
+    selectedBoardPosition,
+    clickHandIndex,
+    reset,
+  } = useSelectionStore(useShallow((state) => ({
+    selectedHandIndexes: state.selectedHandIndexes,
+    selectedBoardPosition: state.selectedBoardPosition,
+    clickHandIndex: state.clickHandIndex,
+    reset: state.reset,
+  })));
   const onMulligan = useCallback(() => {
     dispatchAction({
       type: 'mulligan',
       playerId,
-      handIndexes: selectedCardIndexes,
+      handIndexes: selectedHandIndexes,
     });
-  }, [playerId]);
+    reset();
+  }, [playerId, selectedHandIndexes]);
+  const onPlayCard = useCallback(() => {
+    if (!selectedBoardPosition) return;
+    dispatchAction({
+      type: 'playCard',
+      playerId,
+      fromHandIndex: selectedHandIndexes[0],
+      toBoardPosition: selectedBoardPosition!,
+    });
+  }, []);
   return (
     <div>
       { phase === 'setup' && (
-        <Button
-          onClick={() => onMulligan}
-        >
-          Mulligan
+        <Button onClick={() => onMulligan()}>
+          { selectedHandIndexes.length > 0 ? "Mulligan and begin" : "Begin" }
         </Button>
       ) }
-      <div>
-        { hand.map((card, idx) => (
-          <div key={card.id} onClick={() => onClickCardAtIndex(idx)}>
-            <FullCard {...card} />
+      { phase === 'play' && (
+        <Button onClick={() => onPlayCard()}>
+          Play card
+        </Button>
+      ) }
+      <div className="flex">
+        { player.hand.map((card, idx) => (
+          <div
+            key={card.id}
+            className="w-xs"
+            onClick={() => clickHandIndex(idx, phase)}
+          >
+            <HandCard card={card} isSelected={selectedHandIndexes.includes(idx)} />
           </div>
         )) }
       </div>

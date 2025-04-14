@@ -1,7 +1,15 @@
-const BoardTile = () => {
+import { BoardTile as IBoardTile } from '@/gameplay/state/Board';
+import TileContainer from './TileContainer';
+import TileCard from './TileCard';
+
+const BoardTile = (tile: IBoardTile) => {
+  const { card } = tile;
   return (
-    <div>
-    </div>
+    <TileContainer>
+      { card && (
+        <TileCard {...card} />
+      ) }
+    </TileContainer>
   );
 };
 

@@ -22,7 +22,7 @@ const PlayerSetup = () => {
       <div>
         { !bothReady && (
           <div>
-            {`Player ${playerIdx} (${playerDirection}):`}
+            {`Player ${playerIdx + 1} (${playerDirection}):`}
             <CreatePlayer />
           </div>
         ) }
