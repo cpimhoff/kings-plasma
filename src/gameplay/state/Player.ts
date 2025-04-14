@@ -9,7 +9,6 @@ export type Player = {
 
   // phase states
   phase: {
-    deckSelection: { done: boolean };
     setup: { done: boolean };
     play: { passed: boolean };
     end: { requestRematch: boolean };
@@ -28,7 +27,6 @@ export function createPlayer(name: string): Player {
     deck: [],
     hand: [],
     phase: {
-      deckSelection: { done: false },
       setup: { done: false },
       play: { passed: false },
       end: { requestRematch: false },
