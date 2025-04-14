@@ -13,6 +13,7 @@ const PlayerHand = () => {
     players,
     playPhaseActivePlayerId,
   } = gameState!;
+
   let playerId;
   if (phase === 'setup') {
     playerId = players
@@ -20,7 +21,9 @@ const PlayerHand = () => {
   } else {
     playerId = playPhaseActivePlayerId;
   }
+
   const player = getPlayerWithId(players, playerId);
+
   const {
     selectedHandIndexes,
     selectedBoardPosition,
@@ -32,6 +35,7 @@ const PlayerHand = () => {
     clickHandIndex: state.clickHandIndex,
     reset: state.reset,
   })));
+
   const onMulligan = useCallback(() => {
     dispatchAction({
       type: 'mulligan',
@@ -40,6 +44,7 @@ const PlayerHand = () => {
     });
     reset();
   }, [playerId, selectedHandIndexes]);
+
   const onPlayCard = useCallback(() => {
     if (!selectedBoardPosition) return;
     dispatchAction({
@@ -48,7 +53,8 @@ const PlayerHand = () => {
       fromHandIndex: selectedHandIndexes[0],
       toBoardPosition: selectedBoardPosition!,
     });
-  }, []);
+  }, [selectedBoardPosition, selectedHandIndexes]);
+
   return (
     <div>
       { phase === 'setup' && (

@@ -1,6 +1,8 @@
 import { create } from 'zustand';
-import { BoardPosition } from '@/gameplay/state/Board';
+import { BoardPosition, BoardTile } from '@/gameplay/state/Board';
 import { Phase } from '@/gameplay/state/Phase';
+import { Card } from '@/gameplay/state/Card';
+import { Player } from '@/gameplay/state/Player';
 
 const MAX_CARDS_TO_MULLIGAN = 3;
 
@@ -9,7 +11,7 @@ interface SelectionStore {
   selectedBoardPosition: BoardPosition | null;
 
   clickHandIndex: (handIdx: number, phase: Phase) => void;
-  clickBoardPosition: (pos: BoardPosition) => void;
+  clickBoardTile: (tile: BoardTile, selectedCard: Card, playerId: Player['id']) => void;
   reset: () => void;
 };
 
@@ -36,9 +38,18 @@ export const useSelectionStore = create<SelectionStore>((set) => ({
     };
   }),
 
-  clickBoardPosition: (pos) => set(() => {
+  clickBoardTile: (tile, selectedCard, playerId) => set(() => {
+    let isValidSelection = false;
+    if (tile.controllerPlayerId === playerId) {
+      if (typeof selectedCard.playRequirement === 'number') {
+        isValidSelection = !tile.card && tile.pips >= selectedCard.playRequirement;
+      }
+      if (selectedCard.playRequirement === 'replace') {
+        isValidSelection = !!tile.card;
+      }
+    }
     return {
-      selectedBoardPosition: pos,
+      selectedBoardPosition: isValidSelection ? tile.position : null,
     };
   }),
 
