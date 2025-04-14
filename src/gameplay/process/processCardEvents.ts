@@ -7,11 +7,16 @@ import {
 } from "../state";
 import { ProcessCtx } from "./ctx";
 import { allBoardCards } from "./iter";
+import { nextStableInt } from "./rng";
 
 type Event = Event.CardPlayed | Event.PowerChanged | Event.CardDestroyed;
 namespace Event {
   export type CardPlayed = { triggerId: "onPlay"; tile: BoardTile };
-  export type PowerChanged = { triggerId: "onPowerChange"; tile: BoardTile };
+  export type PowerChanged = {
+    triggerId: "onPowerChange";
+    tile: BoardTile;
+    changeDirection: "increasing" | "decreasing";
+  };
   export type CardDestroyed = { triggerId: "onDestroy"; tile: BoardTile };
 }
 
@@ -29,19 +34,19 @@ export function processCardEvents(
     const event = eventQueue.shift()!;
     const triggeredActions = getEventTriggers(state, event);
     triggeredActions.forEach((action) => {
-      processTriggeredCardAction(state, action, eventQueue, ctx);
+      processTriggeredCardAction(state, action, eventQueue);
     });
+    ctx.addKeyframe();
   }
 }
 
 function getEventTriggers(state: GameState, event: Event) {
   const triggeredActions: TriggeredAction[] = [];
   for (const responder of allBoardCards(state)) {
-    for (const { trigger: triggerCond, actions: triggerResponses } of responder
-      .card.effects) {
-      if (doesEventSatisfyTriggerCondition(event, responder, triggerCond)) {
+    for (const effect of responder.card.effects) {
+      if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger)) {
         triggeredActions.push(
-          ...triggerResponses.map((action) => ({
+          ...effect.actions.map((action) => ({
             ...action,
             source: responder,
           })),
@@ -87,57 +92,82 @@ function processTriggeredCardAction(
   state: GameState,
   action: TriggeredAction,
   eventQueue: Event[],
-  _ctx: ProcessCtx,
 ) {
+  const actionPlayerId = action.source.controllerPlayerId;
   switch (action.id) {
     case "addControlledPips": {
+      const targets = action.tiles.map((deltaTile) => ({
+        x: action.source.position.x + deltaTile.dx,
+        y: action.source.position.y + deltaTile.dy,
+      }));
+      for (const t of targets) {
+        const tile = state.board[t.x][t.y];
+        if (tile.card) continue; // nothing to do on already occupied tiles
+        if (
+          // only add pips if not already under enemy control
+          tile.controllerPlayerId === null ||
+          tile.controllerPlayerId === actionPlayerId
+        ) {
+          tile.pips += action.amount;
+        }
+        tile.controllerPlayerId = actionPlayerId;
+      }
       break;
     }
 
     case "addPower": {
-      // This logic is a bit messy and duplicates
-      // some logic from doesEventSatisfyTriggerCondition.
-      // (mostly placeholder)
-      let target: Card | undefined;
-      if (action.self) {
-        target = action.source.card;
-        target.power += action.amount;
-        eventQueue.push({
-          triggerId: "onPowerChange",
-          tile: action.source,
-        });
-      }
-      const actorPos = action.source.position;
-      for (const cell of allBoardCards(state)) {
-        if (cell.card === action.source.card) continue; // skip self
-        const isAllied =
-          cell.controllerPlayerId === action.source.controllerPlayerId;
-        if (isAllied && !action.allied) continue;
-        if (!isAllied && !action.opponent) continue;
-
-        const isTargetTile =
-          !action.tiles ||
-          action.tiles.some(
-            (deltaTile) =>
-              actorPos.x + deltaTile.dx === cell.position.x &&
-              actorPos.y + deltaTile.dy === cell.position.y,
-          );
-        if (!isTargetTile) continue;
-
-        cell.card.power += action.amount;
-        eventQueue.push({
-          triggerId: "onPowerChange",
-          tile: cell,
-        });
+      if (action.amount === 0) break;
+      const targets = getTileTargets(state, action.source, action);
+      for (const t of targets) {
+        t.card.power += action.amount;
+        if (t.card.power > 0) {
+          eventQueue.push({
+            triggerId: "onPowerChange",
+            tile: t,
+            changeDirection: action.amount > 0 ? "increasing" : "decreasing",
+          });
+        } else {
+          t.card = null!;
+          eventQueue.push({
+            triggerId: "onDestroy",
+            tile: t,
+          });
+        }
       }
       break;
     }
 
     case "createCardForPlayer": {
+      const player = state.players.find((p) =>
+        action.player === "allied"
+          ? p.id === actionPlayerId
+          : p.id !== actionPlayerId,
+      )!;
+      if (!player) break;
+      switch (action.into) {
+        case "hand": {
+          player.hand.push(action.card);
+          break;
+        }
+        case "deck.random": {
+          const randomIndex = nextStableInt(state, 0, player.deck.length - 1);
+          player.deck.splice(randomIndex, 0, action.card);
+          break;
+        }
+        case "deck.top": {
+          player.deck.push(action.card);
+          break;
+        }
+      }
       break;
     }
 
     case "immediatelyDestroy": {
+      const targets = getTileTargets(state, action.source, action);
+      for (const t of targets) {
+        t.card = null!;
+        eventQueue.push({ triggerId: "onDestroy", tile: t });
+      }
       break;
     }
 
@@ -145,4 +175,37 @@ function processTriggeredCardAction(
       action satisfies never;
       break;
   }
+}
+
+function getTileTargets(
+  state: GameState,
+  source: BoardTile,
+  action: Partial<
+    Pick<CardAction.AddPower, "tiles" | "self" | "allied" | "opponent">
+  >,
+): (BoardTile & { card: Card })[] {
+  // start with the targeted tiles, including self
+  const targetTiles = action.tiles
+    ? ([
+        source.position,
+        ...action.tiles.map((deltaTile) => ({
+          x: source.position.x + deltaTile.dx,
+          y: source.position.y + deltaTile.dy,
+        })),
+      ]
+        .map((pos) => state.board[pos.x][pos.y])
+        .filter((t) => t.card) as (BoardTile & { card: Card })[])
+    : Array.from(allBoardCards(state));
+
+  // filter out based on conditions
+  return targetTiles
+    .filter((t) => action.self || t.card !== source.card)
+    .filter(
+      (t) =>
+        action.allied || t.controllerPlayerId !== source.controllerPlayerId,
+    )
+    .filter(
+      (t) =>
+        action.opponent || t.controllerPlayerId === source.controllerPlayerId,
+    );
 }
