@@ -12,24 +12,19 @@ const GameBoard = () => {
   const { gameState } = useGameplayStore();
   const state = gameState!;
   const {
-    board,
     phase,
     players,
     playPhaseActivePlayerId: playerId,
   } = state!;
 
   const {
+    selectedHandIndexes,
     selectedBoardPosition,
     clickBoardTile,
   } = useSelectionStore(useShallow((state) => ({
     selectedBoardPosition: state.selectedBoardPosition,
-    clickBoardTile: state.clickBoardTile,
-  })));
-
-  const {
-    selectedHandIndexes,
-  } = useSelectionStore(useShallow((state) => ({
     selectedHandIndexes: state.selectedHandIndexes,
+    clickBoardTile: state.clickBoardTile,
   })));
 
   const onClickTile = useCallback((tile: IBoardTile) => {
@@ -40,9 +35,17 @@ const GameBoard = () => {
     clickBoardTile(tile, selectedCard, playerId);
   }, [phase, selectedHandIndexes]);
 
-  const positionsEqual = (pos1: BoardPosition, pos2: BoardPosition) => (
+  // rotate the board 180deg for the trailing player
+  // (tile position data remains unchanged)
+  const { board: trueBoard } = state!;
+  const isTrailingPlayer = players.map(p => p.id).indexOf(playerId) === 1;
+  const board = isTrailingPlayer ?
+    [...trueBoard.map(column => [...column].reverse())].reverse()
+    : trueBoard;
+
+  const positionsEqual = useCallback((pos1: BoardPosition, pos2: BoardPosition) => (
     pos1.x === pos2.x && pos1.y === pos2.y
-  );
+  ), []);
 
   const playColumns = board.map((column) => (
     column.map((tile) => (
@@ -59,9 +62,11 @@ const GameBoard = () => {
 
   const { rowScoresByPlayerId } = adaptGameState(state);
 
-  const scoreColumns = players.map((player) => (
-    buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id])
-  ));
+  const scoreColumns = [...players]
+    .sort(p => ((p.id === playerId) ? -1 : 1))
+    .map((player) => (
+      buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id])
+    ));
 
   const columns = [scoreColumns[0], ...playColumns, scoreColumns[1]];
   const tiles = columns.reduce((accum, curr) => [...accum, ...curr], []);
