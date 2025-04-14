@@ -57,7 +57,7 @@ const Controls = () => {
       playerId,
     });
     reset();
-  }, []);
+  }, [playerId]);
 
   return (
     <div>
