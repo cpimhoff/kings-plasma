@@ -22,6 +22,7 @@ function processPlayCard(
   const tile = state.board[action.toBoardPosition.x][action.toBoardPosition.y];
   tile.card = card;
   tile.controllerPlayerId = action.playerId;
+  tile.pips = 0;
   processCardEvents(state, { triggerId: "onPlay", tile }, ctx);
 
   markPlayerPassed(state, action.playerId, false);
