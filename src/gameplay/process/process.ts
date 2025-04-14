@@ -31,7 +31,7 @@ export function process(
           });
         },
   };
-  processPhase(state, action, ctx);
+  processPhase(draftState, action, ctx);
   const finalState = finishDraft(draftState);
   return { state: finalState, action, keyframes };
 }
