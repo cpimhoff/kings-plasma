@@ -56,6 +56,14 @@ const PlayerHand = () => {
     reset();
   }, [selectedBoardPosition, selectedHandIndexes]);
 
+  const onPass = useCallback(() => {
+    dispatchAction({
+      type: 'pass',
+      playerId,
+    });
+    reset();
+  }, []);
+
   return (
     <div>
       { phase === 'setup' && (
@@ -64,9 +72,14 @@ const PlayerHand = () => {
         </Button>
       ) }
       { phase === 'play' && (
-        <Button onClick={() => onPlayCard()}>
-          Play card
-        </Button>
+        <>
+          <Button onClick={() => onPlayCard()}>
+            Play card
+          </Button>
+          <Button onClick={() => onPass()}>
+            Pass
+          </Button>
+        </>
       ) }
       <div className="flex">
         { player.hand.map((card, idx) => (
