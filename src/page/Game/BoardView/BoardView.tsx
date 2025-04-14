@@ -6,7 +6,6 @@ const BoardView = () => {
     <div>
       <GameBoard />
       <PlayerHand />
-      <div> Pass </div>
     </div>
   );
 };

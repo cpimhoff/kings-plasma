@@ -15,7 +15,7 @@ const BoardTile = (tile: IBoardTile) => {
       { card && (
         <TileCard {...card} />
       ) }
-      <TilePips pips={pips} />
+      { pips > 0 && <TilePips pips={pips} /> }
       { playerName }
     </TileContainer>
   );

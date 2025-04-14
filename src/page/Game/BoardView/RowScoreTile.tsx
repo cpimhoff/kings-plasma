@@ -7,7 +7,7 @@ const RowScoreTile = ({ score }: Props) => {
   return (
     <TileContainer>
       <div>
-        { score }
+        row score: { score }
       </div>
     </TileContainer>
   );
