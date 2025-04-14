@@ -11,6 +11,7 @@ interface GameplayStore {
 
   beginGame: (players: Player[]) => void;
   dispatchAction: (action: Action) => void;
+  undo: () => void;
 };
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
