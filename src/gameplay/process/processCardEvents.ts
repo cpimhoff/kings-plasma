@@ -112,7 +112,8 @@ function processTriggeredCardAction(
         y: action.source.position.y + deltaTile.dy,
       }));
       for (const t of targets) {
-        const tile = state.board[t.x][t.y];
+        const tile = state.board?.[t.x]?.[t.y];
+        if (!tile) continue; // out of bounds
         if (tile.card) continue; // nothing to do on already occupied tiles
         if (
           // only add pips if not already under enemy control
