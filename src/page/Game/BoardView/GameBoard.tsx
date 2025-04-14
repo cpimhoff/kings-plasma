@@ -47,6 +47,7 @@ const GameBoard = () => {
   const playColumns = board.map((column) => (
     column.map((tile) => (
       <div
+        key={`${tile.position.x},${tile.position.y}`}
         className={cn({
           'bg-sky-200': selectedBoardPosition && positionsEqual(tile.position, selectedBoardPosition),
         })}
