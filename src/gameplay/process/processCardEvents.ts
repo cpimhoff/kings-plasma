@@ -205,7 +205,8 @@ function getTileTargets(
           y: source.position.y + deltaTile.dy,
         })),
       ]
-        .map((pos) => state.board[pos.x][pos.y])
+        .map((pos) => state.board?.[pos.x]?.[pos.y])
+        .filter((t) => t) // ignore out of bounds targets
         .filter((t) => t.card) as (BoardTile & { card: Card })[])
     : Array.from(allBoardCards(state));
 
