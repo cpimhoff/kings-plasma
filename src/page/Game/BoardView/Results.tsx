@@ -3,7 +3,7 @@ import { getPlayerWithId } from '@/gameplay/state/Player';
 import { adaptGameState } from './adapter';
 
 const Results = () => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { players } = gameState!;
   const { pointsByPlayerId } = adaptGameState(gameState!);
   return (

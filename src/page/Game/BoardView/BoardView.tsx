@@ -4,7 +4,7 @@ import EndPhase from './EndPhase';
 import { useGameplayStore } from '@/gameplay/store' ;
 
 const BoardView = () => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { phase } = gameState!;
 
   let phaseView;

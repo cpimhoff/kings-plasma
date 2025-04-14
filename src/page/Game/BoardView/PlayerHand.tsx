@@ -8,7 +8,7 @@ interface Props {
   player: Player,
 }
 const PlayerHand = ({ player }: Props) => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { phase } = gameState!;
 
   const { hand } = player;

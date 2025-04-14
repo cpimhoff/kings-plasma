@@ -5,7 +5,7 @@ import Results from './Results';
 import { useGameplayStore } from '@/gameplay/store' ;
 
 const EndPhase = () => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { players } = gameState!;
   const player = players[0];
   return (

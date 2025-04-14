@@ -5,7 +5,7 @@ import PlayerHand from './PlayerHand';
 import { useGameplayStore } from '@/gameplay/store' ;
 
 const SetupPhase = () => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { players } = gameState!;
   const player = players.find((player) => !player.phase.setup.done)!;
   return (

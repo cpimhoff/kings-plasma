@@ -7,7 +7,7 @@ import TilePips from './TilePips';
 
 const BoardTile = (tile: IBoardTile) => {
   const { card, pips, controllerPlayerId } = tile;
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { players } = gameState!;
   const playerName = controllerPlayerId ? getPlayerWithId(players, controllerPlayerId).name : 'empty';
   return (

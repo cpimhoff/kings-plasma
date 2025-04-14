@@ -9,9 +9,9 @@ interface Props {
   player: Player;
 }
 
-const Controls = ({ player }: Props) => {
-  const { gameState, dispatchAction, undo } = useGameplayStore();
-  const { phase } = gameState!;
+const BoardControls = ({ player }: Props) => {
+  const gameState = useGameplayStore((state) => state.gameState);
+  const [ dispatchAction, undo ] = useGameplayStore(useShallow((state) => [state.dispatchAction, state.undo]));
 
   const {
     selectedHandIndexes,
@@ -51,6 +51,8 @@ const Controls = ({ player }: Props) => {
     reset();
   }, [player.id]);
 
+  const { phase } = gameState!;
+
   return (
     <div>
       { phase === 'setup' && (
@@ -66,13 +68,13 @@ const Controls = ({ player }: Props) => {
           <Button onClick={() => onPass()}>
             Pass
           </Button>
-          <Button onClick={() => undo()}>
-            Undo
-          </Button>
         </>
       ) }
+      <Button onClick={() => undo()}>
+        Undo
+      </Button>
     </div>
   );
 };
 
-export default Controls;
+export default BoardControls;

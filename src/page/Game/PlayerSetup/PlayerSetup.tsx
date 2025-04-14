@@ -13,7 +13,7 @@ const PlayerSetup = () => {
     const dir = idx === 0 ? 'Left' : 'Right';
     return [idx, dir, idx === 2]
   }, [players]);
-  const { beginGame } = useGameplayStore();
+  const beginGame = useGameplayStore((state) => state.beginGame);
   const onClickStartGame = useCallback(() => {
     submit(beginGame);
   }, []);

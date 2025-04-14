@@ -6,7 +6,7 @@ import { useGameplayStore } from '@/gameplay/store' ;
 import { getPlayerWithId } from '@/gameplay/state/Player';
 
 const PlayPhase = () => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { players, playPhaseActivePlayerId } = gameState!;
   const activePlayerId = playPhaseActivePlayerId;
   const player = getPlayerWithId(players, activePlayerId);

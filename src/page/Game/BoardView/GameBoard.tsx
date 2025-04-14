@@ -9,7 +9,7 @@ import { Player, getPlayerWithId } from '@/gameplay/state/Player';
 import { adaptGameState } from './adapter';
 
 const GameBoard = () => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const state = gameState!;
   const {
     phase,

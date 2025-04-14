@@ -6,7 +6,7 @@ interface Props {
 }
 
 const GameStatus = ({ player }: Props) => {
-  const { gameState } = useGameplayStore();
+  const gameState = useGameplayStore((state) => state.gameState);
   const { phase } = gameState!;
   return (
     <div>
