@@ -1,10 +1,11 @@
 import { create } from 'zustand';
-import { Card } from '@/gameplay/state/Card';
+import { Card, withReversedVectors } from '@/gameplay/state/Card';
 import CardMultiSet from '../CardMultiSet';
 import { FF7_LIBRARY } from '@/gameplay/library/ff7Library';
 
 interface CardLibraryStore {
-  cardLibrary: CardMultiSet,
+  cardLibrary: CardMultiSet;
+  isTrailingPlayer: boolean;
 
   takeCard: (card: Card) => void;
   replaceCard: (card: Card) => void;
@@ -13,6 +14,7 @@ interface CardLibraryStore {
 
 export const useCardLibraryStore = create<CardLibraryStore>((set) => ({
   cardLibrary: initLibrary(),
+  isTrailingPlayer: false,
 
   takeCard: (card) => set((state) => {
     const newCardLibrary = state.cardLibrary.clone();
@@ -30,16 +32,19 @@ export const useCardLibraryStore = create<CardLibraryStore>((set) => ({
     };
   }),
 
-  reset: () => set(() => ({
-    cardLibrary: initLibrary(),
-  })),
+  reset: () => set({
+    cardLibrary: initLibrary(true),
+    isTrailingPlayer: true,
+  }),
 }));
 
-function initLibrary() {
+function initLibrary(reverse: boolean = false) {
   const library = new CardMultiSet();
-  FF7_LIBRARY.forEach(card => {
-    const count = card.isLegendary ? 1 : 3;
-    library.addCard(card, count);
-  });
+  FF7_LIBRARY
+    .map(card => reverse ? withReversedVectors(card) : card)
+    .forEach(card => {
+      const count = card.isLegendary ? 1 : 3;
+      library.addCard(card, count);
+    });
   return library;
 };

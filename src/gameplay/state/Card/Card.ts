@@ -1,5 +1,6 @@
 import { CardEffect } from "./CardEffect";
-import { Vector2, addVector2s } from '@/utils/vector';
+import { Vector2, addVector2s, invertVector2 } from '@/utils/vector';
+import { produce } from 'immer';
 
 export type Card = {
   id: string;
@@ -84,3 +85,17 @@ export const getCardHasSpecialEffect = (effects: Card['effects']) => {
   return ret;
 }
 
+export function withReversedVectors(card: Card): Card {
+  return produce(card, (draft) => {
+    draft.effects = draft.effects?.map((effect) => {
+      effect.trigger.tiles = effect.trigger?.tiles?.map((vector: Vector2) => invertVector2(vector));
+      effect.actions = effect.actions.map((action) => {
+        if ('tiles' in action) {
+          action.tiles = action.tiles?.map((tile: Vector2) => invertVector2(tile))
+        }
+        return action;
+      });
+      return effect;
+    });
+  });
+}

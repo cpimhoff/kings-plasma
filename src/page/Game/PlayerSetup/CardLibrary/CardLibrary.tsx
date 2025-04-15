@@ -14,7 +14,7 @@ const CardLibrary = ({
   onClickCard,
   setPreviewCard,
 }: Props) => {
-  const { cardLibrary } = useCardLibraryStore();
+  const { cardLibrary, isTrailingPlayer } = useCardLibraryStore();
   const allCardNodesById = useMemo<Record<ICard['id'], ReactNode>>(() => (
     Object.values(cardLibrary.getCardsById()).map((card) => {
       const cardNode = <SmallCard {...card} />;
@@ -26,7 +26,7 @@ const CardLibrary = ({
       ...accum,
       [curr.id]: curr.node,
     }), {})
-  ), []);
+  ), [isTrailingPlayer]);
   return (
     <div>
       <h2> available cards </h2>

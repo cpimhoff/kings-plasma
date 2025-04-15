@@ -15,7 +15,9 @@ const GameBoard = () => {
   // rotate the board 180deg for the trailing player
   // (tile position data remains unchanged)
   const { board: trueBoard } = state!;
-  const isTrailingPlayer = players.map(p => p.id).indexOf(playerId) === 1;
+  // const isTrailingPlayer = players.map(p => p.id).indexOf(playerId) === 1;
+  // TODO: uncomment when inverting the card preview grids is implemented
+  const isTrailingPlayer = false;
   const board = isTrailingPlayer ?
     [...trueBoard.map(column => [...column].reverse())].reverse()
     : trueBoard;
