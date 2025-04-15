@@ -6,22 +6,33 @@ import { process } from './process/process';
 
 interface GameplayStore {
   gameState: GameState | null;
+  previewState: GameState | null;
   historyStack: GameState[];
   _pending: boolean;
 
   beginGame: (players: Player[]) => void;
+  previewAction: (action: Action) => void;
   dispatchAction: (action: Action) => void;
   undo: () => void;
 };
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
+  previewState: null,
   historyStack: [],
   _pending: false,
 
   beginGame: (players) => set(() => ({
     gameState: createInitialState(players),
   })),
+
+  previewAction: (action) => set(() => {
+    const { keyframes, state: finalState } = process(get().gameState!, action);
+    const allFrames = [...keyframes.map(kf => kf.snapshot), finalState];
+    return {
+      previewState: allFrames[0],
+    };
+  }),
 
   dispatchAction: (action) => {
     if (get()._pending) return;

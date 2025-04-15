@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useGameplayStore } from '@/gameplay/store' ;
 import { Player } from '@/gameplay/state/Player' ;
+import { useMulliganStore } from './mulliganStore';
 import { useSelectionStore } from './selectionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
@@ -14,42 +15,63 @@ const BoardControls = ({ player }: Props) => {
   const [ dispatchAction, undo ] = useGameplayStore(useShallow((state) => [state.dispatchAction, state.undo]));
 
   const {
-    selectedHandIndexes,
+    handIndexesToMulligan,
+    resetMulligans,
+  } = useMulliganStore(useShallow((state) => ({
+    handIndexesToMulligan: state.handIndexesToMulligan,
+    resetMulligans: state.resetMulligans,
+  })));
+
+  const {
+    selectedHandIndex,
     selectedBoardPosition,
-    reset,
+    resetSelections,
   } = useSelectionStore(useShallow((state) => ({
-    selectedHandIndexes: state.selectedHandIndexes,
+    selectedHandIndex: state.selectedHandIndex,
     selectedBoardPosition: state.selectedBoardPosition,
-    reset: state.reset,
+    resetSelections: state.resetSelections,
   })));
 
   const onMulligan = useCallback(() => {
     dispatchAction({
       type: 'mulligan',
       playerId: player.id,
-      handIndexes: selectedHandIndexes,
+      handIndexes: handIndexesToMulligan,
     });
-    reset();
-  }, [player.id, selectedHandIndexes]);
+    resetMulligans();
+  }, [player.id, handIndexesToMulligan]);
 
   const onPlayCard = useCallback(() => {
     if (!selectedBoardPosition) return;
     dispatchAction({
       type: 'playCard',
       playerId: player.id,
-      fromHandIndex: selectedHandIndexes[0],
+      fromHandIndex: selectedHandIndex!,
       toBoardPosition: selectedBoardPosition!,
     });
-    reset();
-  }, [selectedBoardPosition, selectedHandIndexes]);
+    resetSelections();
+  }, [selectedBoardPosition, selectedHandIndex]);
 
   const onPass = useCallback(() => {
     dispatchAction({
       type: 'pass',
       playerId: player.id,
     });
-    reset();
+    resetSelections();
   }, [player.id]);
+
+  const onRematch = useCallback(() => {
+    dispatchAction({
+      type: 'rematch',
+      playerId: player.id,
+      rematch: true,
+    });
+  }, [player.id]);
+
+  const onUndo = useCallback(() => {
+    undo();
+    resetSelections();
+  }, []);
 
   const { phase } = gameState!;
 
@@ -57,12 +79,12 @@ const BoardControls = ({ player }: Props) => {
     <div>
       { phase === 'setup' && (
         <Button onClick={() => onMulligan()}>
-          { selectedHandIndexes.length > 0 ? "Mulligan and begin" : "Begin" }
+          { handIndexesToMulligan.length > 0 ? "Mulligan and begin" : "Begin" }
         </Button>
       ) }
       { phase === 'play' && (
         <>
-          <Button disabled={selectedHandIndexes.length === 0} onClick={() => onPlayCard()}>
+          <Button disabled={selectedHandIndex === null} onClick={() => onPlayCard()}>
             Play card
           </Button>
           <Button onClick={() => onPass()}>
@@ -70,7 +92,14 @@ const BoardControls = ({ player }: Props) => {
           </Button>
         </>
       ) }
-      <Button onClick={() => undo()}>
+      { phase === 'end' && (
+        <>
+          <Button onClick={() => onRematch()}>
+            Rematch
+          </Button>
+        </>
+      ) }
+      <Button onClick={() => onUndo()}>
         Undo
       </Button>
     </div>

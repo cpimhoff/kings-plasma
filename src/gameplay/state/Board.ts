@@ -10,6 +10,10 @@ export type BoardPosition = {
   y: number;
 };
 
+export function positionsEqual(pos1: BoardPosition, pos2: BoardPosition) {
+  return pos1.x === pos2.x && pos1.y === pos2.y;
+}
+
 export type BoardTile = {
   position: BoardPosition;
   pips: number;

@@ -1,61 +1,69 @@
 import { create } from 'zustand';
-import { BoardPosition, BoardTile } from '@/gameplay/state/Board';
-import { Phase } from '@/gameplay/state/Phase';
+import { BoardPosition } from '@/gameplay/state/Board';
+import { GameState } from '@/gameplay/state/GameState';
+import { Player, getPlayerWithId } from '@/gameplay/state/Player';
 import { Card } from '@/gameplay/state/Card';
-import { Player } from '@/gameplay/state/Player';
-
-const MAX_CARDS_TO_MULLIGAN = 3;
+import { BoardTile } from '@/gameplay/state/Board';
 
 interface SelectionStore {
-  selectedHandIndexes: number[];
+  selectedHandIndex: number | null;
   selectedBoardPosition: BoardPosition | null;
 
-  clickHandIndex: (handIdx: number, phase: Phase) => void;
-  clickBoardTile: (tile: BoardTile, selectedCard: Card, playerId: Player['id']) => void;
-  reset: () => void;
+  clickHandIndex: (handIdx: number) => void;
+  clickBoardPosition: (pos: BoardPosition, gameState: GameState) => void;
+  resetSelections: () => void;
 };
 
-export const useSelectionStore = create<SelectionStore>((set) => ({
-  selectedHandIndexes: [],
+export const useSelectionStore = create<SelectionStore>((set, get) => ({
+  selectedHandIndex: null,
   selectedBoardPosition: null,
 
-  clickHandIndex: (idx, phase) => set((state) => {
-    let newVal;
-    if (phase === 'setup') {
-      if (state.selectedHandIndexes.length === MAX_CARDS_TO_MULLIGAN) {
-        newVal = state.selectedHandIndexes;
-      }
-      if (state.selectedHandIndexes.includes(idx)) {
-          newVal = state.selectedHandIndexes.filter(i => i !== idx);
-      } else {
-          newVal = [...state.selectedHandIndexes, idx];
-      }
+  clickHandIndex: (handIdx) => {
+    const { selectedHandIndex } = get();
+    if (selectedHandIndex === handIdx) {
+      set({
+        selectedHandIndex: null,
+        selectedBoardPosition: null,
+      });
     } else {
-      newVal = [idx];
+      set({
+        selectedHandIndex: handIdx,
+        selectedBoardPosition: null,
+      });
     }
-    return {
-      selectedHandIndexes: newVal,
-    };
-  }),
+  },
 
-  clickBoardTile: (tile, selectedCard, playerId) => set(() => {
-    let isValidSelection = false;
-    if (tile.controllerPlayerId === playerId) {
-      if (typeof selectedCard.playRequirement === 'number') {
-        isValidSelection = !tile.card && tile.pips >= selectedCard.playRequirement;
-      }
-      if (selectedCard.playRequirement === 'replace') {
-        isValidSelection = !!tile.card;
-      }
-    }
-    return {
-      selectedBoardPosition: isValidSelection ? tile.position : null,
-    };
-  }),
+  clickBoardPosition: (pos, gameState) => {
+    // fail fast
+    const { selectedHandIndex } = get();
+    if (selectedHandIndex === null) return;
+    // get target tile
+    const tile = gameState.board[pos.x][pos.y];
+    // get selected card
+    const activePlayer = getPlayerWithId(gameState.players, gameState.playPhaseActivePlayerId);
+    const selectedCard = activePlayer.hand[selectedHandIndex];
+    // validate
+    const isValid = canPlayerPlaceCardAtTile(activePlayer, selectedCard, tile);
+    if (!isValid) return;
+    set({
+      selectedBoardPosition: pos,
+    });
+  },
 
-  reset: () => set(() => ({
-    selectedHandIndexes: [],
+  resetSelections: () => set(() => ({
+    selectedHandIndex: null,
     selectedBoardPosition: null,
   })),
 
 }));
+
+// TODO: find a better place for this
+export function canPlayerPlaceCardAtTile(player: Player, card: Card, tile: BoardTile) {
+  if (tile.controllerPlayerId !== player.id) return false;
+  if (typeof card.playRequirement === 'number') {
+    if (tile.pips < card.playRequirement) return false;
+  } else {
+    if (tile.card === null) return false;
+  }
+  return true;
+}
