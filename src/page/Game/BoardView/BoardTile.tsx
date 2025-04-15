@@ -10,9 +10,8 @@ interface Props {
   tile: IBoardTile;
   isSelected: boolean;
   onClick: (tile: IBoardTile) => void;
-  backgroundColor: string;
 }
-const BoardTile = ({ tile, isSelected, onClick, backgroundColor }: Props) => {
+const BoardTile = ({ tile, isSelected, onClick }: Props) => {
   const { card, pips, controllerPlayerId } = tile;
   const gameState = useGameplayStore((state) => state.gameState);
   const { players } = gameState!;
@@ -21,9 +20,7 @@ const BoardTile = ({ tile, isSelected, onClick, backgroundColor }: Props) => {
   return (
     <TileContainer>
       <div
-        className={cn('w-full', 'h-full', 'relative', {
-          'bg-sky-200': backgroundColor,
-        })}
+        className="w-full h-full relative"
         onClick={() => onClick(tile)}
       >
         { color && (
