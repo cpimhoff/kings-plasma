@@ -57,7 +57,7 @@ const BoardTile = ({
     const activePlayer = getPlayerWithId(state.players, state.playPhaseActivePlayerId);
     const selectedCard = activePlayer.hand[selectedHandIndex];
     return canPlayerPlaceCardAtTile(activePlayer, selectedCard, tile);
-  }, [selectedHandIndex, gameState]);
+  }, [selectedHandIndex, state]);
 
   const handleHover = useCallback(() => {
     hoverOverBoardPosition(tile.position);
@@ -70,7 +70,7 @@ const BoardTile = ({
         toBoardPosition: tile.position,
       });
     }
-  }, []);
+  }, [tile.position, state]);
 
   return (
     <TileContainer>
