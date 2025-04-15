@@ -60,7 +60,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     if (!historyStack.length || _pending) return {};
     const stackSize = historyStack.length;
     const newState = historyStack[stackSize - 1];
-    const newStack = [...historyStack].splice(0, stackSize);
+    const newStack = [...historyStack].splice(0, stackSize - 1);
     return {
       gameState: newState,
       historyStack: newStack,
