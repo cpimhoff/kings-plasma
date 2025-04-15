@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useGameplayStore } from '@/gameplay/store' ;
 import { Player } from '@/gameplay/state/Player' ;
 import { useMulliganStore } from './mulliganStore';
-import { useSelectionStore } from './selectionStore';
+import { useInteractionStore } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 
@@ -26,7 +26,7 @@ const BoardControls = ({ player }: Props) => {
     selectedHandIndex,
     selectedBoardPosition,
     resetSelections,
-  } = useSelectionStore(useShallow((state) => ({
+  } = useInteractionStore(useShallow((state) => ({
     selectedHandIndex: state.selectedHandIndex,
     selectedBoardPosition: state.selectedBoardPosition,
     resetSelections: state.resetSelections,

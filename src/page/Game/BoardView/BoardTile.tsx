@@ -1,8 +1,7 @@
 import { cn } from '@/utils/cn';
 import { BoardTile as IBoardTile } from '@/gameplay/state/Board';
 import { useGameplayStore } from '@/gameplay/store';
-import { useHoverStore } from './hoverStore';
-import { useSelectionStore, canPlayerPlaceCardAtTile } from './selectionStore';
+import { useInteractionStore, canPlayerPlaceCardAtTile } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { getPlayerWithId } from '@/gameplay/state/Player';
 import { positionsEqual } from '@/gameplay/state/Board';
@@ -28,21 +27,17 @@ const BoardTile = ({
 
   const {
     hoveredBoardPosition,
-    hoverOverBoardPosition,
-    resetHover,
-  } = useHoverStore(useShallow((state) => ({
-    hoveredBoardPosition: state.hoveredBoardPosition,
-    hoverOverBoardPosition: state.hoverOverBoardPosition,
-    resetHover: state.resetHover,
-  })));
-
-  const {
     selectedHandIndex,
     selectedBoardPosition,
+    hoverOverBoardPosition,
+    resetHover,
     clickBoardPosition,
-  } = useSelectionStore(useShallow((state) => ({
+  } = useInteractionStore(useShallow((state) => ({
+    hoveredBoardPosition: state.hoveredBoardPosition,
     selectedHandIndex: state.selectedHandIndex,
     selectedBoardPosition: state.selectedBoardPosition,
+    hoverOverBoardPosition: state.hoverOverBoardPosition,
+    resetHover: state.resetHover,
     clickBoardPosition: state.clickBoardPosition,
   })));
 

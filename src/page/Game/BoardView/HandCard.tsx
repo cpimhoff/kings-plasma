@@ -1,9 +1,8 @@
 import { cn } from '@/utils/cn';
 import { useMemo, useCallback } from 'react';
 import { useGameplayStore } from '@/gameplay/store';
-import { useHoverStore } from './hoverStore';
 import { useMulliganStore } from './mulliganStore';
-import { useSelectionStore } from './selectionStore';
+import { useInteractionStore } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';
 
 import FullCard from '../PlayerSetup/FullCard'; // TODO either move this or make a new component
@@ -15,27 +14,23 @@ interface Props {
 }
 const HandCard = ({ idx, card }: Props) => {
   const {
-    hoveredHandIndex,
-    hoverOverHandIndex,
-    resetHover,
-  } = useHoverStore(useShallow((state) => ({
-    hoveredHandIndex: state.hoveredHandIndex,
-    hoverOverHandIndex: state.hoverOverHandIndex,
-    resetHover: state.resetHover,
-  })));
-
-  const {
     toggleHandIndexToMulligan,
   } = useMulliganStore(useShallow((state) => ({
     toggleHandIndexToMulligan: state.toggleHandIndexToMulligan,
   })));
 
   const {
+    hoveredHandIndex,
     selectedHandIndex,
+    hoverOverHandIndex,
     clickHandIndex,
-  } = useSelectionStore(useShallow((state) => ({
+    resetHover,
+  } = useInteractionStore(useShallow((state) => ({
+    hoveredHandIndex: state.hoveredHandIndex,
     selectedHandIndex: state.selectedHandIndex,
+    hoverOverHandIndex: state.hoverOverHandIndex,
     clickHandIndex: state.clickHandIndex,
+    resetHover: state.resetHover,
   })));
 
   const isHovered = useMemo(() => idx === hoveredHandIndex, [idx, hoveredHandIndex]);

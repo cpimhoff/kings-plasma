@@ -5,18 +5,43 @@ import { Player, getPlayerWithId } from '@/gameplay/state/Player';
 import { Card } from '@/gameplay/state/Card';
 import { BoardTile } from '@/gameplay/state/Board';
 
-interface SelectionStore {
+interface InteractionStore {
+  // ==state==
+  // hovered
+  hoveredHandIndex: number | null;
+  hoveredBoardPosition: BoardPosition | null;
+
+  // selected
   selectedHandIndex: number | null;
   selectedBoardPosition: BoardPosition | null;
 
+  // ==actions==
+  // hover
+  hoverOverHandIndex: (handIdx: number) => void;
+  hoverOverBoardPosition: (pos: BoardPosition) => void;
+
+  // click
   clickHandIndex: (handIdx: number) => void;
   clickBoardPosition: (pos: BoardPosition, gameState: GameState) => void;
+  
+  // reset
+  resetHover: () => void;
   resetSelections: () => void;
 };
 
-export const useSelectionStore = create<SelectionStore>((set, get) => ({
+export const useInteractionStore = create<InteractionStore>((set, get) => ({
+  hoveredHandIndex: null,
+  hoveredBoardPosition: null,
   selectedHandIndex: null,
   selectedBoardPosition: null,
+
+  hoverOverHandIndex: (handIdx) => set({
+    hoveredHandIndex: handIdx,
+  }),
+
+  hoverOverBoardPosition: (pos) => set({
+    hoveredBoardPosition: pos,
+  }),
 
   clickHandIndex: (handIdx) => {
     const { selectedHandIndex } = get();
@@ -50,10 +75,15 @@ export const useSelectionStore = create<SelectionStore>((set, get) => ({
     });
   },
 
-  resetSelections: () => set(() => ({
+  resetHover: () => set({
+    hoveredHandIndex: null,
+    hoveredBoardPosition: null,
+  }),
+
+  resetSelections: () => set({
     selectedHandIndex: null,
     selectedBoardPosition: null,
-  })),
+  }),
 
 }));
 
