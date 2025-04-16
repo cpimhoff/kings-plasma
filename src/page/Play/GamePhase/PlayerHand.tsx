@@ -5,15 +5,16 @@ interface Props {
   player: Player,
 }
 const PlayerHand = ({ player }: Props) => {
-  const { hand } = player;
+  const { hand, colorCssValue: color } = player;
 
   return (
-    <div className="flex">
+    <div className="flex gap-3">
       { hand.map((card, idx) => (
         <HandCard
           key={`${player.id},${card.id},${idx}`}
           idx={idx}
           card={card}
+          color={color}
         />
       )) }
     </div>

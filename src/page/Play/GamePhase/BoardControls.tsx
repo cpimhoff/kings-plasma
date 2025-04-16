@@ -76,7 +76,7 @@ const BoardControls = ({ player }: Props) => {
   const { phase } = gameState!;
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       { phase === 'setup' && (
         <Button onClick={() => onMulligan()}>
           { handIndexesToMulligan.length > 0 ? "Mulligan and begin" : "Begin" }

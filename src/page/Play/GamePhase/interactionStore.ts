@@ -22,8 +22,8 @@ interface InteractionStore {
 
   // click
   clickHandIndex: (handIdx: number) => void;
-  clickBoardPosition: (pos: BoardPosition, gameState: GameState) => void;
-  
+  clickBoardPosition: (pos: BoardPosition, gameState: GameState) => boolean;
+
   // reset
   resetHover: () => void;
   resetSelections: () => void;
@@ -61,7 +61,7 @@ export const useInteractionStore = create<InteractionStore>((set, get) => ({
   clickBoardPosition: (pos, gameState) => {
     // fail fast
     const { selectedHandIndex } = get();
-    if (selectedHandIndex === null) return;
+    if (selectedHandIndex === null) return false;
     // get target tile
     const tile = gameState.board[pos.x][pos.y];
     // get selected card
@@ -69,10 +69,12 @@ export const useInteractionStore = create<InteractionStore>((set, get) => ({
     const selectedCard = activePlayer.hand[selectedHandIndex];
     // validate
     const isValid = canPlayerPlaceCardAtTile(activePlayer, selectedCard, tile);
-    if (!isValid) return;
-    set({
-      selectedBoardPosition: pos,
-    });
+    if (isValid) {
+      set({
+        selectedBoardPosition: pos,
+      });
+    }
+    return isValid;
   },
 
   resetHover: () => set({

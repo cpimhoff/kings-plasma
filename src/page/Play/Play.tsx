@@ -1,11 +1,11 @@
 import { useGameplayStore } from '@/gameplay/store';
-import PlayerSetup from '@/page/Game/PlayerSetup/PlayerSetup';
-import BoardView from '@/page/Game/BoardView/BoardView';
+import PlayerSetup from './PlayerSetup/PlayerSetup';
+import GamePhase from './GamePhase/GamePhase';
 
 const Play = () => {
   const gameState = useGameplayStore(state => state.gameState);
   if (gameState) {
-    return <BoardView />;
+    return <GamePhase />;
   }
   return <PlayerSetup />;
 };

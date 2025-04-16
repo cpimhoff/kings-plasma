@@ -3,7 +3,7 @@ import PlayPhase from './PlayPhase';
 import EndPhase from './EndPhase';
 import { useGameplayStore } from '@/gameplay/store' ;
 
-const BoardView = () => {
+const GamePhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);
   const { phase } = gameState!;
 
@@ -23,10 +23,12 @@ const BoardView = () => {
   };
 
   return (
-    <div>
-      { phaseView }
+    <div className="w-full flex justify-center">
+      <div>
+        { phaseView }
+      </div>
     </div>
   );
 };
 
-export default BoardView;
+export default GamePhase;

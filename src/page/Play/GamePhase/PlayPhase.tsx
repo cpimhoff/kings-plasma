@@ -2,6 +2,7 @@ import GameStatus from './GameStatus';
 import GameBoard from './GameBoard';
 import BoardControls from './BoardControls';
 import PlayerHand from './PlayerHand';
+import BoardView from './BoardView';
 import { useGameplayStore } from '@/gameplay/store' ;
 import { getPlayerWithId } from '@/gameplay/state/Player';
 
@@ -11,12 +12,12 @@ const PlayPhase = () => {
   const activePlayerId = playPhaseActivePlayerId;
   const player = getPlayerWithId(players, activePlayerId);
   return (
-    <div>
-      <GameStatus player={player}/>
-      <GameBoard />
-      <BoardControls player={player} />
-      <PlayerHand player={player} />
-    </div>
+    <BoardView
+      gameStatus={<GameStatus player={player} />}
+      gameBoard={<GameBoard />}
+      boardControls={<BoardControls player={player} />}
+      playerHand={<PlayerHand player={player} />}
+    />
   );
 };
 

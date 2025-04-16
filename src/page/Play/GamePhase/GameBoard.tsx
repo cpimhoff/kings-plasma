@@ -26,7 +26,7 @@ const GameBoard = () => {
     column.map((tile) => (
       <BoardTile
         key={`${tile.position.x},${tile.position.y}`}
-        tile={tile}
+        position={tile.position}
       />
     ))));
 

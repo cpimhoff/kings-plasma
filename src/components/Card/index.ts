@@ -4,6 +4,8 @@ import CardEffectPreviewGrid from './CardEffectPreviewGrid';
 import CardSpecialEffectMarker from './CardSpecialEffectMarker';
 import CardSpecialEffectDescription from './CardSpecialEffectDescription';
 import CardName from './CardName';
+import CardFooter from './CardFooter';
+import CardGradient from './CardGradient';
 
 export {
   CardCost,
@@ -12,4 +14,6 @@ export {
   CardSpecialEffectMarker,
   CardSpecialEffectDescription,
   CardName,
+  CardFooter,
+  CardGradient,
 };

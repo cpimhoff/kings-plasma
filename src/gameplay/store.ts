@@ -12,6 +12,7 @@ interface GameplayStore {
 
   beginGame: (players: Player[]) => void;
   previewAction: (action: Action) => void;
+  clearPreview: () => void;
   dispatchAction: (action: Action) => void;
   undo: () => void;
 };
@@ -34,6 +35,10 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     };
   }),
 
+  clearPreview: () => set({
+    previewState: null,
+  }),
+
   dispatchAction: (action) => {
     if (get()._pending) return;
     set(() => ({ _pending: true }));
@@ -49,6 +54,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     keyframesPromise.then(() => {
       set(() => ({
         gameState: newGameState,
+        previewState: null,
         historyStack: [...get().historyStack, oldGameState],
         _pending: false,
       }));
@@ -63,6 +69,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     const newStack = [...historyStack].splice(0, stackSize - 1);
     return {
       gameState: newState,
+      previewState: null,
       historyStack: newStack,
     };
   }),

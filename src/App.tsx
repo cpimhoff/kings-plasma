@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { Home, NotFound, RootErrorBoundary } from './page';
-import Game from '@/page/Game/Game';
+import Play from '@/page/Play/Play';
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
         />
         <Route
           path="/play"
-          element={<Game />}
+          element={<Play />}
           errorElement={<RootErrorBoundary />}
         />
         <Route path="*" element={<NotFound />} />
