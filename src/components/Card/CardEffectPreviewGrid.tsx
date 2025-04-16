@@ -7,7 +7,7 @@ const CardEffectPreviewGrid = ({ effects }: Props) => {
     return getGridForCardEffects(effects);
   }, [effects]);
   return (
-    <div className="w-full border border-2 border-black grid grid-rows-5 grid-cols-5">
+    <div className="w-full border border-2 border-black grid grid-flow-col grid-rows-5 grid-cols-5">
       { grid.map((row, i) => (
         row.map((cell, j) => (
           <div key={`${i},${j}`} className={cn(classesForCell(cell))}>
