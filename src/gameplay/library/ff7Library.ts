@@ -739,7 +739,7 @@ export namespace FF7Library {
     power: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
-        { dx: 0, dy: 0 },
+        { dx: 1, dy: 0 },
         { dx: 1, dy: -1 },
       ]),
       {
