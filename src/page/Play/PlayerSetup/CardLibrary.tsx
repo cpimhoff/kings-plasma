@@ -2,6 +2,7 @@ import { useMemo, ReactNode } from 'react';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import { usePlayerSetupStore } from './store';
 import { useShallow } from 'zustand/react/shallow';
+import { stringifyHSLColor } from './color';
 import FullCard from './FullCard';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import { MAX_CARDS_IN_DECK } from './constants';
@@ -16,10 +17,10 @@ const CardLibrary = () => {
     draftPlayer: state.draftPlayer,
     addCardToDraftPlayerDeck: state.addCardToDraftPlayerDeck,
   })));
-  const { colorCssValue: color, deck: draftPlayerDeck } = draftPlayer;
+  const { color, deck: draftPlayerDeck } = draftPlayer;
   const allCardNodesById = useMemo<Record<ICard['id'], ReactNode>>(() => (
     Object.values(cardLibrary.getCardsById()).map((card) => {
-      const cardNode = <FullCard card={card} color={color} />;
+      const cardNode = <FullCard card={card} color={stringifyHSLColor(color)} />;
       return {
         id: card.id,
         node: cardNode,

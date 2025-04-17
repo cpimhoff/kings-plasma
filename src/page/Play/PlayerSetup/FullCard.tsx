@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn';
+import { useMemo } from 'react';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import {
   CardGradient,
@@ -15,6 +16,9 @@ interface Props {
   color: string;
 }
 const FullCard = ({ card, color }: Props) => {
+  const effectPreviewGrid = useMemo(() => (
+    <CardEffectPreviewGrid effects={card.effects} />
+  ), [card.effects]);
   return (
     <div
       className={cn('w-50 h-70 flex flex-col items-center', {
@@ -31,7 +35,7 @@ const FullCard = ({ card, color }: Props) => {
           </div>
         </div>
         <div className="w-1/2">
-          <CardEffectPreviewGrid {...card} />
+          { effectPreviewGrid }
         </div>
       </CardGradient>
       <CardFooter className="w-full flex grow flex-col justify-stretch items-center">
