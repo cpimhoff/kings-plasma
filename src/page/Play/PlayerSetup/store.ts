@@ -77,7 +77,7 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
         color: getRandomHSLColor(),
         deck: new CardMultiSet(),
       },
-      library: initCardLibrary(true),
+      cardLibrary: initCardLibrary(true),
     };
   }),
 

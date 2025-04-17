@@ -29,8 +29,7 @@ const CardLibrary = () => {
       ...accum,
       [curr.id]: curr.node,
     }), {})
-  ), [color]); // recreate when a new player is added, to reverse the cards for player 2
-  // TODO: ^improve this
+  ), [cardLibrary, color]);
   return (
     <div className="overflow-y-auto">
       <h2> available cards </h2>
