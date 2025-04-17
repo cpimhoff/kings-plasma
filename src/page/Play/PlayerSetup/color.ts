@@ -4,7 +4,7 @@ export function getRandomHSLColor(): HSLColor {
   return {
     h: Math.random() * 360,
     s: 1,
-    l: 1,
+    l: 0.5,
   };
 }
 
