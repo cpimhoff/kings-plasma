@@ -1,38 +1,35 @@
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePlayerSetupStore } from './store';
 import { useGameplayStore } from '@/gameplay/store';
 import { useShallow } from 'zustand/react/shallow';
-import { Button } from '@/components/ui/button';
 import CreatePlayer from './CreatePlayer';
+import { Button } from '@/components/ui/button';
 
 const PlayerSetup = () => {
-  const [ players, submit ] = usePlayerSetupStore(
-    useShallow(state => [state.players, state.submit]));
-  const [playerIdx, playerDirection, bothReady] = useMemo(() => {
-    const idx = players.length;
-    const dir = idx === 0 ? 'Left' : 'Right';
-    return [idx, dir, idx === 2]
-  }, [players]);
+  const {
+    players,
+  } = usePlayerSetupStore(
+    useShallow((state) => ({
+      players: state.players,
+    })));
+
   const beginGame = useGameplayStore((state) => state.beginGame);
-  const onClickStartGame = useCallback(() => {
-    submit(beginGame);
-  }, []);
+
+  const onClickStart = useCallback(() => {
+    beginGame(players);
+  }, [players]);
+
   return (
     <div>
-      <p> player setup </p>
-      <div>
-        { !bothReady && (
-          <div>
-            {`Player ${playerIdx + 1} (${playerDirection}):`}
-            <CreatePlayer />
-          </div>
-        ) }
-        { bothReady && (
-          <Button onClick={() => onClickStartGame()}> Start game </Button>
-        ) }
-      </div>
+      { players.length < 2 ? (
+        <CreatePlayer />
+      ) : (
+        <div className="w-full h-screen flex justify-center items-center">
+          <Button onClick={() => onClickStart()}>Start</Button>
+        </div>
+      ) }
     </div>
   );
-};
+}
 
 export default PlayerSetup;

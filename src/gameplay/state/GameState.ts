@@ -1,3 +1,4 @@
+import { produce } from "immer";
 import { Phase } from "./Phase";
 import { Board, createBoard } from "./Board";
 import { Player } from "./Player";
@@ -29,6 +30,5 @@ export function createInitialState(players: Player[]): GameState {
     board,
     rng: StableRandom.init(),
   };
-  processGameStart(state);
-  return state;
+  return produce(state, (draft) => processGameStart(draft));
 }

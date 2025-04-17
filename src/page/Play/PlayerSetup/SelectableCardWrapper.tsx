@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 interface Props {
   enabled?: boolean;
   count: number;
-  onHover: () => void;
+  onHover?: () => void;
   onClick: () => void;
   children: ReactNode;
 };
@@ -22,7 +22,11 @@ const SelectableCardWrapper = ({
       onMouseOver={onHover}
     >
       { children }
-      { `x${count}` }
+      <div className="flex justify-end">
+        <span className="mr-2">
+          { `x${count}` }
+        </span>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,52 @@
+import { useMemo, ReactNode } from 'react';
+import { Card as ICard } from '@/gameplay/state/Card/Card';
+import { usePlayerSetupStore } from './store';
+import { useShallow } from 'zustand/react/shallow';
+import FullCard from './FullCard';
+import SelectableCardWrapper from './SelectableCardWrapper';
+import { MAX_CARDS_IN_DECK } from './constants';
+
+const CardLibrary = () => {
+  const {
+    cardLibrary,
+    draftPlayer,
+    addCardToDraftPlayerDeck,
+  } = usePlayerSetupStore(useShallow((state) => ({
+    cardLibrary: state.cardLibrary,
+    draftPlayer: state.draftPlayer,
+    addCardToDraftPlayerDeck: state.addCardToDraftPlayerDeck,
+  })));
+  const { colorCssValue: color, deck: draftPlayerDeck } = draftPlayer;
+  const allCardNodesById = useMemo<Record<ICard['id'], ReactNode>>(() => (
+    Object.values(cardLibrary.getCardsById()).map((card) => {
+      const cardNode = <FullCard card={card} color={color} />;
+      return {
+        id: card.id,
+        node: cardNode,
+      };
+    }).reduce((accum, curr) => ({
+      ...accum,
+      [curr.id]: curr.node,
+    }), {})
+  ), [color]); // recreate when a new player is added, to reverse the cards for player 2
+  // TODO: ^improve this
+  return (
+    <div className="overflow-y-auto">
+      <h2> available cards </h2>
+      <div className="flex flex-wrap">
+        { cardLibrary.asArray({ includeZeroes: true }).map(({ card, count }) => (
+            <SelectableCardWrapper
+              key={card.id}
+              count={count}
+              enabled={draftPlayerDeck.size() < MAX_CARDS_IN_DECK}
+              onClick={() => count > 0 && addCardToDraftPlayerDeck(card)}
+            >
+              { allCardNodesById[card.id] }
+            </SelectableCardWrapper>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CardLibrary;

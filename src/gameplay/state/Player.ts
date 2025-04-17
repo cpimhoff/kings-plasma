@@ -19,11 +19,11 @@ export type Player = {
   hand: Card[];
 };
 
-export function createPlayer(name: string): Player {
+export function createPlayer(name: string, colorCssValue: string): Player {
   return {
     id: uuid(),
     name,
-    colorCssValue: `hsl(${Math.random() * 360}, 100%, 50%)`,
+    colorCssValue,
     deck: [],
     hand: [],
     phase: {
