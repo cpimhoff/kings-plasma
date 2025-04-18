@@ -16,7 +16,7 @@ const CardDeck = () => {
       draftPlayer: state.draftPlayer,
       removeCardFromDraftPlayerDeck: state.removeCardFromDraftPlayerDeck,
     })));
-  const { colorCssValue, deck: draftPlayerDeck } = draftPlayer;
+  const { deck: draftPlayerDeck } = draftPlayer;
 
   const [previewCard, setPreviewCard] = useState<ICard | null>(null);
   return (
@@ -33,12 +33,12 @@ const CardDeck = () => {
                   onHover={() => setPreviewCard(card)}
                   className="w-30 h-40"
                 >
-                  <SmallCard card={card} color={colorCssValue} />
+                  <SmallCard card={card} color={'var(--player-color)'} />
                 </SelectableCardWrapper>
               )
           ) }
         </div>
-        { previewCard && <FullCard card={previewCard} color={colorCssValue} /> }
+        { previewCard && <FullCard card={previewCard} color={'var(--player-color)'} /> }
       </div>
     </div>
   );

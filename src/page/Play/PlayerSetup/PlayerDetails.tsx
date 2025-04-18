@@ -1,4 +1,3 @@
-import { useTransition } from 'react';
 import { usePlayerSetupStore } from './store';
 import { useShallow } from 'zustand/react/shallow';
 import { CirclePicker, ColorResult } from 'react-color';
@@ -40,12 +39,8 @@ const PlayerDetails = () => {
       && !!draftPlayerName;
   }, [deckSize, draftPlayerName]);
 
-  const [_, startTransition] = useTransition();
-
   const handleChangeColor = useCallback((colorResult: ColorResult) => {
-    startTransition(() => {
-      setDraftPlayerColor(colorResult.hex);
-    });
+    setDraftPlayerColor(colorResult.hex);
   }, []);
 
   return (
