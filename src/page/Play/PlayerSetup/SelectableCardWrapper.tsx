@@ -4,7 +4,9 @@ import { ReactNode } from 'react';
 interface Props {
   enabled?: boolean;
   count: number;
-  onHover?: () => void;
+  maxCount?: number | undefined;
+  onHoverIn?: () => void;
+  onHoverOut?: () => void;
   onClick: () => void;
   className?: string;
   children: ReactNode;
@@ -13,23 +15,31 @@ interface Props {
 const SelectableCardWrapper = ({
   enabled = true,
   count,
-  onHover,
+  maxCount,
+  onHoverIn,
+  onHoverOut,
   onClick,
   className,
   children,
 }: Props) => {
+  const countInfo = (typeof maxCount !== 'undefined') ? (
+    `${count}/${maxCount}`
+  ) : (
+    `x${count}`
+  );
   return (
     <div
-      className={cn("flex flex-col hover:bg-slate-200 hover:cursor-pointer", className)}
+      className={cn("flex flex-col p-2 hover:bg-slate-100 hover:cursor-pointer", className)}
       onClick={() => enabled && onClick()}
-      onMouseOver={onHover}
+      onMouseOver={onHoverIn}
+      onMouseOut={onHoverOut}
     >
       <div className="flex flex-col grow">
         { children }
       </div>
-      <div className="flex justify-end">
-        <span className="mr-2">
-          { `x${count}` }
+      <div className="flex justify-center">
+        <span className="mt-1 border border-2 rounded-md w-10 text-center">
+          { countInfo }
         </span>
       </div>
     </div>

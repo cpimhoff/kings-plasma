@@ -2,6 +2,8 @@ import { usePlayerSetupStore } from './store';
 import { useShallow } from 'zustand/react/shallow';
 import { CirclePicker, ColorResult } from 'react-color';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { MIN_CARDS_IN_DECK, MAX_CARDS_IN_DECK } from './constants';
 
 const PlayerDetails = () => {
@@ -45,17 +47,28 @@ const PlayerDetails = () => {
 
   return (
     <div>
-      {`Player ${playerIdx + 1} (${playerDirection}):`}
-      <div className="flex">
-        Name:
-          <Input
-            className="max-w-70"
-            placeholder="Player name"
-            value={draftPlayerName}
-            onChange={(e) => setDraftPlayerName(e.target.value)}
-          />
-        <CirclePicker color={colorCssValue} onChange={handleChangeColor} />
-        <Button className="mr-4" disabled={!isValid} onClick={() => addPlayerFromDraft()}> Done </Button>
+      <div className="my-5">
+        {`Player ${playerIdx + 1} (${playerDirection})`}
+      </div>
+      <div className="flex justify-between">
+        <div className="flex gap-5">
+          <div className="flex-col">
+            <Label>Name</Label>
+            <Input
+              className="max-w-70"
+              placeholder="Player name"
+              value={draftPlayerName}
+              onChange={(e) => setDraftPlayerName(e.target.value)}
+            />
+          </div>
+          <div className="flex-col">
+            <Label>Color</Label>
+            <CirclePicker color={colorCssValue} onChange={handleChangeColor} />
+          </div>
+        </div>
+        <div className="mr-10">
+          <Button className="mr-4" disabled={!isValid} onClick={() => addPlayerFromDraft()}> Done </Button>
+        </div>
       </div>
     </div>
   );

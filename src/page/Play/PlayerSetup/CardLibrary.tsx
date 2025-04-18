@@ -37,6 +37,7 @@ const CardLibrary = () => {
             <SelectableCardWrapper
               key={card.id}
               count={count}
+              maxCount={card.isLegendary ? 1 : 3}
               enabled={draftPlayerDeck.size() < MAX_CARDS_IN_DECK}
               onClick={() => count > 0 && addCardToDraftPlayerDeck(card)}
             >

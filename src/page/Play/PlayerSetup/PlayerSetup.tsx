@@ -20,7 +20,7 @@ const PlayerSetup = () => {
   }, [players]);
 
   return (
-    <div>
+    <div className="mx-40">
       { players.length < 2 ? (
         <CreatePlayer />
       ) : (

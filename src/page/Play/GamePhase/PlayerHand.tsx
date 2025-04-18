@@ -12,7 +12,7 @@ const PlayerHand = ({ player }: Props) => {
 
   return (
     <div>
-      <div>
+      <div className="mb-3">
         { phase === 'setup' ? "Select up to three cards to mulligan." : null }
       </div>
       <div className="flex gap-3">
