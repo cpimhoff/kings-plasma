@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import { ReactNode } from 'react';
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
   count: number;
   onHover?: () => void;
   onClick: () => void;
+  className?: string;
   children: ReactNode;
 };
 
@@ -13,15 +15,18 @@ const SelectableCardWrapper = ({
   count,
   onHover,
   onClick,
+  className,
   children,
 }: Props) => {
   return (
     <div
-      className="min-w-30 m-4 hover:bg-slate-200 hover:cursor-pointer"
+      className={cn("flex flex-col hover:bg-slate-200 hover:cursor-pointer", className)}
       onClick={() => enabled && onClick()}
       onMouseOver={onHover}
     >
-      { children }
+      <div className="flex flex-col grow">
+        { children }
+      </div>
       <div className="flex justify-end">
         <span className="mr-2">
           { `x${count}` }

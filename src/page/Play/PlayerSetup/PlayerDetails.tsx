@@ -24,7 +24,7 @@ const PlayerDetails = () => {
   const {
     name: draftPlayerName,
     deck: draftPlayerDeck,
-    color,
+    colorCssValue,
   } = draftPlayer;
   const deckSize = useMemo(() => draftPlayerDeck.size(), [draftPlayerDeck]);
 
@@ -44,7 +44,7 @@ const PlayerDetails = () => {
 
   const handleChangeColor = useCallback((colorResult: ColorResult) => {
     startTransition(() => {
-      setDraftPlayerColor(colorResult.hsl);
+      setDraftPlayerColor(colorResult.hex);
     });
   }, []);
 
@@ -59,7 +59,7 @@ const PlayerDetails = () => {
             value={draftPlayerName}
             onChange={(e) => setDraftPlayerName(e.target.value)}
           />
-        <CirclePicker color={color} onChange={handleChangeColor} />
+        <CirclePicker color={colorCssValue} onChange={handleChangeColor} />
         <Button className="mr-4" disabled={!isValid} onClick={() => addPlayerFromDraft()}> Done </Button>
       </div>
     </div>

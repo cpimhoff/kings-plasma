@@ -2,8 +2,7 @@ import { create } from 'zustand';
 import { produce } from 'immer';
 import { Card, withReversedVectors } from '@/gameplay/state/Card';
 import { Player, createPlayer } from '@/gameplay/state/Player';
-import { HSLColor } from 'react-color';
-import { getRandomHSLColor, stringifyHSLColor } from './color';
+import { getRandomColor } from './color';
 import CardMultiSet from './CardMultiSet';
 import { FF7_LIBRARY } from '@/gameplay/library/ff7Library';
 
@@ -13,14 +12,14 @@ interface PlayerSetupStore {
   players: Player[],
   draftPlayer: {
     name: string,
-    color: HSLColor,
+    colorCssValue: string,
     deck: CardMultiSet,
   },
 
   cardLibrary: CardMultiSet;
 
   setDraftPlayerName: (name: string) => void;
-  setDraftPlayerColor: (color: HSLColor) => void;
+  setDraftPlayerColor: (color: string) => void;
   addPlayerFromDraft: () => void;
   addCardToDraftPlayerDeck: (card: Card) => void;
   removeCardFromDraftPlayerDeck: (card: Card) => void;
@@ -30,7 +29,7 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
   players: [],
   draftPlayer: {
     name: DEFAULT_PLAYER_NAMES[0],
-    color: getRandomHSLColor(),
+    colorCssValue: getRandomColor(),
     deck: new CardMultiSet(),
   },
 
@@ -41,7 +40,7 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
   })),
 
   setDraftPlayerColor: (newColor) => set(produce((state) => {
-    state.draftPlayer.color = newColor;
+    state.draftPlayer.colorCssValue = newColor;
   })),
 
   addCardToDraftPlayerDeck: (card) => set(produce((state) => {
@@ -67,14 +66,14 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
   })),
 
   addPlayerFromDraft: () => set((state) => {
-    const player = createPlayer(state.draftPlayer.name, stringifyHSLColor(state.draftPlayer.color));
+    const player = createPlayer(state.draftPlayer.name, state.draftPlayer.colorCssValue);
     player.deck = createDeckFromDraft(state.draftPlayer.deck);
     // (player.hand gets created by game processor)
     return {
       players: [...state.players, player],
       draftPlayer: {
         name: DEFAULT_PLAYER_NAMES[1],
-        color: getRandomHSLColor(),
+        colorCssValue: getRandomColor(),
         deck: new CardMultiSet(),
       },
       cardLibrary: initCardLibrary(true),

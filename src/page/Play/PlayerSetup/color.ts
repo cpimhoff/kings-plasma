@@ -1,11 +1,28 @@
 import { HSLColor } from 'react-color';
 
-export function getRandomHSLColor(): HSLColor {
-  return {
-    h: Math.random() * 360,
-    s: 1,
-    l: 0.5,
-  };
+const colors = [
+  '#f44336',
+  '#e91e63',
+  '#9c27b0',
+  '#673ab7',
+  '#3f51b5',
+  '#2196f3',
+  '#03a9f4',
+  '#00bcd4',
+  '#009688',
+  '#4caf50',
+  '#8bc34a',
+  '#cddc39',
+  '#ffeb3b',
+  '#ffc107',
+  '#ff9800',
+  '#ff5722',
+  '#795548',
+  '#607d8b',
+];
+
+export function getRandomColor(): string {
+  return colors[Math.floor(Math.random() * colors.length)];
 }
 
 export function stringifyHSLColor(color: HSLColor): string {

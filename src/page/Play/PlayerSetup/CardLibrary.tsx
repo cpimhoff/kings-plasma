@@ -17,10 +17,10 @@ const CardLibrary = () => {
     draftPlayer: state.draftPlayer,
     addCardToDraftPlayerDeck: state.addCardToDraftPlayerDeck,
   })));
-  const { color, deck: draftPlayerDeck } = draftPlayer;
+  const { colorCssValue, deck: draftPlayerDeck } = draftPlayer;
   const allCardNodesById = useMemo<Record<ICard['id'], ReactNode>>(() => (
     Object.values(cardLibrary.getCardsById()).map((card) => {
-      const cardNode = <FullCard card={card} color={stringifyHSLColor(color)} />;
+      const cardNode = <FullCard card={card} color={colorCssValue} />;
       return {
         id: card.id,
         node: cardNode,
@@ -29,11 +29,11 @@ const CardLibrary = () => {
       ...accum,
       [curr.id]: curr.node,
     }), {})
-  ), [cardLibrary, color]);
+  ), [cardLibrary, colorCssValue]);
   return (
     <div className="overflow-y-auto">
       <h2> available cards </h2>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap gap-3">
         { cardLibrary.asArray({ includeZeroes: true }).map(({ card, count }) => (
             <SelectableCardWrapper
               key={card.id}
