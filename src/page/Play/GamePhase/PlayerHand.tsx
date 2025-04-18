@@ -11,11 +11,11 @@ const PlayerHand = ({ player }: Props) => {
   const { phase } = gameState!;
 
   return (
-    <div className="grow">
+    <div>
       <div className="mb-3">
         { phase === 'setup' ? "Select up to three cards to mulligan." : null }
       </div>
-      <div className="flex align-center gap-3 bg-slate-300 p-2 h-75 overflow-x-auto">
+      <div className="flex items-center gap-3 bg-slate-300 p-2 w-[70rem] h-80 overflow-x-auto">
         { hand.map((card, idx) => (
           <HandCard
             key={`${player.id},${card.id},${idx}`}

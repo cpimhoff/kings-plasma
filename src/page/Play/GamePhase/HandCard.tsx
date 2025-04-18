@@ -66,7 +66,7 @@ const HandCard = ({ idx, card, color }: Props) => {
 
   return (
     <div
-      className={cn('w-50 h-70 flex flex-col items-center', {
+      className={cn('flex-shrink-0 w-50 h-70 flex flex-col items-center', {
         'border border-3': true,
         'border-orange-400': isMulligan,
         'border-sky-300': isHovered && !isSelected,

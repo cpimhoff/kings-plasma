@@ -22,7 +22,7 @@ const CardDeck = () => {
   return (
     <div>
       <h2> deck ({draftPlayerDeck.size()}/{MAX_CARDS_IN_DECK}) </h2>
-      <div className="flex w-full">
+      <div className="flex w-full justify-between">
         <div className="flex flex-wrap gap-3 w-250 min-h-110 bg-slate-300 p-2">
           { draftPlayerDeck.asArray()
               .map(({ card, count }) => (
@@ -39,7 +39,7 @@ const CardDeck = () => {
               )
           ) }
         </div>
-        <div className="flex flex-col m-auto justify-center align-center">
+        <div className="w-100 flex flex-col m-auto items-center">
           { previewCard && <FullCard card={previewCard} color={'var(--player-color)'} /> }
         </div>
       </div>

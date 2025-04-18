@@ -30,7 +30,7 @@ const CardLibrary = () => {
     }), {})
   ), [cardLibrary]);
   return (
-    <div className="flex flex-col align-center overflow-y-auto">
+    <div className="flex flex-col">
       <h2> available cards </h2>
       <div className="flex flex-wrap justify-center gap-3 bg-slate-300 p-2">
         { cardLibrary.asArray({ includeZeroes: true }).map(({ card, count }) => (

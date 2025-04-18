@@ -15,11 +15,8 @@ const BoardView = ({
   return (
     <div>
       { gameStatus }
-      <div>
+      <div className="flex justify-center">
         { gameBoard }
-        <div>
-          {/* todo: render a preview card here? */}
-        </div>
       </div>
       <div className="mt-3 flex justify-between">
         { playerHand }

@@ -69,11 +69,15 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
     const player = createPlayer(state.draftPlayer.name, state.draftPlayer.colorCssValue);
     player.deck = createDeckFromDraft(state.draftPlayer.deck);
     // (player.hand gets created by game processor)
+    let newColor;
+    do {
+      newColor = getRandomColor();
+    } while (newColor === player.colorCssValue);
     return {
       players: [...state.players, player],
       draftPlayer: {
         name: DEFAULT_PLAYER_NAMES[1],
-        colorCssValue: getRandomColor(),
+        colorCssValue: newColor,
         deck: new CardMultiSet(),
       },
       cardLibrary: initCardLibrary(true),
