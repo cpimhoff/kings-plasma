@@ -22,12 +22,16 @@ const GameBoard = () => {
     [...trueBoard.map(column => [...column].reverse())].reverse()
     : trueBoard;
 
-  const playColumns = board.map((column) => (
-    column.map((tile) => (
-      <BoardTile
+  const playColumns = board.map((column, c) => (
+    column.map((tile, r) => (
+      <div
         key={`${tile.position.x},${tile.position.y}`}
-        position={tile.position}
-      />
+        className={(c * 5 + r ) % 2 === 1 ? "bg-slate-500" : "bg-slate-100" }
+      >
+        <BoardTile
+          position={tile.position}
+        />
+      </div>
     ))));
 
   const { rowScoresByPlayerId } = adaptGameState(state);
@@ -53,7 +57,9 @@ function buildScoreColumnForPlayer(
   rowScores: number[],
 ) {
   return Array.from({ length: 3 }).map((_, i) => (
-    <RowScoreTile key={`${playerId},${i}`} score={rowScores[i]}/>
+    <div key={`${playerId},${i}`} className="bg-slate-500">
+      <RowScoreTile score={rowScores[i]}/>
+    </div>
   ));
 }
 
