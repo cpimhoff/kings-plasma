@@ -23,8 +23,10 @@ interface Props {
 }
 const HandCard = ({ idx, card, color }: Props) => {
   const {
+    handIndexesToMulligan,
     toggleHandIndexToMulligan,
   } = useMulliganStore(useShallow((state) => ({
+    handIndexesToMulligan: state.handIndexesToMulligan,
     toggleHandIndexToMulligan: state.toggleHandIndexToMulligan,
   })));
 
@@ -42,6 +44,7 @@ const HandCard = ({ idx, card, color }: Props) => {
     resetHover: state.resetHover,
   })));
 
+  const isMulligan = useMemo(() => handIndexesToMulligan.includes(idx), [idx, handIndexesToMulligan]);
   const isHovered = useMemo(() => idx === hoveredHandIndex, [idx, hoveredHandIndex]);
   const isSelected = useMemo(() => idx === selectedHandIndex, [idx, selectedHandIndex]);
 
@@ -65,6 +68,7 @@ const HandCard = ({ idx, card, color }: Props) => {
     <div
       className={cn('w-50 h-70 flex flex-col items-center', {
         'border border-3': true,
+        'border-orange-400': isMulligan,
         'border-sky-300': isHovered && !isSelected,
         'border-red-600': isSelected,
       })}

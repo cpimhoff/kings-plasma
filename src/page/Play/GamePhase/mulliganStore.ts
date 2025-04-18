@@ -14,16 +14,17 @@ export const useMulliganStore = create<MulliganStore>((set, get) => ({
 
   toggleHandIndexToMulligan: (handIdx) => {
     const { handIndexesToMulligan } = get();
-    if (handIndexesToMulligan.length === MAX_CARDS_TO_MULLIGAN) return;
-    let newVal;
+    let newVal = null;
     if (handIndexesToMulligan.includes(handIdx)) {
       newVal = handIndexesToMulligan.filter(i => i !== handIdx);
-    } else {
+    } else if (handIndexesToMulligan.length < MAX_CARDS_TO_MULLIGAN) {
       newVal = [...handIndexesToMulligan, handIdx];
     }
-    set({
-      handIndexesToMulligan: newVal,
-    });
+    if (newVal) {
+      set({
+        handIndexesToMulligan: newVal,
+      });
+    }
   },
 
   resetMulligans: () => set(() => ({

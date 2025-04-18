@@ -21,7 +21,7 @@ const BoardView = ({
           {/* todo: render a preview card here? */}
         </div>
       </div>
-      <div className="flex mt-3">
+      <div className="mt-3 flex justify-between">
         { playerHand }
         <div className="ml-3">
           { boardControls }
