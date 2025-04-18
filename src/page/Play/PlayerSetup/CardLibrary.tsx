@@ -2,7 +2,7 @@ import { useMemo, ReactNode } from 'react';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import { usePlayerSetupStore } from './store';
 import { useShallow } from 'zustand/react/shallow';
-import FullCard from './FullCard';
+import FullCard from '@/components/Card/FullCard';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import { MAX_CARDS_IN_DECK } from './constants';
 
@@ -30,9 +30,9 @@ const CardLibrary = () => {
     }), {})
   ), [cardLibrary]);
   return (
-    <div className="overflow-y-auto">
+    <div className="flex flex-col align-center overflow-y-auto">
       <h2> available cards </h2>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap justify-center gap-3 bg-slate-300 p-2">
         { cardLibrary.asArray({ includeZeroes: true }).map(({ card, count }) => (
             <SelectableCardWrapper
               key={card.id}

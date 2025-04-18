@@ -3,8 +3,8 @@ import { usePlayerSetupStore } from './store';
 import { Card as ICard } from '@/gameplay/state/Card/Card';
 import { useShallow } from 'zustand/react/shallow';
 import SelectableCardWrapper from './SelectableCardWrapper';
-import SmallCard from '@/components/Card/SmallCard';
-import FullCard from './FullCard';
+import DeckCard from './DeckCard';
+import FullCard from '@/components/Card/FullCard';
 import { MAX_CARDS_IN_DECK } from './constants';
 
 const CardDeck = () => {
@@ -23,7 +23,7 @@ const CardDeck = () => {
     <div>
       <h2> deck ({draftPlayerDeck.size()}/{MAX_CARDS_IN_DECK}) </h2>
       <div className="flex w-full">
-        <div className="flex flex-wrap gap-3 w-300 min-h-110">
+        <div className="flex flex-wrap gap-3 w-250 min-h-110 bg-slate-300 p-2">
           { draftPlayerDeck.asArray()
               .map(({ card, count }) => (
                 <SelectableCardWrapper
@@ -34,7 +34,7 @@ const CardDeck = () => {
                   onHoverOut={() => setPreviewCard(null)}
                   className="w-40 h-50"
                 >
-                  <SmallCard card={card} color={'var(--player-color)'} />
+                  <DeckCard card={card} color={'var(--player-color)'} />
                 </SelectableCardWrapper>
               )
           ) }

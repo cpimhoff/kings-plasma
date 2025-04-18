@@ -87,9 +87,10 @@ const BoardTile = ({
     occupyingCard,
     occupyingPips,
   } = useMemo(() => {
-    const tile = previewState ?
-      previewState.board[position.x][position.y] :
-      state.board[position.x][position.y];
+    const currentTile = state.board[position.x][position.y];
+    const previewTile = previewState?.board[position.x][position.y];
+    const tile = previewTile || currentTile;
+    // TODO: highlight difference in preview
     const {
       card,
       pips,

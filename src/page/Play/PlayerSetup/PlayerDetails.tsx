@@ -4,6 +4,7 @@ import { CirclePicker, ColorResult } from 'react-color';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getAvailableColors } from './color';
 import { MIN_CARDS_IN_DECK, MAX_CARDS_IN_DECK } from './constants';
 
 const PlayerDetails = () => {
@@ -63,7 +64,12 @@ const PlayerDetails = () => {
           </div>
           <div className="flex-col">
             <Label>Color</Label>
-            <CirclePicker color={colorCssValue} onChange={handleChangeColor} />
+            <CirclePicker
+              width="450px"
+              color={colorCssValue}
+              colors={getAvailableColors()}
+              onChange={handleChangeColor}
+            />
           </div>
         </div>
         <div className="mr-10">

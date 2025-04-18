@@ -46,7 +46,7 @@ const GameBoard = () => {
   const tiles = columns.reduce((accum, curr) => [...accum, ...curr], []);
 
   return (
-    <div className="grid grid-flow-col grid-cols-7 grid-rows-3 w-[60rem] gap-5">
+    <div className="grid grid-flow-col grid-cols-7 grid-rows-3 w-[60rem] h-[30rem] border border-px border-black">
       { tiles }
     </div>
   );

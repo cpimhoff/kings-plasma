@@ -5,7 +5,7 @@ interface Props {
 }
 const TileContainer = ({ children }: Props) => {
   return (
-    <div className="w-30 h-40 border border-black">
+    <div className="w-full h-full border border-px border-black">
       { children }
     </div>
   );
