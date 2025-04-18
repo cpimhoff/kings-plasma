@@ -21,8 +21,8 @@ export function resetGameState(oldGameState: GameState): GameState {
       // un-mark as done with mulligan
       player.phase.setup.done = false;
       // put all cards back in decks
-      player.hand.forEach((_, i) => {
-        moveCardFromHandToDeck(player, i);
+      player.hand.forEach((_) => {
+        moveCardFromHandToDeck(player, 0);
       });
     });
   });
