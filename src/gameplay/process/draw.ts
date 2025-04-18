@@ -17,3 +17,13 @@ export function discardCardFromHand(
   player.hand.splice(cardIndex, 1);
   return card;
 }
+
+export function moveCardFromHandToDeck(
+  player: Player,
+  cardIndex: number,
+): void {
+  const card = discardCardFromHand(player, cardIndex);
+  if (card) {
+    player.deck.push(card);
+  }
+}

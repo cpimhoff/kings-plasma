@@ -2,6 +2,7 @@ import { produce } from "immer";
 import { Phase } from "./Phase";
 import { Board, createBoard } from "./Board";
 import { Player } from "./Player";
+import { moveCardFromHandToDeck } from "../process/draw";
 import { StableRandom, StableRandomState } from "@/utils/random";
 import { processGameStart } from "../process/processGameStart";
 
@@ -15,7 +16,17 @@ export type GameState = {
 
 export function resetGameState(oldGameState: GameState): GameState {
   const { players } = oldGameState;
-  return createInitialState(players);
+  const newPlayers = produce(players, (draft) => {
+    draft.forEach((player) => {
+      // un-mark as done with mulligan
+      player.phase.setup.done = false;
+      // put all cards back in decks
+      player.hand.forEach((_, i) => {
+        moveCardFromHandToDeck(player, i);
+      });
+    });
+  });
+  return createInitialState(newPlayers);
 }
 
 export function createInitialState(players: Player[]): GameState {

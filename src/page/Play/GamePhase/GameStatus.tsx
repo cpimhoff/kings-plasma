@@ -11,7 +11,7 @@ const GameStatus = ({ player }: Props) => {
   return (
     <div>
       <p> current phase: { phase } </p>
-      { phase !== 'end' && <p> current player: { player.name } </p> }
+      <p> current player: { player.name } </p>
     </div>
   );
 };
