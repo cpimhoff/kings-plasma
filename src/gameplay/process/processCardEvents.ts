@@ -43,7 +43,8 @@ export function processCardEvents(
       }
     });
   }
-  // note that the final keyframe is equal to the final gamestate
+  // note that the final keyframe will be equal to the final gamestate in board state,
+  // but will differ in player state (because it will be the other player's turn)
 }
 
 function getEventTriggers(state: GameState, event: Event) {

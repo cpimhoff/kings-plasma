@@ -39,25 +39,27 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     previewState: null,
   }),
 
-  dispatchAction: (action) => {
+  dispatchAction: async (action) => {
     if (get()._pending) return;
-    set(() => ({ _pending: true }));
+    set(() => ({
+      _pending: true,
+      previewState: null,
+    }));
     const oldGameState = get().gameState!;
-    const { state: newGameState, keyframes } = process(oldGameState, action);
+    const { keyframes, state: newGameState } = process(oldGameState, action);
     const keyframeStates = keyframes.map(kf => kf.snapshot);
-    const keyframesPromise = keyframeStates.map(s => (
-      new Promise<void>((resolve) => {
-        set(() => ({ gameState: s }));
-        setTimeout(resolve, 1000);
-      })
-    )).reduce((accum, curr) => accum.then(() => curr), Promise.resolve());
-    keyframesPromise.then(() => {
-      set(() => ({
-        gameState: newGameState,
-        previewState: null,
-        historyStack: [...get().historyStack, oldGameState],
-        _pending: false,
-      }));
+    await keyframeStates.reduce((accum, curr) => {
+      return accum.then(() => {
+        return new Promise((resolve) => {
+          set({ gameState: curr });
+          setTimeout(resolve, 1000);
+        });
+      });
+    }, Promise.resolve());
+    set({
+      gameState: newGameState,
+      historyStack: [...get().historyStack, oldGameState],
+      _pending: false,
     });
   },
 
