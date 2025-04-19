@@ -36,11 +36,14 @@ export function processCardEvents(
     const triggeredActions = getEventTriggers(state, event);
     triggeredActions.forEach((action) => {
       processTriggeredCardAction(state, action, eventQueue);
-    });
-    if (eventQueue.length > 0) {
       ctx.addKeyframe();
-    }
+      const didReap = reapZombieCards(state, eventQueue);
+      if (didReap) {
+        ctx.addKeyframe();
+      }
+    });
   }
+  // note that the final keyframe is equal to the final gamestate
 }
 
 function getEventTriggers(state: GameState, event: Event) {
@@ -144,13 +147,6 @@ function processTriggeredCardAction(
           tile: t,
           changeDirection: action.amount > 0 ? "increasing" : "decreasing",
         });
-        if (t.card.power === 0) {
-          const oldTile = destroyCardAtTile(t);
-          eventQueue.push({
-            triggerId: "onDestroy",
-            tile: oldTile,
-          });
-        }
       }
       break;
     }
@@ -203,6 +199,24 @@ function destroyCardAtTile(tile: ActionSource): ActionSource {
     draft.card = destroyedCard;
   });
   return oldTile;
+}
+
+function reapZombieCards(
+  state: GameState,
+  eventQueue: Event[],
+): boolean {
+  let didReap = false;
+  for (const tile of allBoardCards(state)) {
+    if (tile.card.power === 0) {
+      const oldTile = destroyCardAtTile(tile);
+      eventQueue.push({
+        triggerId: "onDestroy",
+        tile: oldTile,
+      });
+      didReap = true;
+    }
+  }
+  return didReap;
 }
 
 function getTileTargets(
