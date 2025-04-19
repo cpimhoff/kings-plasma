@@ -37,7 +37,8 @@ const GameBoard = () => {
   const { rowScoresByPlayerId } = adaptGameState(state);
 
   const scoreColumns = [...players]
-    .sort(p => ((p.id === playerId) ? -1 : 1))
+    // .sort(p => ((p.id === playerId) ? -1 : 1))
+    // ^TODO: bring this back if we decide to flip the board for player 2
     .map((player) => (
       buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id])
     ));
