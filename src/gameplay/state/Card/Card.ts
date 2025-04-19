@@ -93,6 +93,9 @@ export function withReversedVectors(card: Card): Card {
         if ('tiles' in action) {
           action.tiles = action.tiles?.map((tile: Vector2) => invertVector2(tile))
         }
+        if ('card' in action) {
+          action.card = withReversedVectors(action.card);
+        }
         return action;
       });
       return effect;
