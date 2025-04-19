@@ -48,7 +48,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     const keyframesPromise = keyframeStates.map(s => (
       new Promise<void>((resolve) => {
         set(() => ({ gameState: s }));
-        resolve();
+        setTimeout(resolve, 1000);
       })
     )).reduce((accum, curr) => accum.then(() => curr), Promise.resolve());
     keyframesPromise.then(() => {

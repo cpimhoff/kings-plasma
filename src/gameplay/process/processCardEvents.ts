@@ -36,7 +36,9 @@ export function processCardEvents(
     triggeredActions.forEach((action) => {
       processTriggeredCardAction(state, action, eventQueue);
     });
-    ctx.addKeyframe();
+    if (eventQueue.length > 0) {
+      ctx.addKeyframe();
+    }
   }
 }
 
