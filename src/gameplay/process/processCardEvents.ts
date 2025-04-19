@@ -5,8 +5,9 @@ import {
   CardAction,
   CardTriggerCondition,
 } from "../state";
+import { produce } from 'immer';
 import { ProcessCtx } from "./ctx";
-import { allBoardCards } from "./iter";
+import { allBoardCards, ActionSource } from "./iter";
 import { nextStableInt } from "./rng";
 
 type Event = Event.CardPlayed | Event.PowerChanged | Event.CardDestroyed;
@@ -17,11 +18,11 @@ namespace Event {
     tile: BoardTile;
     changeDirection: "increasing" | "decreasing";
   };
-  export type CardDestroyed = { triggerId: "onDestroy"; tile: BoardTile };
+  export type CardDestroyed = { triggerId: "onDestroy"; tile: ActionSource };
 }
 
 type TriggeredAction = CardAction & {
-  source: BoardTile & { card: Card };
+  source: ActionSource;
 };
 
 export function processCardEvents(
@@ -44,7 +45,10 @@ export function processCardEvents(
 
 function getEventTriggers(state: GameState, event: Event) {
   const triggeredActions: TriggeredAction[] = [];
-  for (const responder of allBoardCards(state)) {
+  // destroyed cards aren't on the board anymore but they can still respond to onDestroy events
+  let destroyedTile = (event.triggerId === 'onDestroy') ? event.tile : null;
+  let responders = allBoardCards(state, destroyedTile);
+  for (const responder of responders) {
     for (const effect of responder.card.effects) {
       if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger)) {
         triggeredActions.push(
@@ -141,10 +145,10 @@ function processTriggeredCardAction(
             changeDirection: action.amount > 0 ? "increasing" : "decreasing",
           });
         } else {
-          t.card = null!;
+          const oldTile = destroyCardAtTile(t);
           eventQueue.push({
             triggerId: "onDestroy",
-            tile: t,
+            tile: oldTile,
           });
         }
       }
@@ -179,8 +183,8 @@ function processTriggeredCardAction(
     case "immediatelyDestroy": {
       const targets = getTileTargets(state, action.source, action);
       for (const t of targets) {
-        t.card = null!;
-        eventQueue.push({ triggerId: "onDestroy", tile: t });
+        const oldTile = destroyCardAtTile(t);
+        eventQueue.push({ triggerId: "onDestroy", tile: oldTile });
       }
       break;
     }
@@ -189,6 +193,15 @@ function processTriggeredCardAction(
       action satisfies never;
       break;
   }
+}
+
+function destroyCardAtTile(tile: ActionSource): ActionSource {
+  const destroyedCard = tile.card;
+  tile.card = null!;
+  const oldTile = produce(tile, (draft) => {
+    draft.card = destroyedCard;
+  });
+  return oldTile;
 }
 
 function getTileTargets(

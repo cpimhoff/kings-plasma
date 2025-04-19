@@ -1,10 +1,15 @@
 import { BoardTile, Card, GameState } from "../state";
 
-export function* allBoardCards(state: GameState) {
-  // first iterate over all cards on the board
+// TODO: put this somewhere better
+export type ActionSource = BoardTile & { card: Card };
+
+export function* allBoardCards(state: GameState, destroyedTile?: ActionSource | null) {
+  // first yield the destroyed tile, if there is one
+  if (destroyedTile) yield destroyedTile;
+  // then iterate over all cards on the board
   for (const row of state.board) {
     for (const cell of row) {
-      if (cell.card) yield cell as BoardTile & { card: Card };
+      if (cell.card) yield cell as ActionSource;
     }
   }
 }
