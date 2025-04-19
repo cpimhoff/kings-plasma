@@ -198,6 +198,7 @@ function processTriggeredCardAction(
 function destroyCardAtTile(tile: ActionSource): ActionSource {
   const destroyedCard = tile.card;
   tile.card = null!;
+  tile.pips = 1;
   const oldTile = produce(tile, (draft) => {
     draft.card = destroyedCard;
   });
