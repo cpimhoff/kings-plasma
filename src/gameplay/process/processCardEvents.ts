@@ -138,13 +138,13 @@ function processTriggeredCardAction(
       const targets = getTileTargets(state, action.source, action);
       for (const t of targets) {
         t.card.power += action.amount;
-        if (t.card.power > 0) {
-          eventQueue.push({
-            triggerId: "onPowerChange",
-            tile: t,
-            changeDirection: action.amount > 0 ? "increasing" : "decreasing",
-          });
-        } else {
+        if (t.card.power < 0) t.card.power = 0;
+        eventQueue.push({
+          triggerId: "onPowerChange",
+          tile: t,
+          changeDirection: action.amount > 0 ? "increasing" : "decreasing",
+        });
+        if (t.card.power === 0) {
           const oldTile = destroyCardAtTile(t);
           eventQueue.push({
             triggerId: "onDestroy",
