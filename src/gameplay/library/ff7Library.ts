@@ -633,7 +633,6 @@ export namespace FF7Library {
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
         { dx: 1, dy: 1 },
-        { dx: 0, dy: 0 },
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange([{ dx: 0, dy: 1 }], +4, {
@@ -855,7 +854,6 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
     ],
-    description: `When enemy cards are destroyed, raise this card's power by 1.`,
     isLegendary: false,
   };
 
@@ -874,6 +872,7 @@ export namespace FF7Library {
         actions: [{ id: "addPower", self: true, amount: +1 }],
       },
     ],
+    description: `When enemy cards are destroyed, raise this card's power by 1.`,
     isLegendary: false,
   };
 
