@@ -1,28 +1,27 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { Card, withReversedVectors } from '@/gameplay/state/Card';
+import { CardDefinition, withReversedVectors } from '@/gameplay/state/Card';
 import { Player, createPlayer } from '@/gameplay/state/Player';
 import { getRandomColor } from './color';
-import CardMultiSet from './CardMultiSet';
 import { FF7_LIBRARY } from '@/gameplay/library/ff7Library';
+import { uuid } from '@/utils';
 
 const DEFAULT_PLAYER_NAMES = ['Lefty', 'Righty'];
 
 interface PlayerSetupStore {
   players: Player[],
+  cardLibrary: CardDefinition[],
   draftPlayer: {
     name: string,
     colorCssValue: string,
-    deck: CardMultiSet,
+    deckCounts: number[],
   },
-
-  cardLibrary: CardMultiSet;
 
   setDraftPlayerName: (name: string) => void;
   setDraftPlayerColor: (color: string) => void;
   addPlayerFromDraft: () => void;
-  addCardToDraftPlayerDeck: (card: Card) => void;
-  removeCardFromDraftPlayerDeck: (card: Card) => void;
+  addCardToDraftPlayerDeck: (cardIdx: number) => void;
+  removeCardFromDraftPlayerDeck: (cardIdx: number) => void;
 };
 
 export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
@@ -30,79 +29,72 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
   draftPlayer: {
     name: DEFAULT_PLAYER_NAMES[0],
     colorCssValue: getRandomColor(),
-    deck: new CardMultiSet(),
+    deckCounts: [],
   },
+  cardLibrary: FF7_LIBRARY,
 
-  cardLibrary: initCardLibrary(),
+  setDraftPlayerName: (newName) =>
+    set(
+      produce((state) => {
+        state.draftPlayer.name = newName;
+      }),
+    ),
 
-  setDraftPlayerName: (newName) => set(produce((state) => {
-    state.draftPlayer.name = newName;
-  })),
+  setDraftPlayerColor: (newColor) =>
+    set(
+      produce((state) => {
+        state.draftPlayer.colorCssValue = newColor;
+      }),
+    ),
 
-  setDraftPlayerColor: (newColor) => set(produce((state) => {
-    state.draftPlayer.colorCssValue = newColor;
-  })),
+  addCardToDraftPlayerDeck: (cardIdx: number) =>
+    set(
+      produce((state) => {
+        const { deckCounts } = state.draftPlayer;
+        deckCounts[cardIdx] = (deckCounts[cardIdx] ?? 0) + 1;
+      }),
+    ),
 
-  addCardToDraftPlayerDeck: (card) => set(produce((state) => {
-    // add to deck
-    const newDraftPlayerDeck = state.draftPlayer.deck.clone();
-    newDraftPlayerDeck.addCard(card);
-    state.draftPlayer.deck = newDraftPlayerDeck;
-    // remove from library
-    const newCardLibrary = state.cardLibrary.clone();
-    newCardLibrary.removeCard(card);
-    state.cardLibrary = newCardLibrary;
-  })),
+  removeCardFromDraftPlayerDeck: (cardIdx: number) =>
+    set(
+      produce((state) => {
+        const { deckCounts } = state.draftPlayer;
+        deckCounts[cardIdx] = (deckCounts[cardIdx] ?? 0) - 1;
+      }),
+    ),
 
-  removeCardFromDraftPlayerDeck: (card) => set(produce((state) => {
-    // remove from deck
-    const newDraftPlayerDeck = state.draftPlayer.deck.clone();
-    newDraftPlayerDeck.removeCard(card);
-    state.draftPlayer.deck = newDraftPlayerDeck;
-    // add to library
-    const newCardLibrary = state.cardLibrary.clone();
-    newCardLibrary.addCard(card);
-    state.cardLibrary = newCardLibrary;
-  })),
-
-  addPlayerFromDraft: () => set((state) => {
-    const player = createPlayer(state.draftPlayer.name, state.draftPlayer.colorCssValue);
-    player.deck = createDeckFromDraft(state.draftPlayer.deck);
-    // (player.hand gets created by game processor)
-    let newColor;
-    do {
-      newColor = getRandomColor();
-    } while (newColor === player.colorCssValue);
-    return {
-      players: [...state.players, player],
-      draftPlayer: {
-        name: DEFAULT_PLAYER_NAMES[1],
-        colorCssValue: newColor,
-        deck: new CardMultiSet(),
-      },
-      cardLibrary: initCardLibrary(true),
-    };
-  }),
-
+  addPlayerFromDraft: () =>
+    set((state) => {
+      const player = createPlayer(
+        state.draftPlayer.name,
+        state.draftPlayer.colorCssValue,
+      );
+      player.deck = createDeckFromDraft(
+        state.cardLibrary,
+        state.draftPlayer.deckCounts,
+      );
+      // (player.hand gets created by game processor)
+      let newColor;
+      do {
+        newColor = getRandomColor();
+      } while (newColor === player.colorCssValue);
+      return {
+        players: [...state.players, player],
+        draftPlayer: {
+          name: DEFAULT_PLAYER_NAMES[1],
+          colorCssValue: newColor,
+          deckCounts: [],
+        },
+        cardLibrary: state.cardLibrary.map(withReversedVectors),
+      };
+    }),
 }));
 
-function createDeckFromDraft(draftDeck: CardMultiSet) {
-  const deck: Player['deck']  = [];
-  draftDeck.asArray().forEach(({ card, count }) => {
-    new Array(count).fill(0).forEach(() => {
-      deck.push(card);
-    });
+function createDeckFromDraft(library: CardDefinition[], deckCounts: number[]) {
+  const deck: Player['deck'] = [];
+  deckCounts.forEach((count, cardIdx) => {
+    const cardDef = library[cardIdx];
+    deck.push(...Array.from({ length: count }).map(() => ({ ...cardDef, id: uuid() })));
   });
   return deck;
-};
-
-function initCardLibrary(reverse: boolean = false) {
-  const library = new CardMultiSet();
-  FF7_LIBRARY
-  .map(card => reverse ? withReversedVectors(card) : card)
-  .forEach(card => {
-    const count = card.isLegendary ? 1 : 3;
-    library.addCard(card, count);
-  });
-  return library;
 };

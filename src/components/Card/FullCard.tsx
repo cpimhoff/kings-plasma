@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn';
 import { useMemo } from 'react';
-import { Card as ICard } from '@/gameplay/state/Card/Card';
+import { CardDefinition } from "@/gameplay/state";
 import {
   CardGradient,
   CardCost,
@@ -12,7 +12,7 @@ import {
 } from '@/components/Card';
 
 interface Props {
-  card: ICard;
+  card: CardDefinition;
   color: string;
 }
 const FullCard = ({ card, color }: Props) => {

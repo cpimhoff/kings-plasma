@@ -1,5 +1,5 @@
-import { Card } from "./Card";
-import { Vector2 } from '@/utils/vector';
+import { CardDefinition } from "./Card";
+import { Vector2 } from "@/utils/vector";
 
 export type CardAction =
   | CardAction.AddControlledPips
@@ -49,7 +49,7 @@ export namespace CardAction {
   export type CreateCardForPlayer = {
     id: "createCardForPlayer";
     // the card to create
-    card: Card;
+    cardDefinition: CardDefinition;
     // the player to add the card to the hand of
     player: "allied" | "opponent";
     // where to add the card into

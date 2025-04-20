@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 interface Props {
   enabled?: boolean;
   count: number;
-  maxCount?: number | undefined;
+  maxCount?: number;
   onHoverIn?: () => void;
   onHoverOut?: () => void;
   onClick: () => void;

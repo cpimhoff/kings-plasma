@@ -25,10 +25,13 @@ const PlayerDetails = () => {
 
   const {
     name: draftPlayerName,
-    deck: draftPlayerDeck,
+    deckCounts: draftPlayerDeckCounts,
     colorCssValue,
   } = draftPlayer;
-  const deckSize = useMemo(() => draftPlayerDeck.size(), [draftPlayerDeck]);
+  const deckSize = useMemo(
+    () => Object.values(draftPlayerDeckCounts).reduce((s, c) => s + c, 0),
+    [draftPlayerDeckCounts],
+  );
 
   const [playerIdx, playerDirection] = useMemo(() => {
     const idx = players.length;

@@ -3,8 +3,8 @@ import { Card as ICard } from '@/gameplay/state/Card/Card';
 
 interface Props {
   power: ICard['power'];
-  nerfed: boolean;
-  buffed: boolean;
+  nerfed?: boolean;
+  buffed?: boolean;
 }
 const classes = "border border-3 rounded-full w-full h-full flex justify-center items-center bg-slate-700 font-bold";
 const CardPower = ({ power, nerfed, buffed }: Props) => {

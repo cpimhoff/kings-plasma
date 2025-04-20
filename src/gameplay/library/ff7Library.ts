@@ -1,12 +1,11 @@
-import { Card, CardEffect } from "../state";
+import { CardDefinition, CardEffect } from "../state";
 
 export namespace FF7Library {
   // An index of all cards in FF7: Rebirth is available at:
   // https://game8.co/games/Final-Fantasy-VII-Rebirth/archives/Queens-Blood
   // The below definitions are ordered according to how they appear at that link
 
-  export const SecurityOfficer: Card = {
-    id: "security-officer",
+  export const SecurityOfficer: CardDefinition = {
     name: "Security Officer",
     playRequirement: 1,
     power: 1,
@@ -18,11 +17,9 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const RiotTrooper: Card = {
-    id: "riot-trooper",
+  export const RiotTrooper: CardDefinition = {
     name: "Riot Trooper",
     playRequirement: 2,
     power: 3,
@@ -35,11 +32,9 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Grenadier: Card = {
-    id: "grenadier",
+  export const Grenadier: CardDefinition = {
     name: "Grenadier",
     playRequirement: 2,
     power: 1,
@@ -49,11 +44,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of enemy cards on affected tiles by 4.`,
-    isLegendary: false,
   };
 
-  export const JUnitSweeper: Card = {
-    id: "j-unit-sweeper",
+  export const JUnitSweeper: CardDefinition = {
     name: "J-Unit Sweeper",
     playRequirement: 2,
     power: 2,
@@ -65,11 +58,9 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const QueenBee: Card = {
-    id: "queen-bee",
+  export const QueenBee: CardDefinition = {
     name: "Queen Bee",
     playRequirement: 1,
     power: 1,
@@ -79,11 +70,9 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Toxirat: Card = {
-    id: "toxirat",
+  export const Toxirat: CardDefinition = {
     name: "Toxirat",
     playRequirement: 2,
     power: 2,
@@ -100,11 +89,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 3.`,
-    isLegendary: false,
   };
 
-  export const Levrikon: Card = {
-    id: "levrikon",
+  export const Levrikon: CardDefinition = {
     name: "Levrikon",
     playRequirement: 1,
     power: 2,
@@ -114,11 +101,9 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const GrasslandsWolf: Card = {
-    id: "grasslands-wolf",
+  export const GrasslandsWolf: CardDefinition = {
     name: "Grasslands Wolf",
     playRequirement: 1,
     power: 2,
@@ -128,11 +113,9 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Mu: Card = {
-    id: "mu",
+  export const Mu: CardDefinition = {
     name: "Mu",
     playRequirement: 2,
     power: 1,
@@ -146,11 +129,9 @@ export namespace FF7Library {
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 1 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const Mandragora: Card = {
-    id: "mandragora",
+  export const Mandragora: CardDefinition = {
     name: "Mandragora",
     playRequirement: 1,
     power: 1,
@@ -161,7 +142,6 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.createCardForPlayer({
-          id: "mandragora-minion",
           name: "Mandragora Minion",
           playRequirement: 1,
           power: 1,
@@ -171,16 +151,13 @@ export namespace FF7Library {
               { dx: 1, dy: 0 },
             ]),
           ],
-          isLegendary: false,
         }),
       ),
     ],
     description: `When played, add Mandragora Minion to your hand.`,
-    isLegendary: false,
   };
 
-  export const Elphadunk: Card = {
-    id: "elphadunk",
+  export const Elphadunk: CardDefinition = {
     name: "Elphadunk",
     playRequirement: 2,
     power: 4,
@@ -191,11 +168,9 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Cactuar: Card = {
-    id: "cactuar",
+  export const Cactuar: CardDefinition = {
     name: "Cactuar",
     playRequirement: 1,
     power: 1,
@@ -209,11 +184,9 @@ export namespace FF7Library {
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const CrystallineCrab: Card = {
-    id: "crystalline-crab",
+  export const CrystallineCrab: CardDefinition = {
     name: "Crystalline Crab",
     playRequirement: 1,
     power: 1,
@@ -228,11 +201,9 @@ export namespace FF7Library {
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const Quetzalcoatl: Card = {
-    id: "quetzalcoatl",
+  export const Quetzalcoatl: CardDefinition = {
     name: "Quetzalcoatl",
     playRequirement: 2,
     power: 3,
@@ -244,11 +215,9 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Zu: Card = {
-    id: "zu",
+  export const Zu: CardDefinition = {
     name: "Zu",
     playRequirement: 2,
     power: 2,
@@ -260,11 +229,9 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const DevilRider: Card = {
-    id: "devil-rider",
+  export const DevilRider: CardDefinition = {
     name: "Devil Rider",
     playRequirement: 2,
     power: 4,
@@ -276,11 +243,9 @@ export namespace FF7Library {
         { dx: -2, dy: 1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Screamer: Card = {
-    id: "screamer",
+  export const Screamer: CardDefinition = {
     name: "Screamer",
     playRequirement: 3,
     power: 1,
@@ -296,11 +261,9 @@ export namespace FF7Library {
         { dx: -1, dy: 0 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Flan: Card = {
-    id: "flan",
+  export const Flan: CardDefinition = {
     name: "Flan",
     playRequirement: 1,
     power: 2,
@@ -311,11 +274,9 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Crawler: Card = {
-    id: "crawler",
+  export const Crawler: CardDefinition = {
     name: "Crawler",
     playRequirement: 1,
     power: 2,
@@ -327,11 +288,9 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Archdragon: Card = {
-    id: "archdragon",
+  export const Archdragon: CardDefinition = {
     name: "Archdragon",
     playRequirement: 1,
     power: 3,
@@ -348,11 +307,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of enemy cards on affected tiles by 3.`,
-    isLegendary: false,
   };
 
-  export const Ogre: Card = {
-    id: "ogre",
+  export const Ogre: CardDefinition = {
     name: "Ogre",
     playRequirement: 2,
     power: 5,
@@ -364,11 +321,9 @@ export namespace FF7Library {
         { dx: 1, dy: -2 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Deathwheel: Card = {
-    id: "deathwheel",
+  export const Deathwheel: CardDefinition = {
     name: "Deathwheel",
     playRequirement: 1,
     power: 1,
@@ -388,11 +343,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 3.`,
-    isLegendary: false,
   };
 
-  export const Fleetwing: Card = {
-    id: "fleetwing",
+  export const Fleetwing: CardDefinition = {
     name: "Fleetwing",
     playRequirement: 1,
     power: 3,
@@ -404,11 +357,9 @@ export namespace FF7Library {
         { dx: -2, dy: -2 },
       ]),
     ],
-    isLegendary: false,
   };
 
-  export const Zemzelett: Card = {
-    id: "zemzelett",
+  export const Zemzelett: CardDefinition = {
     name: "Zemzelett",
     playRequirement: 2,
     power: 1,
@@ -423,11 +374,9 @@ export namespace FF7Library {
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const Ignilisk: Card = {
-    id: "ignilisk",
+  export const Ignilisk: CardDefinition = {
     name: "Ignilisk",
     playRequirement: 1,
     power: 1,
@@ -446,11 +395,9 @@ export namespace FF7Library {
       ),
     ],
     description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const Capparwire: Card = {
-    id: "capparwire",
+  export const Capparwire: CardDefinition = {
     name: "Capparwire",
     playRequirement: 1,
     power: 3,
@@ -472,11 +419,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
-    isLegendary: false,
   };
 
-  export const MindFlayer: Card = {
-    id: "mind-flayer",
+  export const MindFlayer: CardDefinition = {
     name: "Mind Flayer",
     playRequirement: 2,
     power: 1,
@@ -498,11 +443,9 @@ export namespace FF7Library {
       ),
     ],
     description: `Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const Scrutineye: Card = {
-    id: "scrutineye",
+  export const Scrutineye: CardDefinition = {
     name: "Scrutineye",
     playRequirement: 1,
     power: 1,
@@ -521,11 +464,9 @@ export namespace FF7Library {
       ),
     ],
     description: `Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const HellRiderII: Card = {
-    id: "hell-rider-ii",
+  export const HellRiderII: CardDefinition = {
     name: "Hell Rider II",
     playRequirement: 3,
     power: 5,
@@ -550,11 +491,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of enemy cards on affected tiles by 3.`,
-    isLegendary: false,
   };
 
-  export const Flametrooper: Card = {
-    id: "flametrooper",
+  export const Flametrooper: CardDefinition = {
     name: "Flametrooper",
     playRequirement: 1,
     power: 3,
@@ -582,11 +521,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 3.`,
-    isLegendary: false,
   };
 
-  export const Spearhawk: Card = {
-    id: "spearhawk",
+  export const Spearhawk: CardDefinition = {
     name: "Spearhawk",
     playRequirement: 1,
     power: 1,
@@ -601,11 +538,9 @@ export namespace FF7Library {
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const SeaDevil: Card = {
-    id: "sea-devil",
+  export const SeaDevil: CardDefinition = {
     name: "Sea Devil",
     playRequirement: 3,
     power: 1,
@@ -621,11 +556,9 @@ export namespace FF7Library {
       },
     ],
     description: `When allied cards are played from hand, raise this card's power by 1.`,
-    isLegendary: false,
   };
 
-  export const Shoalopod: Card = {
-    id: "shoalopod",
+  export const Shoalopod: CardDefinition = {
     name: "Shoalopod",
     playRequirement: 2,
     power: 1,
@@ -640,11 +573,9 @@ export namespace FF7Library {
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 4 while this card is in play.`,
-    isLegendary: false,
   };
 
-  export const CrownLance: Card = {
-    id: "crown-lance",
+  export const CrownLance: CardDefinition = {
     name: "Crown Lance",
     playRequirement: 2,
     power: 2,
@@ -666,11 +597,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 2.`,
-    isLegendary: false,
   };
 
-  export const TonberryKing: Card = {
-    id: "tonberry-king",
+  export const TonberryKing: CardDefinition = {
     name: "Tonberry King",
     playRequirement: 2,
     power: 1,
@@ -682,11 +611,9 @@ export namespace FF7Library {
       },
     ],
     description: `When allied cards are destroyed, raise this card's power by 2.`,
-    isLegendary: false,
   };
 
-  export const SandhogPie: Card = {
-    id: "sandhog-pie",
+  export const SandhogPie: CardDefinition = {
     name: "Sandhog Pie",
     playRequirement: 1,
     power: 1,
@@ -707,11 +634,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When destroyed, raise the power of allied cards on affected tile by 3.`,
-    isLegendary: false,
   };
 
-  export const Bloatfloat: Card = {
-    id: "bloatfloat",
+  export const Bloatfloat: CardDefinition = {
     name: "Bloatfloat",
     playRequirement: 1,
     power: 1,
@@ -728,11 +653,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 4.`,
-    isLegendary: false,
   };
 
-  export const Bagnadrana: Card = {
-    id: "bagnadrana",
+  export const Bagnadrana: CardDefinition = {
     name: "Bagnadrana",
     playRequirement: 3,
     power: 2,
@@ -747,11 +670,9 @@ export namespace FF7Library {
       },
     ],
     description: `When enemy cards are played from hand, raise this card's power by 1.`,
-    isLegendary: false,
   };
 
-  export const Cockatrice: Card = {
-    id: "cockatrice",
+  export const Cockatrice: CardDefinition = {
     name: "Cockatrice",
     playRequirement: 2,
     power: 3,
@@ -763,11 +684,9 @@ export namespace FF7Library {
       }),
     ],
     description: `When played, destroy allied and enemy cards on affected tiles.`,
-    isLegendary: false,
   };
 
-  export const Heatseeker: Card = {
-    id: "heatseeker",
+  export const Heatseeker: CardDefinition = {
     name: "Heatseeker",
     playRequirement: 1,
     power: 1,
@@ -778,12 +697,10 @@ export namespace FF7Library {
         { dx: 0, dy: 1 },
         { dx: 0, dy: -1 },
       ]),
-      CardEffect.onThisDestroyed({
-        id: "createCardForPlayer",
-        card: {
+      CardEffect.onThisDestroyed(
+        CardEffect.createCardForPlayer({
           // FIXME: need to check the exact card in game, can't find a screenshot
           // of the minion card online...
-          id: "heatseeker-minion",
           name: "Heatseeker Minion",
           playRequirement: 1,
           power: 1,
@@ -795,18 +712,13 @@ export namespace FF7Library {
               { dx: 0, dy: -1 },
             ]),
           ],
-          isLegendary: false,
-        },
-        player: "allied",
-        into: "hand",
-      }),
+        }),
+      ),
     ],
     description: `When destroyed, add Heatseeker Minion to your hand.`,
-    isLegendary: false,
   };
 
-  export const Bomb: Card = {
-    id: "bomb",
+  export const Bomb: CardDefinition = {
     name: "Bomb",
     playRequirement: 2,
     power: 2,
@@ -838,11 +750,9 @@ export namespace FF7Library {
       ),
     ],
     description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 4.`,
-    isLegendary: false,
   };
 
-  export const Thug: Card = {
-    id: "thug",
+  export const Thug: CardDefinition = {
     name: "Thug",
     playRequirement: 2,
     power: 4,
@@ -854,11 +764,10 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
     ],
-    isLegendary: false,
+    description: `When enemy cards are destroyed, raise this card's power by 1.`,
   };
 
-  export const DeathClaw: Card = {
-    id: "death-claw",
+  export const DeathClaw: CardDefinition = {
     name: "Death Claw",
     playRequirement: 1,
     power: 2,
@@ -873,11 +782,9 @@ export namespace FF7Library {
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 1.`,
-    isLegendary: false,
   };
 
-  export const Landworm: Card = {
-    id: "landworm",
+  export const Landworm: CardDefinition = {
     name: "Landworm",
     playRequirement: 3,
     power: 5,
@@ -893,14 +800,12 @@ export namespace FF7Library {
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 2.`,
-    isLegendary: false,
   };
 
-  export const Sandspitter: Card = {
+  export const Sandspitter: CardDefinition = {
     // This card has an incorrect description on the game8 site
     // correct info here:
     // https://www.gamerguides.com/final-fantasy-vii-rebirth/database/queens-blood/standard/045-sandspitter
-    id: "sandspitter",
     name: "Sandspitter",
     playRequirement: 2,
     power: 3,
@@ -928,7 +833,6 @@ export namespace FF7Library {
       ),
     ],
     description: `When enemy cards are destroyed, raise this card's power by 2.`,
-    isLegendary: false,
   };
 
   // To be continued...
@@ -982,4 +886,3 @@ export const FF7_LIBRARY = [
   FF7Library.Landworm,
   FF7Library.Sandspitter,
 ];
-
