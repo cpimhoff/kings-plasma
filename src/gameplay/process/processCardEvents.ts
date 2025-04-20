@@ -36,7 +36,7 @@ export function processCardEvents(
     const triggeredActions = getEventTriggers(state, event);
     triggeredActions.forEach((action) => {
       processTriggeredCardAction(state, action, eventQueue);
-      ctx.addKeyframe();
+      ctx.addKeyframe({ major: action.id !== 'addControlledPips' });
       const didReap = reapZombieCards(state, eventQueue);
       if (didReap) {
         ctx.addKeyframe();

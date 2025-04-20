@@ -1,7 +1,7 @@
 import { createDraft, finishDraft, current as snapshotDraft } from "immer";
 
 import { Action, GameState } from "../state";
-import { ProcessCtx, ProcessKeyframe, ProcessResult } from "./ctx";
+import { ProcessCtx, KeyframeMetadata, ProcessKeyframe, ProcessResult } from "./ctx";
 import { processSetup } from "./processSetup";
 import { processPlay } from "./processPlay";
 import { processEnd } from "./processEnd";
@@ -24,7 +24,7 @@ export function process(
   const ctx: ProcessCtx = {
     addKeyframe: skipKeyframes
       ? () => undefined
-      : (meta?: any) => {
+      : (meta?: KeyframeMetadata) => {
           keyframes.push({
             snapshot: snapshotDraft(draftState),
             meta,

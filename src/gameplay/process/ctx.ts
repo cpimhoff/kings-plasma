@@ -6,11 +6,15 @@ export type ProcessResult = {
   keyframes: ProcessKeyframe[];
 };
 
+export type KeyframeMetadata = {
+  major: boolean;
+};
+
 export type ProcessKeyframe = {
   snapshot: GameState;
-  meta?: any;
+  meta?: KeyframeMetadata;
 };
 
 export type ProcessCtx = {
-  addKeyframe: (meta?: any) => void;
+  addKeyframe: (meta?: KeyframeMetadata) => void;
 };

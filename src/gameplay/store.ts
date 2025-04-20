@@ -28,10 +28,13 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
   })),
 
   previewAction: (action) => set(() => {
-    const { keyframes, state: finalState } = process(get().gameState!, action);
-    const allFrames = [...keyframes.map(kf => kf.snapshot), finalState];
+    const { keyframes } = process(get().gameState!, action);
+    const majorFrames = keyframes
+      .filter(kf => kf.meta?.major);
+    const previewState = [...majorFrames, ...[keyframes[0]]]
+      .map(kf => kf.snapshot)[0];
     return {
-      previewState: allFrames[0],
+      previewState,
     };
   }),
 
