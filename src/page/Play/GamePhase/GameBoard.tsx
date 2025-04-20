@@ -12,15 +12,9 @@ const GameBoard = () => {
     // playPhaseActivePlayerId: playerId, // see below
   } = state!;
 
-  // rotate the board 180deg for the trailing player
-  // (tile position data remains unchanged)
   const { board: trueBoard } = state!;
-  // const isTrailingPlayer = players.map(p => p.id).indexOf(playerId) === 1;
-  // TODO: uncomment when inverting the card preview grids is implemented
-  const isTrailingPlayer = false;
-  const board = isTrailingPlayer ?
-    [...trueBoard.map(column => [...column].reverse())].reverse()
-    : trueBoard;
+  // reverse each column for rendering with css grid
+  const board = [...trueBoard.map(column => [...column].reverse())];
 
   const playColumns = board.map((column, c) => (
     column.map((tile, r) => (
@@ -37,8 +31,6 @@ const GameBoard = () => {
   const { rowScoresByPlayerId } = adaptGameState(state);
 
   const scoreColumns = [...players]
-    // .sort(p => ((p.id === playerId) ? -1 : 1))
-    // ^TODO: bring this back if we decide to flip the board for player 2
     .map((player) => (
       buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id])
     ));

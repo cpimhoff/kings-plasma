@@ -54,7 +54,7 @@ export function getGridForCardEffects(effects: Card['effects']): CardGridCell[][
                 affects = true;
               }
               const coords = addVector2s(origin, vector);
-              const cell = grid[coords.dx][coords.dy];
+              const cell = grid[coords.dx][4 - coords.dy]; // reverse each column for rendering with css grid
               cell.claims = cell.claims || claims;
               cell.affects = cell.affects || affects;
             });
