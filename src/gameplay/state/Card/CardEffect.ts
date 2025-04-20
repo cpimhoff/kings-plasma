@@ -1,4 +1,4 @@
-import { Card } from "./Card";
+import { CardDefinition } from "./Card";
 import { Vector2 } from "@/utils/vector";
 import { CardAction } from "./CardAction";
 import { CardTriggerCondition } from "./CardTriggerCondition";
@@ -86,13 +86,13 @@ export namespace CardEffect {
   }
 
   export function createCardForPlayer(
-    card: Card,
+    cardDefinition: CardDefinition,
     player: "allied" | "opponent" = "allied",
     into: "hand" | "deck.random" | "deck.top" = "hand",
   ): CardAction.CreateCardForPlayer {
     return {
       id: "createCardForPlayer",
-      card,
+      cardDefinition,
       player,
       into,
     };

@@ -1,4 +1,4 @@
-import { Card as ICard } from '@/gameplay/state/Card';
+import { CardDefinition } from '@/gameplay/state/Card';
 import {
   CardCost,
   CardPower,
@@ -9,7 +9,7 @@ import {
 } from '@/components/Card';
 
 interface Props {
-  card: ICard;
+  card: CardDefinition;
   color: string;
 }
 const DeckCard = ({ card, color }: Props) => {

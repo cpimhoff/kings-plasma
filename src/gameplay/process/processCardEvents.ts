@@ -9,6 +9,7 @@ import { produce } from 'immer';
 import { ProcessCtx } from "./ctx";
 import { allBoardCards, ActionSource } from "./iter";
 import { nextStableInt } from "./rng";
+import { uuid } from "@/utils";
 
 type Event = Event.CardPlayed | Event.PowerChanged | Event.CardDestroyed;
 namespace Event {
@@ -158,19 +159,20 @@ function processTriggeredCardAction(
           ? p.id === actionPlayerId
           : p.id !== actionPlayerId,
       )!;
-      if (!player) break;
+      if(!player) break;
+      const card = { ...action.cardDefinition, id: uuid() };
       switch (action.into) {
         case "hand": {
-          player.hand.push(action.card);
+          player.hand.push(card);
           break;
         }
         case "deck.random": {
           const randomIndex = nextStableInt(state, 0, player.deck.length - 1);
-          player.deck.splice(randomIndex, 0, action.card);
+          player.deck.splice(randomIndex, 0, card);
           break;
         }
         case "deck.top": {
-          player.deck.push(action.card);
+          player.deck.push(card);
           break;
         }
       }

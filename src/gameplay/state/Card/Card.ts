@@ -17,24 +17,18 @@ export type Card = {
   effects: CardEffect[];
 
   // readable description of special effects
-  description?: string | undefined,
+  description?: string | undefined;
 
   // if true, limit one per deck
-  isLegendary: boolean,
+  isLegendary?: boolean;
 };
 
-export type CardGridCell = {
-  origin: boolean,
-  claims: boolean,
-  affects: boolean,
-};
+export type CardDefinition = Omit<Card, "id">;
+
+export type CardGridCell = { origin: boolean; claims: boolean; affects: boolean };
 export type CardGrid = CardGridCell[][];
-export function getGridForCardEffects(effects: Card['effects']): CardGridCell[][] {
-  const templateCell = {
-    origin: false,
-    claims: false,
-    affects: false,
-  };
+export function getGridForCardEffects(effects: CardDefinition['effects']): CardGridCell[][] {
+  const templateCell: CardGridCell = { origin: false, claims: false, affects: false };
   const grid: CardGrid = Array.from({ length: 5 }, () => (
     Array.from({ length: 5 }, () => ({
       ...templateCell,
@@ -66,7 +60,7 @@ export function getGridForCardEffects(effects: Card['effects']): CardGridCell[][
   return grid;
 };
 
-export const getCardHasSpecialEffect = (effects: Card['effects']) => {
+export const getCardHasSpecialEffect = (effects: CardDefinition['effects']) => {
   let ret = false;
   effects.forEach((effect) => {
     effect.actions.forEach((action) => {
@@ -85,16 +79,16 @@ export const getCardHasSpecialEffect = (effects: Card['effects']) => {
   return ret;
 }
 
-export function withReversedVectors(card: Card): Card {
+export function withReversedVectors(card: CardDefinition): CardDefinition {
   return produce(card, (draft) => {
     draft.effects = draft.effects?.map((effect) => {
       effect.trigger.tiles = effect.trigger?.tiles?.map((vector: Vector2) => invertVector2(vector));
       effect.actions = effect.actions.map((action) => {
-        if ('tiles' in action) {
-          action.tiles = action.tiles?.map((tile: Vector2) => invertVector2(tile))
+        if ("tiles" in action) {
+          action.tiles = action.tiles?.map((tile: Vector2) => invertVector2(tile));
         }
-        if ('card' in action) {
-          action.card = withReversedVectors(action.card);
+        if ("cardDefinition" in action) {
+          action.cardDefinition = withReversedVectors(action.cardDefinition);
         }
         return action;
       });
