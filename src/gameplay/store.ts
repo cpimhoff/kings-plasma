@@ -15,7 +15,8 @@ interface GameplayStore {
   clearPreview: () => void;
   dispatchAction: (action: Action) => void;
   undo: () => void;
-}
+  _setDebugState: (state: GameState) => void;
+};
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
@@ -80,4 +81,9 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
         historyStack: newStack,
       };
     }),
+
+  _setDebugState: (state) => set({
+    gameState: state,
+  }),
+
 }));
