@@ -9,7 +9,7 @@ const GameBoard = () => {
   const state = gameState!;
   const {
     players,
-    playPhaseActivePlayerId: playerId,
+    // playPhaseActivePlayerId: playerId, // see below
   } = state!;
 
   // rotate the board 180deg for the trailing player
