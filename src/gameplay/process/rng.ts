@@ -1,23 +1,15 @@
-import { StableRandom } from "@/utils/random";
-import { GameState } from "../state";
+import { StableRandom } from '@/utils/random';
+import { GameState } from '../state';
 
 /** Stable randomizer functions.
  * Note that, like other process functions, these modify the `state.rng`
  * object in place. */
 
-export function nextStableUniform(
-  state: GameState,
-  min: number = 0,
-  max: number = 1,
-): number {
+export function nextStableUniform(state: GameState, min: number = 0, max: number = 1): number {
   return StableRandom.next(state.rng) * (max - min) + min;
 }
 
-export function nextStableInt(
-  state: GameState,
-  min: number = 0,
-  max: number = 1,
-): number {
+export function nextStableInt(state: GameState, min: number = 0, max: number = 1): number {
   return Math.floor(nextStableUniform(state, min, max + 1));
 }
 

@@ -1,9 +1,9 @@
-import { GameState } from "..";
-import { drawCardToHand } from "./draw";
-import { nextStableShuffle } from "./rng";
+import { GameState } from '..';
+import { drawCardToHand } from './draw';
+import { nextStableShuffle } from './rng';
 
 export function processGameStart(state: GameState) {
-  state.phase = "setup";
+  state.phase = 'setup';
 
   // shuffle each player's deck
   state.players.forEach((player) => {

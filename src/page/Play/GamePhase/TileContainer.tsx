@@ -4,11 +4,7 @@ interface Props {
   children: ReactNode;
 }
 const TileContainer = ({ children }: Props) => {
-  return (
-    <div className="w-full h-full border border-px border-black">
-      { children }
-    </div>
-  );
+  return <div className="border-px h-full w-full border border-black">{children}</div>;
 };
 
 export default TileContainer;

@@ -7,15 +7,13 @@ const CardSpecialEffectMarker = ({ effects }: Props) => {
   }, [effects]);
   return (
     <div
-      className="text-transparent text-xl"
-      style={{ 'textShadow': '0 0 0 var(--color-yellow-500)' }}
+      className="text-xl text-transparent"
+      style={{ textShadow: '0 0 0 var(--color-yellow-500)' }}
       dangerouslySetInnerHTML={{
         __html: hasSpecialEffect ? '&#127775;' : '',
       }}
-      >
-    </div>
+    ></div>
   );
 };
 
 export default CardSpecialEffectMarker;
-

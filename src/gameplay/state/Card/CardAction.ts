@@ -1,5 +1,5 @@
-import { CardDefinition } from "./Card";
-import { Vector2 } from "@/utils/vector";
+import { CardDefinition } from './Card';
+import { Vector2 } from '@/utils/vector';
 
 export type CardAction =
   | CardAction.AddControlledPips
@@ -11,7 +11,7 @@ export namespace CardAction {
   /** Add pips or take control of the board.
    * This is the most common action in the game. */
   export type AddControlledPips = {
-    id: "addControlledPips";
+    id: 'addControlledPips';
     // the tiles to add pips to
     tiles: Array<Vector2>;
     // the amount of pips to add to a controlled tile; typically 1
@@ -20,7 +20,7 @@ export namespace CardAction {
 
   /** Change the power of cards */
   export type AddPower = {
-    id: "addPower";
+    id: 'addPower';
     // if true, add power to this card; ignores `.tiles`
     self?: boolean;
     // if true, add power to allied cards
@@ -34,7 +34,7 @@ export namespace CardAction {
   };
 
   export type ImmediatelyDestroy = {
-    id: "immediatelyDestroy";
+    id: 'immediatelyDestroy';
     // if true, destroy this card (ignores `.tiles`)
     self?: boolean;
     // if true, destroy allied cards
@@ -47,12 +47,12 @@ export namespace CardAction {
 
   /** Create a card and add it to the target player's hand. */
   export type CreateCardForPlayer = {
-    id: "createCardForPlayer";
+    id: 'createCardForPlayer';
     // the card to create
     cardDefinition: CardDefinition;
     // the player to add the card to the hand of
-    player: "allied" | "opponent";
+    player: 'allied' | 'opponent';
     // where to add the card into
-    into: "hand" | "deck.random" | "deck.top";
+    into: 'hand' | 'deck.random' | 'deck.top';
   };
 }

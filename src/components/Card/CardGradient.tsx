@@ -9,10 +9,10 @@ interface Props {
 const CardGradient = ({ color, className, children }: Props) => {
   return (
     <div
-      className={cn(className, "bg-linear-to-t from-gray-700 to-[var(--start-color)]")}
+      className={cn(className, 'bg-linear-to-t from-gray-700 to-[var(--start-color)]')}
       style={{ '--start-color': color } as CSSProperties}
     >
-      { children }
+      {children}
     </div>
   );
 };

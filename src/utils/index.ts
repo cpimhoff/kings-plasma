@@ -1,2 +1,2 @@
-export * from "./cn";
-export * from "./uuid";
+export * from './cn';
+export * from './uuid';

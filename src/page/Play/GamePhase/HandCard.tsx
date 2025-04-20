@@ -17,41 +17,38 @@ import {
 } from '@/components/Card';
 
 interface Props {
-  idx: number,
-  card: ICard,
-  color: string,
+  idx: number;
+  card: ICard;
+  color: string;
 }
 const HandCard = ({ idx, card, color }: Props) => {
-  const {
-    handIndexesToMulligan,
-    toggleHandIndexToMulligan,
-  } = useMulliganStore(useShallow((state) => ({
-    handIndexesToMulligan: state.handIndexesToMulligan,
-    toggleHandIndexToMulligan: state.toggleHandIndexToMulligan,
-  })));
+  const { handIndexesToMulligan, toggleHandIndexToMulligan } = useMulliganStore(
+    useShallow((state) => ({
+      handIndexesToMulligan: state.handIndexesToMulligan,
+      toggleHandIndexToMulligan: state.toggleHandIndexToMulligan,
+    })),
+  );
 
-  const {
-    hoveredHandIndex,
-    selectedHandIndex,
-    hoverOverHandIndex,
-    clickHandIndex,
-    resetHover,
-  } = useInteractionStore(useShallow((state) => ({
-    hoveredHandIndex: state.hoveredHandIndex,
-    selectedHandIndex: state.selectedHandIndex,
-    hoverOverHandIndex: state.hoverOverHandIndex,
-    clickHandIndex: state.clickHandIndex,
-    resetHover: state.resetHover,
-  })));
+  const { hoveredHandIndex, selectedHandIndex, hoverOverHandIndex, clickHandIndex, resetHover } = useInteractionStore(
+    useShallow((state) => ({
+      hoveredHandIndex: state.hoveredHandIndex,
+      selectedHandIndex: state.selectedHandIndex,
+      hoverOverHandIndex: state.hoverOverHandIndex,
+      clickHandIndex: state.clickHandIndex,
+      resetHover: state.resetHover,
+    })),
+  );
 
   const isMulligan = useMemo(() => handIndexesToMulligan.includes(idx), [idx, handIndexesToMulligan]);
   const isHovered = useMemo(() => idx === hoveredHandIndex, [idx, hoveredHandIndex]);
   const isSelected = useMemo(() => idx === selectedHandIndex, [idx, selectedHandIndex]);
 
-  const { gameState, clearPreview } = useGameplayStore(useShallow((state) => ({
-    gameState: state.gameState,
-    clearPreview: state.clearPreview,
-  })));
+  const { gameState, clearPreview } = useGameplayStore(
+    useShallow((state) => ({
+      gameState: state.gameState,
+      clearPreview: state.clearPreview,
+    })),
+  );
 
   const { phase } = gameState!;
 
@@ -59,18 +56,21 @@ const HandCard = ({ idx, card, color }: Props) => {
     hoverOverHandIndex(idx);
   }, []);
 
-  const handleClick = useCallback<(idx: number) => void>((idx) => {
-    if (phase === 'setup') {
-      toggleHandIndexToMulligan(idx);
-    } else {
-      clickHandIndex(idx);
-      clearPreview();
-    }
-  }, [phase]);
+  const handleClick = useCallback<(idx: number) => void>(
+    (idx) => {
+      if (phase === 'setup') {
+        toggleHandIndexToMulligan(idx);
+      } else {
+        clickHandIndex(idx);
+        clearPreview();
+      }
+    },
+    [phase],
+  );
 
   return (
     <div
-      className={cn('flex-shrink-0 w-50 h-70 flex flex-col items-center', {
+      className={cn('flex h-70 w-50 flex-shrink-0 flex-col items-center', {
         'border border-3': true,
         'border-orange-400': isMulligan,
         'border-sky-300': isHovered && !isSelected,
@@ -80,11 +80,11 @@ const HandCard = ({ idx, card, color }: Props) => {
       onMouseLeave={() => resetHover()}
       onClick={() => handleClick(idx)}
     >
-      <CardGradient color={color} className="w-full flex flex-col items-center">
-        <div className="w-full mb-3">
-          <div className="flex justify-between mt-2 mx-4">
+      <CardGradient color={color} className="flex w-full flex-col items-center">
+        <div className="mb-3 w-full">
+          <div className="mx-4 mt-2 flex justify-between">
             <CardCost {...card} />
-            <div className="w-8 h-8">
+            <div className="h-8 w-8">
               <CardPower {...card} />
             </div>
           </div>
@@ -93,11 +93,11 @@ const HandCard = ({ idx, card, color }: Props) => {
           <CardEffectPreviewGrid {...card} />
         </div>
       </CardGradient>
-      <CardFooter className="w-full flex grow flex-col justify-stretch items-center">
-        <div className="flex justify-center mb-3">
+      <CardFooter className="flex w-full grow flex-col items-center justify-stretch">
+        <div className="mb-3 flex justify-center">
           <CardName {...card} />
         </div>
-        <div className="h-full flex items-center">
+        <div className="flex h-full items-center">
           <CardSpecialEffectDescription {...card} />
         </div>
       </CardFooter>

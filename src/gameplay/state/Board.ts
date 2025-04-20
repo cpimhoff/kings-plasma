@@ -1,5 +1,5 @@
-import { Card } from "./Card";
-import { Player } from "./Player";
+import { Card } from './Card';
+import { Player } from './Player';
 
 export type Board = Array<Array<BoardTile>>;
 
@@ -18,12 +18,12 @@ export type BoardTile = {
   position: BoardPosition;
   pips: number;
   card: Card | null;
-  controllerPlayerId: Player["id"] | null;
+  controllerPlayerId: Player['id'] | null;
 };
 
 export function createBoard(
   dimensions: { width: number; height: number },
-  players?: { leading: Player["id"]; trailing: Player["id"] },
+  players?: { leading: Player['id']; trailing: Player['id'] },
 ): Board {
   // make the empty board
   const board: Board = Array.from({ length: dimensions.width }, (_, x) =>

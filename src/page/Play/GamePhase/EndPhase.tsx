@@ -4,7 +4,7 @@ import BoardControls from './BoardControls';
 import PlayerHand from './PlayerHand';
 import Results from './Results';
 import GameStatus from './GameStatus';
-import { useGameplayStore } from '@/gameplay/store' ;
+import { useGameplayStore } from '@/gameplay/store';
 
 const EndPhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);
@@ -13,12 +13,12 @@ const EndPhase = () => {
   return (
     <>
       <BoardView
-        gameStatus={(
+        gameStatus={
           <>
             <GameStatus player={player} />
             <Results />
           </>
-        )}
+        }
         gameBoard={<GameBoard />}
         boardControls={<BoardControls player={player} />}
         playerHand={<PlayerHand player={player} />}

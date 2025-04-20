@@ -1,4 +1,4 @@
-import { Action, GameState } from "../state";
+import { Action, GameState } from '../state';
 
 export type ProcessResult = {
   state: GameState;

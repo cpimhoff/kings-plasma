@@ -1,12 +1,5 @@
 import { CardDefinition } from '@/gameplay/state/Card';
-import {
-  CardCost,
-  CardPower,
-  CardSpecialEffectMarker,
-  CardGradient,
-  CardFooter,
-  CardName,
-} from '@/components/Card';
+import { CardCost, CardPower, CardSpecialEffectMarker, CardGradient, CardFooter, CardName } from '@/components/Card';
 
 interface Props {
   card: CardDefinition;
@@ -14,14 +7,14 @@ interface Props {
 }
 const DeckCard = ({ card, color }: Props) => {
   return (
-    <div className="flex flex-col h-full border border-3 rounded-sm">
-      <CardGradient className="w-full h-full flex flex-col" color={color}>
-        <div className="mt-2 mx-2 flex flex-col justify-between grow">
+    <div className="flex h-full flex-col rounded-sm border border-3">
+      <CardGradient className="flex h-full w-full flex-col" color={color}>
+        <div className="mx-2 mt-2 flex grow flex-col justify-between">
           <div className="flex justify-between">
-            <div className="w-7 h-7">
+            <div className="h-7 w-7">
               <CardCost {...card} />
             </div>
-            <div className="m-1 w-7 h-7">
+            <div className="m-1 h-7 w-7">
               <CardPower {...card} />
             </div>
           </div>

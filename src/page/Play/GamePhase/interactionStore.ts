@@ -27,7 +27,7 @@ interface InteractionStore {
   // reset
   resetHover: () => void;
   resetSelections: () => void;
-};
+}
 
 export const useInteractionStore = create<InteractionStore>((set, get) => ({
   hoveredHandIndex: null,
@@ -35,13 +35,15 @@ export const useInteractionStore = create<InteractionStore>((set, get) => ({
   selectedHandIndex: null,
   selectedBoardPosition: null,
 
-  hoverOverHandIndex: (handIdx) => set({
-    hoveredHandIndex: handIdx,
-  }),
+  hoverOverHandIndex: (handIdx) =>
+    set({
+      hoveredHandIndex: handIdx,
+    }),
 
-  hoverOverBoardPosition: (pos) => set({
-    hoveredBoardPosition: pos,
-  }),
+  hoverOverBoardPosition: (pos) =>
+    set({
+      hoveredBoardPosition: pos,
+    }),
 
   clickHandIndex: (handIdx) => {
     const { selectedHandIndex } = get();
@@ -77,16 +79,17 @@ export const useInteractionStore = create<InteractionStore>((set, get) => ({
     return isValid;
   },
 
-  resetHover: () => set({
-    hoveredHandIndex: null,
-    hoveredBoardPosition: null,
-  }),
+  resetHover: () =>
+    set({
+      hoveredHandIndex: null,
+      hoveredBoardPosition: null,
+    }),
 
-  resetSelections: () => set({
-    selectedHandIndex: null,
-    selectedBoardPosition: null,
-  }),
-
+  resetSelections: () =>
+    set({
+      selectedHandIndex: null,
+      selectedBoardPosition: null,
+    }),
 }));
 
 // TODO: find a better place for this

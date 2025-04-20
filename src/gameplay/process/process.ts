@@ -1,10 +1,10 @@
-import { createDraft, finishDraft, current as snapshotDraft } from "immer";
+import { createDraft, finishDraft, current as snapshotDraft } from 'immer';
 
-import { Action, GameState } from "../state";
-import { ProcessCtx, KeyframeMetadata, ProcessKeyframe, ProcessResult } from "./ctx";
-import { processSetup } from "./processSetup";
-import { processPlay } from "./processPlay";
-import { processEnd } from "./processEnd";
+import { Action, GameState } from '../state';
+import { ProcessCtx, KeyframeMetadata, ProcessKeyframe, ProcessResult } from './ctx';
+import { processSetup } from './processSetup';
+import { processPlay } from './processPlay';
+import { processEnd } from './processEnd';
 
 /**
  * Process a single action in the game, atomically updating the state to the

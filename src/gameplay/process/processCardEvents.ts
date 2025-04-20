@@ -1,36 +1,26 @@
-import {
-  GameState,
-  Card,
-  BoardTile,
-  CardAction,
-  CardTriggerCondition,
-} from "../state";
+import { GameState, Card, BoardTile, CardAction, CardTriggerCondition } from '../state';
 import { produce } from 'immer';
-import { ProcessCtx } from "./ctx";
-import { allBoardCards, ActionSource } from "./iter";
-import { nextStableInt } from "./rng";
-import { uuid } from "@/utils";
+import { ProcessCtx } from './ctx';
+import { allBoardCards, ActionSource } from './iter';
+import { nextStableInt } from './rng';
+import { uuid } from '@/utils';
 
 type Event = Event.CardPlayed | Event.PowerChanged | Event.CardDestroyed;
 namespace Event {
-  export type CardPlayed = { triggerId: "onPlay"; tile: BoardTile };
+  export type CardPlayed = { triggerId: 'onPlay'; tile: BoardTile };
   export type PowerChanged = {
-    triggerId: "onPowerChange";
+    triggerId: 'onPowerChange';
     tile: BoardTile;
-    changeDirection: "increasing" | "decreasing";
+    changeDirection: 'increasing' | 'decreasing';
   };
-  export type CardDestroyed = { triggerId: "onDestroy"; tile: ActionSource };
+  export type CardDestroyed = { triggerId: 'onDestroy'; tile: ActionSource };
 }
 
 type TriggeredAction = CardAction & {
   source: ActionSource;
 };
 
-export function processCardEvents(
-  state: GameState,
-  initialEvent: Event,
-  ctx: ProcessCtx,
-) {
+export function processCardEvents(state: GameState, initialEvent: Event, ctx: ProcessCtx) {
   const eventQueue: Event[] = [initialEvent];
   while (eventQueue.length > 0) {
     const event = eventQueue.shift()!;
@@ -51,7 +41,7 @@ export function processCardEvents(
 function getEventTriggers(state: GameState, event: Event) {
   const triggeredActions: TriggeredAction[] = [];
   // destroyed cards aren't on the board anymore but they can still respond to onDestroy events
-  let destroyedTile = (event.triggerId === 'onDestroy') ? event.tile : null;
+  let destroyedTile = event.triggerId === 'onDestroy' ? event.tile : null;
   let responders = allBoardCards(state, destroyedTile);
   for (const responder of responders) {
     for (const effect of responder.card.effects) {
@@ -79,8 +69,8 @@ function doesEventSatisfyTriggerCondition(
   // special cases for specific trigger conditions are represented as
   // guard conditions and come first:
   if (
-    triggerCond.id === "onPowerChange" &&
-    event.triggerId === "onPowerChange" &&
+    triggerCond.id === 'onPowerChange' &&
+    event.triggerId === 'onPowerChange' &&
     triggerCond.changeDirection !== event.changeDirection
   )
     return false;
@@ -94,8 +84,7 @@ function doesEventSatisfyTriggerCondition(
     return true;
   }
 
-  const isEventFromAlly =
-    event.tile.controllerPlayerId === responder.controllerPlayerId;
+  const isEventFromAlly = event.tile.controllerPlayerId === responder.controllerPlayerId;
   if (!triggerCond.allied && isEventFromAlly) return false;
   if (!triggerCond.opponent && !isEventFromAlly) return false;
 
@@ -110,14 +99,10 @@ function doesEventSatisfyTriggerCondition(
   }
 }
 
-function processTriggeredCardAction(
-  state: GameState,
-  action: TriggeredAction,
-  eventQueue: Event[],
-) {
+function processTriggeredCardAction(state: GameState, action: TriggeredAction, eventQueue: Event[]) {
   const actionPlayerId = action.source.controllerPlayerId;
   switch (action.id) {
-    case "addControlledPips": {
+    case 'addControlledPips': {
       const targets = action.tiles.map((deltaTile) => ({
         x: action.source.position.x + deltaTile.dx,
         y: action.source.position.y + deltaTile.dy,
@@ -138,40 +123,38 @@ function processTriggeredCardAction(
       break;
     }
 
-    case "addPower": {
+    case 'addPower': {
       if (action.amount === 0) break;
       const targets = getTileTargets(state, action.source, action);
       for (const t of targets) {
         t.card.power += action.amount;
         if (t.card.power < 0) t.card.power = 0;
         eventQueue.push({
-          triggerId: "onPowerChange",
+          triggerId: 'onPowerChange',
           tile: t,
-          changeDirection: action.amount > 0 ? "increasing" : "decreasing",
+          changeDirection: action.amount > 0 ? 'increasing' : 'decreasing',
         });
       }
       break;
     }
 
-    case "createCardForPlayer": {
+    case 'createCardForPlayer': {
       const player = state.players.find((p) =>
-        action.player === "allied"
-          ? p.id === actionPlayerId
-          : p.id !== actionPlayerId,
+        action.player === 'allied' ? p.id === actionPlayerId : p.id !== actionPlayerId,
       )!;
-      if(!player) break;
+      if (!player) break;
       const card = { ...action.cardDefinition, id: uuid() };
       switch (action.into) {
-        case "hand": {
+        case 'hand': {
           player.hand.push(card);
           break;
         }
-        case "deck.random": {
+        case 'deck.random': {
           const randomIndex = nextStableInt(state, 0, player.deck.length - 1);
           player.deck.splice(randomIndex, 0, card);
           break;
         }
-        case "deck.top": {
+        case 'deck.top': {
           player.deck.push(card);
           break;
         }
@@ -179,11 +162,11 @@ function processTriggeredCardAction(
       break;
     }
 
-    case "immediatelyDestroy": {
+    case 'immediatelyDestroy': {
       const targets = getTileTargets(state, action.source, action);
       for (const t of targets) {
         const oldTile = destroyCardAtTile(t);
-        eventQueue.push({ triggerId: "onDestroy", tile: oldTile });
+        eventQueue.push({ triggerId: 'onDestroy', tile: oldTile });
       }
       break;
     }
@@ -204,16 +187,13 @@ function destroyCardAtTile(tile: ActionSource): ActionSource {
   return oldTile;
 }
 
-function reapZombieCards(
-  state: GameState,
-  eventQueue: Event[],
-): boolean {
+function reapZombieCards(state: GameState, eventQueue: Event[]): boolean {
   let didReap = false;
   for (const tile of allBoardCards(state)) {
     if (tile.card.power === 0) {
       const oldTile = destroyCardAtTile(tile);
       eventQueue.push({
-        triggerId: "onDestroy",
+        triggerId: 'onDestroy',
         tile: oldTile,
       });
       didReap = true;
@@ -225,9 +205,7 @@ function reapZombieCards(
 function getTileTargets(
   state: GameState,
   source: BoardTile,
-  action: Partial<
-    Pick<CardAction.AddPower, "tiles" | "self" | "allied" | "opponent">
-  >,
+  action: Partial<Pick<CardAction.AddPower, 'tiles' | 'self' | 'allied' | 'opponent'>>,
 ): (BoardTile & { card: Card })[] {
   // start with the targeted tiles, including self
   const targetTiles = action.tiles
@@ -246,12 +224,6 @@ function getTileTargets(
   // filter out based on conditions
   return targetTiles
     .filter((t) => action.self || t.card !== source.card)
-    .filter(
-      (t) =>
-        action.allied || t.controllerPlayerId !== source.controllerPlayerId,
-    )
-    .filter(
-      (t) =>
-        action.opponent || t.controllerPlayerId === source.controllerPlayerId,
-    );
+    .filter((t) => action.allied || t.controllerPlayerId !== source.controllerPlayerId)
+    .filter((t) => action.opponent || t.controllerPlayerId === source.controllerPlayerId);
 }

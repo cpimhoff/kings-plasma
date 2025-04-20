@@ -1,4 +1,4 @@
-import { CardEffect } from "./CardEffect";
+import { CardEffect } from './CardEffect';
 import { Vector2, addVector2s, invertVector2 } from '@/utils/vector';
 import { produce } from 'immer';
 
@@ -8,7 +8,7 @@ export type Card = {
 
   // requirements to play this card to the board, either a number of pips or
   // "replace" to replace a card on the board
-  playRequirement: number | "replace";
+  playRequirement: number | 'replace';
 
   // score this card contributes to row while on the board
   power: number;
@@ -23,42 +23,52 @@ export type Card = {
   isLegendary?: boolean;
 };
 
-export type CardDefinition = Omit<Card, "id">;
+export type CardDefinition = Omit<Card, 'id'>;
 
-export type CardGridCell = { origin: boolean; claims: boolean; affects: boolean };
+export type CardGridCell = {
+  origin: boolean;
+  claims: boolean;
+  affects: boolean;
+};
 export type CardGrid = CardGridCell[][];
 export function getGridForCardEffects(effects: CardDefinition['effects']): CardGridCell[][] {
-  const templateCell: CardGridCell = { origin: false, claims: false, affects: false };
-  const grid: CardGrid = Array.from({ length: 5 }, () => (
+  const templateCell: CardGridCell = {
+    origin: false,
+    claims: false,
+    affects: false,
+  };
+  const grid: CardGrid = Array.from({ length: 5 }, () =>
     Array.from({ length: 5 }, () => ({
       ...templateCell,
-    }))));
-  const origin: Vector2 = { dx: 2, dy: 2};
+    })),
+  );
+  const origin: Vector2 = { dx: 2, dy: 2 };
   grid[origin.dx][origin.dy].origin = true;
   effects.forEach((effect) => {
     effect.actions.forEach((action) => {
-        switch (action.id) {
-          case 'addControlledPips':
-          case 'addPower': {
-            action.tiles?.forEach((vector) => {
-              let claims = false, affects = false;
-              if (effect.trigger.id === 'onPlay' && action.id === 'addControlledPips') {
-                claims = true;
-              } else {
-                affects = true;
-              }
-              const coords = addVector2s(origin, vector);
-              const cell = grid[coords.dx][4 - coords.dy]; // reverse each column for rendering with css grid
-              cell.claims = cell.claims || claims;
-              cell.affects = cell.affects || affects;
-            });
-            break;
-          }
+      switch (action.id) {
+        case 'addControlledPips':
+        case 'addPower': {
+          action.tiles?.forEach((vector) => {
+            let claims = false,
+              affects = false;
+            if (effect.trigger.id === 'onPlay' && action.id === 'addControlledPips') {
+              claims = true;
+            } else {
+              affects = true;
+            }
+            const coords = addVector2s(origin, vector);
+            const cell = grid[coords.dx][4 - coords.dy]; // reverse each column for rendering with css grid
+            cell.claims = cell.claims || claims;
+            cell.affects = cell.affects || affects;
+          });
+          break;
         }
+      }
     });
   });
   return grid;
-};
+}
 
 export const getCardHasSpecialEffect = (effects: CardDefinition['effects']) => {
   let ret = false;
@@ -77,17 +87,17 @@ export const getCardHasSpecialEffect = (effects: CardDefinition['effects']) => {
     });
   });
   return ret;
-}
+};
 
 export function withReversedVectors(card: CardDefinition): CardDefinition {
   return produce(card, (draft) => {
     draft.effects = draft.effects?.map((effect) => {
       effect.trigger.tiles = effect.trigger?.tiles?.map((vector: Vector2) => invertVector2(vector));
       effect.actions = effect.actions.map((action) => {
-        if ("tiles" in action) {
+        if ('tiles' in action) {
           action.tiles = action.tiles?.map((tile: Vector2) => invertVector2(tile));
         }
-        if ("cardDefinition" in action) {
+        if ('cardDefinition' in action) {
           action.cardDefinition = withReversedVectors(action.cardDefinition);
         }
         return action;

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useGameplayStore } from '@/gameplay/store' ;
-import { Player } from '@/gameplay/state/Player' ;
+import { useGameplayStore } from '@/gameplay/store';
+import { Player } from '@/gameplay/state/Player';
 import { useMulliganStore } from './mulliganStore';
 import { useInteractionStore } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -12,21 +12,20 @@ interface Props {
 
 const BoardControls = ({ player }: Props) => {
   const gameState = useGameplayStore((state) => state.gameState);
-  const [ dispatchAction, undo ] = useGameplayStore(useShallow((state) => [state.dispatchAction, state.undo]));
+  const [dispatchAction, undo] = useGameplayStore(useShallow((state) => [state.dispatchAction, state.undo]));
 
-  const {
-    handIndexesToMulligan,
-    resetMulligans,
-  } = useMulliganStore(useShallow((state) => ({
-    handIndexesToMulligan: state.handIndexesToMulligan,
-    resetMulligans: state.resetMulligans,
-  })));
+  const { handIndexesToMulligan, resetMulligans } = useMulliganStore(
+    useShallow((state) => ({
+      handIndexesToMulligan: state.handIndexesToMulligan,
+      resetMulligans: state.resetMulligans,
+    })),
+  );
 
-  const {
-    resetSelections,
-  } = useInteractionStore(useShallow((state) => ({
-    resetSelections: state.resetSelections,
-  })));
+  const { resetSelections } = useInteractionStore(
+    useShallow((state) => ({
+      resetSelections: state.resetSelections,
+    })),
+  );
 
   const onMulligan = useCallback(() => {
     dispatchAction({
@@ -62,28 +61,22 @@ const BoardControls = ({ player }: Props) => {
 
   return (
     <div className="flex flex-col gap-3">
-      { phase === 'setup' && (
+      {phase === 'setup' && (
         <Button onClick={() => onMulligan()}>
-          { handIndexesToMulligan.length > 0 ? "Mulligan and begin" : "Begin" }
+          {handIndexesToMulligan.length > 0 ? 'Mulligan and begin' : 'Begin'}
         </Button>
-      ) }
-      { phase === 'play' && (
+      )}
+      {phase === 'play' && (
         <>
-          <Button onClick={() => onPass()}>
-            Pass
-          </Button>
+          <Button onClick={() => onPass()}>Pass</Button>
         </>
-      ) }
-      { phase === 'end' && (
+      )}
+      {phase === 'end' && (
         <>
-          <Button onClick={() => onRematch()}>
-            Rematch
-          </Button>
+          <Button onClick={() => onRematch()}>Rematch</Button>
         </>
-      ) }
-      <Button onClick={() => onUndo()}>
-        Undo
-      </Button>
+      )}
+      <Button onClick={() => onUndo()}>Undo</Button>
     </div>
   );
 };

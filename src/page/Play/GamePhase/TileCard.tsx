@@ -9,13 +9,13 @@ interface Props {
 }
 const TileCard = ({ card, color, nerfedPower, buffedPower }: Props) => {
   return (
-    <div className="flex flex-col h-full border border-3 rounded-sm">
-      <CardGradient className="flex flex-col h-full justify-between" color={color}>
-        <div className="w-full flex justify-between">
-          <div className="m-1 w-7 h-7">
+    <div className="flex h-full flex-col rounded-sm border border-3">
+      <CardGradient className="flex h-full flex-col justify-between" color={color}>
+        <div className="flex w-full justify-between">
+          <div className="m-1 h-7 w-7">
             <CardSpecialEffectMarker {...card} />
           </div>
-          <div className="m-1 w-7 h-7">
+          <div className="m-1 h-7 w-7">
             <CardPower power={card.power} nerfed={nerfedPower} buffed={buffedPower} />
           </div>
         </div>

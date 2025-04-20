@@ -3,7 +3,7 @@ import GameBoard from './GameBoard';
 import BoardControls from './BoardControls';
 import PlayerHand from './PlayerHand';
 import BoardView from './BoardView';
-import { useGameplayStore } from '@/gameplay/store' ;
+import { useGameplayStore } from '@/gameplay/store';
 
 const SetupPhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);

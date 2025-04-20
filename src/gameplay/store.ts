@@ -15,7 +15,7 @@ interface GameplayStore {
   clearPreview: () => void;
   dispatchAction: (action: Action) => void;
   undo: () => void;
-};
+}
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
@@ -23,24 +23,25 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
   historyStack: [],
   _pending: false,
 
-  beginGame: (players) => set(() => ({
-    gameState: createInitialState(players),
-  })),
+  beginGame: (players) =>
+    set(() => ({
+      gameState: createInitialState(players),
+    })),
 
-  previewAction: (action) => set(() => {
-    const { keyframes } = process(get().gameState!, action);
-    const majorFrames = keyframes
-      .filter(kf => !kf.meta?.minor);
-    const previewState = [...majorFrames, keyframes[0]]
-      .map(kf => kf.snapshot)[0];
-    return {
-      previewState,
-    };
-  }),
+  previewAction: (action) =>
+    set(() => {
+      const { keyframes } = process(get().gameState!, action);
+      const majorFrames = keyframes.filter((kf) => !kf.meta?.minor);
+      const previewState = [...majorFrames, keyframes[0]].map((kf) => kf.snapshot)[0];
+      return {
+        previewState,
+      };
+    }),
 
-  clearPreview: () => set({
-    previewState: null,
-  }),
+  clearPreview: () =>
+    set({
+      previewState: null,
+    }),
 
   dispatchAction: async (action) => {
     if (get()._pending) return;
@@ -50,7 +51,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     }));
     const oldGameState = get().gameState!;
     const { keyframes, state: newGameState } = process(oldGameState, action);
-    const keyframeStates = keyframes.map(kf => kf.snapshot);
+    const keyframeStates = keyframes.map((kf) => kf.snapshot);
     await keyframeStates.reduce((accum, curr) => {
       return accum.then(() => {
         return new Promise((resolve) => {
@@ -66,17 +67,17 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     });
   },
 
-  undo: () => set((state) => {
-    const { historyStack, _pending } = state;
-    if (!historyStack.length || _pending) return {};
-    const stackSize = historyStack.length;
-    const newState = historyStack[stackSize - 1];
-    const newStack = [...historyStack].splice(0, stackSize - 1);
-    return {
-      gameState: newState,
-      previewState: null,
-      historyStack: newStack,
-    };
-  }),
-
+  undo: () =>
+    set((state) => {
+      const { historyStack, _pending } = state;
+      if (!historyStack.length || _pending) return {};
+      const stackSize = historyStack.length;
+      const newState = historyStack[stackSize - 1];
+      const newStack = [...historyStack].splice(0, stackSize - 1);
+      return {
+        gameState: newState,
+        previewState: null,
+        historyStack: newStack,
+      };
+    }),
 }));

@@ -12,4 +12,4 @@ export function invertVector2(v: Vector2): Vector2 {
     dx: -v.dx,
     dy: -v.dy,
   };
-};
+}

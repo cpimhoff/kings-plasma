@@ -1,4 +1,4 @@
-import { BoardTile, Card, GameState } from "../state";
+import { BoardTile, Card, GameState } from '../state';
 
 // TODO: put this somewhere better
 export type ActionSource = BoardTile & { card: Card };

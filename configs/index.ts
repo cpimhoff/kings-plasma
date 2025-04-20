@@ -1,1 +1,1 @@
-export * from './fonts.config'
+export * from './fonts.config';

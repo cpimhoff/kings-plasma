@@ -14,44 +14,39 @@ const GameBoard = () => {
 
   const { board: trueBoard } = state!;
   // reverse each column for rendering with css grid
-  const board = [...trueBoard.map(column => [...column].reverse())];
+  const board = [...trueBoard.map((column) => [...column].reverse())];
 
-  const playColumns = board.map((column, c) => (
+  const playColumns = board.map((column, c) =>
     column.map((tile, r) => (
       <div
         key={`${tile.position.x},${tile.position.y}`}
-        className={(c * 5 + r ) % 2 === 1 ? "bg-slate-500" : "bg-slate-100" }
+        className={(c * 5 + r) % 2 === 1 ? 'bg-slate-500' : 'bg-slate-100'}
       >
-        <BoardTile
-          position={tile.position}
-        />
+        <BoardTile position={tile.position} />
       </div>
-    ))));
+    )),
+  );
 
   const { rowScoresByPlayerId } = adaptGameState(state);
 
-  const scoreColumns = [...players]
-    .map((player) => (
-      buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id])
-    ));
+  const scoreColumns = [...players].map((player) =>
+    buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id]),
+  );
 
   const columns = [scoreColumns[0], ...playColumns, scoreColumns[1]];
   const tiles = columns.reduce((accum, curr) => [...accum, ...curr], []);
 
   return (
-    <div className="grid grid-flow-col grid-cols-7 grid-rows-3 w-[60rem] h-[30rem] border border-px border-black">
-      { tiles }
+    <div className="border-px grid h-[30rem] w-[60rem] grid-flow-col grid-cols-7 grid-rows-3 border border-black">
+      {tiles}
     </div>
   );
 };
 
-function buildScoreColumnForPlayer(
-  playerId: Player['id'],
-  rowScores: number[],
-) {
+function buildScoreColumnForPlayer(playerId: Player['id'], rowScores: number[]) {
   return Array.from({ length: 3 }).map((_, i) => (
     <div key={`${playerId},${i}`} className="bg-slate-500">
-      <RowScoreTile score={rowScores[i]}/>
+      <RowScoreTile score={rowScores[i]} />
     </div>
   ));
 }

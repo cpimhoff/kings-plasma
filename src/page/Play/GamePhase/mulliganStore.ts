@@ -7,7 +7,7 @@ interface MulliganStore {
 
   toggleHandIndexToMulligan: (handIdx: number) => void;
   resetMulligans: () => void;
-};
+}
 
 export const useMulliganStore = create<MulliganStore>((set, get) => ({
   handIndexesToMulligan: [],
@@ -16,7 +16,7 @@ export const useMulliganStore = create<MulliganStore>((set, get) => ({
     const { handIndexesToMulligan } = get();
     let newVal = null;
     if (handIndexesToMulligan.includes(handIdx)) {
-      newVal = handIndexesToMulligan.filter(i => i !== handIdx);
+      newVal = handIndexesToMulligan.filter((i) => i !== handIdx);
     } else if (handIndexesToMulligan.length < MAX_CARDS_TO_MULLIGAN) {
       newVal = [...handIndexesToMulligan, handIdx];
     }
@@ -27,8 +27,8 @@ export const useMulliganStore = create<MulliganStore>((set, get) => ({
     }
   },
 
-  resetMulligans: () => set(() => ({
-    handIndexesToMulligan: [],
-  })),
-
+  resetMulligans: () =>
+    set(() => ({
+      handIndexesToMulligan: [],
+    })),
 }));

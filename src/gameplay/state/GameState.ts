@@ -1,15 +1,15 @@
-import { produce } from "immer";
-import { Phase } from "./Phase";
-import { Board, createBoard } from "./Board";
-import { Player } from "./Player";
-import { moveCardFromHandToDeck } from "../process/draw";
-import { StableRandom, StableRandomState } from "@/utils/random";
-import { processGameStart } from "../process/processGameStart";
+import { produce } from 'immer';
+import { Phase } from './Phase';
+import { Board, createBoard } from './Board';
+import { Player } from './Player';
+import { moveCardFromHandToDeck } from '../process/draw';
+import { StableRandom, StableRandomState } from '@/utils/random';
+import { processGameStart } from '../process/processGameStart';
 
 export type GameState = {
   phase: Phase;
   players: Player[];
-  playPhaseActivePlayerId: Player["id"];
+  playPhaseActivePlayerId: Player['id'];
   board: Board;
   rng: StableRandomState;
 };
@@ -30,12 +30,9 @@ export function resetGameState(oldGameState: GameState): GameState {
 }
 
 export function createInitialState(players: Player[]): GameState {
-  const board = createBoard(
-    { width: 5, height: 3 },
-    { leading: players[0].id, trailing: players[1].id },
-  );
+  const board = createBoard({ width: 5, height: 3 }, { leading: players[0].id, trailing: players[1].id });
   const state: GameState = {
-    phase: "setup",
+    phase: 'setup',
     players,
     playPhaseActivePlayerId: players[0].id,
     board,

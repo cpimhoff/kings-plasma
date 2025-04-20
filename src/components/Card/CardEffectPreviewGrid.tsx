@@ -7,13 +7,8 @@ const CardEffectPreviewGrid = ({ effects }: Props) => {
     return getGridForCardEffects(effects);
   }, [effects]);
   return (
-    <div className="w-full border border-2 border-black grid grid-flow-col grid-rows-5 grid-cols-5">
-      { grid.map((col, i) => (
-        col.map((cell, j) => (
-          <div key={`${i},${j}`} className={cn(classesForCell(cell))}>
-          </div>
-        ))
-      )) }
+    <div className="grid w-full grid-flow-col grid-cols-5 grid-rows-5 border border-2 border-black">
+      {grid.map((col, i) => col.map((cell, j) => <div key={`${i},${j}`} className={cn(classesForCell(cell))}></div>))}
     </div>
   );
 };

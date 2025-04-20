@@ -1,7 +1,7 @@
 import SetupPhase from './SetupPhase';
 import PlayPhase from './PlayPhase';
 import EndPhase from './EndPhase';
-import { useGameplayStore } from '@/gameplay/store' ;
+import { useGameplayStore } from '@/gameplay/store';
 
 const GamePhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);
@@ -20,13 +20,11 @@ const GamePhase = () => {
       break;
     default:
       return null;
-  };
+  }
 
   return (
-    <div className="w-full flex justify-center">
-      <div>
-        { phaseView }
-      </div>
+    <div className="flex w-full justify-center">
+      <div>{phaseView}</div>
     </div>
   );
 };

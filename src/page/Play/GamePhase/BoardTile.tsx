@@ -13,22 +13,16 @@ import TilePips from './TilePips';
 interface Props {
   position: BoardPosition;
 }
-const BoardTile = ({
-  position,
-}: Props) => {
-  const {
-    gameState,
-    previewState,
-    previewAction,
-    dispatchAction,
-    clearPreview,
-  } = useGameplayStore(useShallow((state) => ({
-    gameState: state.gameState,
-    previewState: state.previewState,
-    previewAction: state.previewAction,
-    dispatchAction: state.dispatchAction,
-    clearPreview: state.clearPreview,
-  })));
+const BoardTile = ({ position }: Props) => {
+  const { gameState, previewState, previewAction, dispatchAction, clearPreview } = useGameplayStore(
+    useShallow((state) => ({
+      gameState: state.gameState,
+      previewState: state.previewState,
+      previewAction: state.previewAction,
+      dispatchAction: state.dispatchAction,
+      clearPreview: state.clearPreview,
+    })),
+  );
 
   const state = gameState!;
 
@@ -40,20 +34,22 @@ const BoardTile = ({
     hoverOverBoardPosition,
     resetHover,
     resetSelections,
-  } = useInteractionStore(useShallow((state) => ({
-    hoveredBoardPosition: state.hoveredBoardPosition,
-    selectedHandIndex: state.selectedHandIndex,
-    hoveredHandIndex: state.hoveredHandIndex,
-    selectedBoardPosition: state.selectedBoardPosition,
-    hoverOverBoardPosition: state.hoverOverBoardPosition,
-    resetHover: state.resetHover,
-    resetSelections: state.resetSelections,
-  })));
+  } = useInteractionStore(
+    useShallow((state) => ({
+      hoveredBoardPosition: state.hoveredBoardPosition,
+      selectedHandIndex: state.selectedHandIndex,
+      hoveredHandIndex: state.hoveredHandIndex,
+      selectedBoardPosition: state.selectedBoardPosition,
+      hoverOverBoardPosition: state.hoverOverBoardPosition,
+      resetHover: state.resetHover,
+      resetSelections: state.resetSelections,
+    })),
+  );
 
-  const [ isHovered, isSelected ] = useMemo(() => {
+  const [isHovered, isSelected] = useMemo(() => {
     const isHovered = hoveredBoardPosition && positionsEqual(position, hoveredBoardPosition);
     const isSelected = selectedBoardPosition && positionsEqual(position, selectedBoardPosition);
-    return [ isHovered, isSelected ];
+    return [isHovered, isSelected];
   }, [position, hoveredBoardPosition, selectedBoardPosition]);
 
   const activePlayer = useMemo(() => {
@@ -94,7 +90,7 @@ const BoardTile = ({
         fromHandIndex: selectedHandIndex!,
         toBoardPosition: {
           x: position.x,
-          y: position.y
+          y: position.y,
         },
       });
       resetHover();
@@ -104,11 +100,9 @@ const BoardTile = ({
     }
   }, [selectedHandIndex, isValidDestinationForActiveCard, activePlayer]);
 
-  const {
-    occupyingCard,
-    occupyingPips,
-  } = useMemo(() => {
-    let cardNode = null, pipsNode = null;
+  const { occupyingCard, occupyingPips } = useMemo(() => {
+    let cardNode = null,
+      pipsNode = null;
     const currentTile = state.board[position.x][position.y];
     const previewTile = previewState?.board[position.x][position.y];
     const tile = previewTile || currentTile;
@@ -118,7 +112,10 @@ const BoardTile = ({
       let nerfedPower = false;
       let buffedPower = false;
       if (previewTile) {
-        if (currentTile.pips !== previewTile.pips || currentTile.controllerPlayerId !== previewTile.controllerPlayerId) {
+        if (
+          currentTile.pips !== previewTile.pips ||
+          currentTile.controllerPlayerId !== previewTile.controllerPlayerId
+        ) {
           highlightPips = true;
         }
         const { card: currentCard } = currentTile;
@@ -133,8 +130,9 @@ const BoardTile = ({
       }
       const { card, pips } = tile;
       const color = getPlayerWithId(state.players, controllerPlayerId).colorCssValue;
-      cardNode = card && <TileCard card={card} color={color} nerfedPower={nerfedPower} buffedPower={buffedPower} /> || null;
-      pipsNode = pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} /> || null;
+      cardNode =
+        (card && <TileCard card={card} color={color} nerfedPower={nerfedPower} buffedPower={buffedPower} />) || null;
+      pipsNode = (pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} />) || null;
     }
     return {
       occupyingCard: cardNode,
@@ -142,25 +140,32 @@ const BoardTile = ({
     };
   }, [state, previewState]);
 
-  const underlay = useMemo(() => (
-    <div className={cn('absolute', 'w-full', 'h-full', 'top-0', 'opacity-60', {
-      'bg-sky-100': isHovered && !isSelected,
-      'bg-sky-200': isSelected,
-      'border border-3 border-green-300': isValidDestinationForActiveCard,
-    })}> </div>
-  ), [isHovered, isSelected, isValidDestinationForActiveCard]);
+  const underlay = useMemo(
+    () => (
+      <div
+        className={cn('absolute', 'w-full', 'h-full', 'top-0', 'opacity-60', {
+          'bg-sky-100': isHovered && !isSelected,
+          'bg-sky-200': isSelected,
+          'border border-3 border-green-300': isValidDestinationForActiveCard,
+        })}
+      >
+        {' '}
+      </div>
+    ),
+    [isHovered, isSelected, isValidDestinationForActiveCard],
+  );
 
   return (
     <TileContainer>
       <div
-        className="w-full h-full relative"
+        className="relative h-full w-full"
         onMouseEnter={() => handleHoverIn()}
         onMouseLeave={() => handleHoverOut()}
         onClick={() => handleClick()}
       >
-        { occupyingPips }
-        { occupyingCard }
-        { underlay }
+        {occupyingPips}
+        {occupyingCard}
+        {underlay}
       </div>
     </TileContainer>
   );

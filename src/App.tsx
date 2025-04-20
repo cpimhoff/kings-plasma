@@ -6,16 +6,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-          errorElement={<RootErrorBoundary />}
-        />
-        <Route
-          path="/play"
-          element={<Play />}
-          errorElement={<RootErrorBoundary />}
-        />
+        <Route path="/" element={<Home />} errorElement={<RootErrorBoundary />} />
+        <Route path="/play" element={<Play />} errorElement={<RootErrorBoundary />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

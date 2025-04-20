@@ -9,20 +9,20 @@ import { uuid } from '@/utils';
 const DEFAULT_PLAYER_NAMES = ['Lefty', 'Righty'];
 
 interface PlayerSetupStore {
-  players: Player[],
-  cardLibrary: CardDefinition[],
+  players: Player[];
+  cardLibrary: CardDefinition[];
   draftPlayer: {
-    name: string,
-    colorCssValue: string,
-    deckCounts: number[],
-  },
+    name: string;
+    colorCssValue: string;
+    deckCounts: number[];
+  };
 
   setDraftPlayerName: (name: string) => void;
   setDraftPlayerColor: (color: string) => void;
   addPlayerFromDraft: () => void;
   addCardToDraftPlayerDeck: (cardIdx: number) => void;
   removeCardFromDraftPlayerDeck: (cardIdx: number) => void;
-};
+}
 
 export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
   players: [],
@@ -65,14 +65,8 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
 
   addPlayerFromDraft: () =>
     set((state) => {
-      const player = createPlayer(
-        state.draftPlayer.name,
-        state.draftPlayer.colorCssValue,
-      );
-      player.deck = createDeckFromDraft(
-        state.cardLibrary,
-        state.draftPlayer.deckCounts,
-      );
+      const player = createPlayer(state.draftPlayer.name, state.draftPlayer.colorCssValue);
+      player.deck = createDeckFromDraft(state.cardLibrary, state.draftPlayer.deckCounts);
       // (player.hand gets created by game processor)
       let newColor;
       do {
@@ -94,7 +88,7 @@ function createDeckFromDraft(library: CardDefinition[], deckCounts: number[]) {
   const deck: Player['deck'] = [];
   deckCounts.forEach((count, cardIdx) => {
     const cardDef = library[cardIdx];
-    deck.push(...Array.from({ length: count }).map(() => ({ ...cardDef, id: uuid() })));
+    deck.push(...Array.from({ length: count }).map(() => ({ ...cardDef, id: uuid() })));
   });
   return deck;
-};
+}

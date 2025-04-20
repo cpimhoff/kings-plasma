@@ -3,7 +3,7 @@ import GameBoard from './GameBoard';
 import BoardControls from './BoardControls';
 import PlayerHand from './PlayerHand';
 import BoardView from './BoardView';
-import { useGameplayStore } from '@/gameplay/store' ;
+import { useGameplayStore } from '@/gameplay/store';
 import { getPlayerWithId } from '@/gameplay/state/Player';
 
 const PlayPhase = () => {
@@ -22,4 +22,3 @@ const PlayPhase = () => {
 };
 
 export default PlayPhase;
-

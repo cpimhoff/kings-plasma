@@ -1,4 +1,4 @@
-import { CardDefinition, CardEffect } from "../state";
+import { CardDefinition, CardEffect } from '../state';
 
 export namespace FF7Library {
   // An index of all cards in FF7: Rebirth is available at:
@@ -6,7 +6,7 @@ export namespace FF7Library {
   // The below definitions are ordered according to how they appear at that link
 
   export const SecurityOfficer: CardDefinition = {
-    name: "Security Officer",
+    name: 'Security Officer',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -20,7 +20,7 @@ export namespace FF7Library {
   };
 
   export const RiotTrooper: CardDefinition = {
-    name: "Riot Trooper",
+    name: 'Riot Trooper',
     playRequirement: 2,
     power: 3,
     effects: [
@@ -35,19 +35,15 @@ export namespace FF7Library {
   };
 
   export const Grenadier: CardDefinition = {
-    name: "Grenadier",
+    name: 'Grenadier',
     playRequirement: 2,
     power: 1,
-    effects: [
-      CardEffect.onThisPlayed(
-        CardEffect.addPower([{ dx: 2, dy: 0 }], -4, { opponent: true }),
-      ),
-    ],
+    effects: [CardEffect.onThisPlayed(CardEffect.addPower([{ dx: 2, dy: 0 }], -4, { opponent: true }))],
     description: `When played, lower the power of enemy cards on affected tiles by 4.`,
   };
 
   export const JUnitSweeper: CardDefinition = {
-    name: "J-Unit Sweeper",
+    name: 'J-Unit Sweeper',
     playRequirement: 2,
     power: 2,
     effects: [
@@ -61,7 +57,7 @@ export namespace FF7Library {
   };
 
   export const QueenBee: CardDefinition = {
-    name: "Queen Bee",
+    name: 'Queen Bee',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -73,7 +69,7 @@ export namespace FF7Library {
   };
 
   export const Toxirat: CardDefinition = {
-    name: "Toxirat",
+    name: 'Toxirat',
     playRequirement: 2,
     power: 2,
     effects: [
@@ -92,7 +88,7 @@ export namespace FF7Library {
   };
 
   export const Levrikon: CardDefinition = {
-    name: "Levrikon",
+    name: 'Levrikon',
     playRequirement: 1,
     power: 2,
     effects: [
@@ -104,7 +100,7 @@ export namespace FF7Library {
   };
 
   export const GrasslandsWolf: CardDefinition = {
-    name: "Grasslands Wolf",
+    name: 'Grasslands Wolf',
     playRequirement: 1,
     power: 2,
     effects: [
@@ -116,7 +112,7 @@ export namespace FF7Library {
   };
 
   export const Mu: CardDefinition = {
-    name: "Mu",
+    name: 'Mu',
     playRequirement: 2,
     power: 1,
     effects: [
@@ -132,7 +128,7 @@ export namespace FF7Library {
   };
 
   export const Mandragora: CardDefinition = {
-    name: "Mandragora",
+    name: 'Mandragora',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -142,7 +138,7 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.createCardForPlayer({
-          name: "Mandragora Minion",
+          name: 'Mandragora Minion',
           playRequirement: 1,
           power: 1,
           effects: [
@@ -158,7 +154,7 @@ export namespace FF7Library {
   };
 
   export const Elphadunk: CardDefinition = {
-    name: "Elphadunk",
+    name: 'Elphadunk',
     playRequirement: 2,
     power: 4,
     effects: [
@@ -171,7 +167,7 @@ export namespace FF7Library {
   };
 
   export const Cactuar: CardDefinition = {
-    name: "Cactuar",
+    name: 'Cactuar',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -187,7 +183,7 @@ export namespace FF7Library {
   };
 
   export const CrystallineCrab: CardDefinition = {
-    name: "Crystalline Crab",
+    name: 'Crystalline Crab',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -204,7 +200,7 @@ export namespace FF7Library {
   };
 
   export const Quetzalcoatl: CardDefinition = {
-    name: "Quetzalcoatl",
+    name: 'Quetzalcoatl',
     playRequirement: 2,
     power: 3,
     effects: [
@@ -218,7 +214,7 @@ export namespace FF7Library {
   };
 
   export const Zu: CardDefinition = {
-    name: "Zu",
+    name: 'Zu',
     playRequirement: 2,
     power: 2,
     effects: [
@@ -232,7 +228,7 @@ export namespace FF7Library {
   };
 
   export const DevilRider: CardDefinition = {
-    name: "Devil Rider",
+    name: 'Devil Rider',
     playRequirement: 2,
     power: 4,
     effects: [
@@ -246,7 +242,7 @@ export namespace FF7Library {
   };
 
   export const Screamer: CardDefinition = {
-    name: "Screamer",
+    name: 'Screamer',
     playRequirement: 3,
     power: 1,
     effects: [
@@ -264,7 +260,7 @@ export namespace FF7Library {
   };
 
   export const Flan: CardDefinition = {
-    name: "Flan",
+    name: 'Flan',
     playRequirement: 1,
     power: 2,
     effects: [
@@ -277,7 +273,7 @@ export namespace FF7Library {
   };
 
   export const Crawler: CardDefinition = {
-    name: "Crawler",
+    name: 'Crawler',
     playRequirement: 1,
     power: 2,
     effects: [
@@ -291,7 +287,7 @@ export namespace FF7Library {
   };
 
   export const Archdragon: CardDefinition = {
-    name: "Archdragon",
+    name: 'Archdragon',
     playRequirement: 1,
     power: 3,
     effects: [
@@ -310,7 +306,7 @@ export namespace FF7Library {
   };
 
   export const Ogre: CardDefinition = {
-    name: "Ogre",
+    name: 'Ogre',
     playRequirement: 2,
     power: 5,
     effects: [
@@ -324,7 +320,7 @@ export namespace FF7Library {
   };
 
   export const Deathwheel: CardDefinition = {
-    name: "Deathwheel",
+    name: 'Deathwheel',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -346,7 +342,7 @@ export namespace FF7Library {
   };
 
   export const Fleetwing: CardDefinition = {
-    name: "Fleetwing",
+    name: 'Fleetwing',
     playRequirement: 1,
     power: 3,
     effects: [
@@ -360,7 +356,7 @@ export namespace FF7Library {
   };
 
   export const Zemzelett: CardDefinition = {
-    name: "Zemzelett",
+    name: 'Zemzelett',
     playRequirement: 2,
     power: 1,
     effects: [
@@ -377,7 +373,7 @@ export namespace FF7Library {
   };
 
   export const Ignilisk: CardDefinition = {
-    name: "Ignilisk",
+    name: 'Ignilisk',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -398,7 +394,7 @@ export namespace FF7Library {
   };
 
   export const Capparwire: CardDefinition = {
-    name: "Capparwire",
+    name: 'Capparwire',
     playRequirement: 1,
     power: 3,
     effects: [
@@ -422,7 +418,7 @@ export namespace FF7Library {
   };
 
   export const MindFlayer: CardDefinition = {
-    name: "Mind Flayer",
+    name: 'Mind Flayer',
     playRequirement: 2,
     power: 1,
     effects: [
@@ -446,7 +442,7 @@ export namespace FF7Library {
   };
 
   export const Scrutineye: CardDefinition = {
-    name: "Scrutineye",
+    name: 'Scrutineye',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -467,7 +463,7 @@ export namespace FF7Library {
   };
 
   export const HellRiderII: CardDefinition = {
-    name: "Hell Rider II",
+    name: 'Hell Rider II',
     playRequirement: 3,
     power: 5,
     effects: [
@@ -494,7 +490,7 @@ export namespace FF7Library {
   };
 
   export const Flametrooper: CardDefinition = {
-    name: "Flametrooper",
+    name: 'Flametrooper',
     playRequirement: 1,
     power: 3,
     effects: [
@@ -524,7 +520,7 @@ export namespace FF7Library {
   };
 
   export const Spearhawk: CardDefinition = {
-    name: "Spearhawk",
+    name: 'Spearhawk',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -541,7 +537,7 @@ export namespace FF7Library {
   };
 
   export const SeaDevil: CardDefinition = {
-    name: "Sea Devil",
+    name: 'Sea Devil',
     playRequirement: 3,
     power: 1,
     effects: [
@@ -551,15 +547,15 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       {
-        trigger: { id: "onPlay", allied: true },
-        actions: [{ id: "addPower", self: true, amount: +1 }],
+        trigger: { id: 'onPlay', allied: true },
+        actions: [{ id: 'addPower', self: true, amount: +1 }],
       },
     ],
     description: `When allied cards are played from hand, raise this card's power by 1.`,
   };
 
   export const Shoalopod: CardDefinition = {
-    name: "Shoalopod",
+    name: 'Shoalopod',
     playRequirement: 2,
     power: 1,
     effects: [
@@ -576,7 +572,7 @@ export namespace FF7Library {
   };
 
   export const CrownLance: CardDefinition = {
-    name: "Crown Lance",
+    name: 'Crown Lance',
     playRequirement: 2,
     power: 2,
     effects: [
@@ -600,21 +596,21 @@ export namespace FF7Library {
   };
 
   export const TonberryKing: CardDefinition = {
-    name: "Tonberry King",
+    name: 'Tonberry King',
     playRequirement: 2,
     power: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       {
-        trigger: { id: "onDestroy", allied: true },
-        actions: [{ id: "addPower", self: true, amount: +2 }],
+        trigger: { id: 'onDestroy', allied: true },
+        actions: [{ id: 'addPower', self: true, amount: +2 }],
       },
     ],
     description: `When allied cards are destroyed, raise this card's power by 2.`,
   };
 
   export const SandhogPie: CardDefinition = {
-    name: "Sandhog Pie",
+    name: 'Sandhog Pie',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -637,7 +633,7 @@ export namespace FF7Library {
   };
 
   export const Bloatfloat: CardDefinition = {
-    name: "Bloatfloat",
+    name: 'Bloatfloat',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -656,7 +652,7 @@ export namespace FF7Library {
   };
 
   export const Bagnadrana: CardDefinition = {
-    name: "Bagnadrana",
+    name: 'Bagnadrana',
     playRequirement: 3,
     power: 2,
     effects: [
@@ -665,21 +661,21 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       {
-        trigger: { id: "onPlay", opponent: true },
-        actions: [{ id: "addPower", self: true, amount: +1 }],
+        trigger: { id: 'onPlay', opponent: true },
+        actions: [{ id: 'addPower', self: true, amount: +1 }],
       },
     ],
     description: `When enemy cards are played from hand, raise this card's power by 1.`,
   };
 
   export const Cockatrice: CardDefinition = {
-    name: "Cockatrice",
+    name: 'Cockatrice',
     playRequirement: 2,
     power: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       CardEffect.onThisPlayed({
-        id: "immediatelyDestroy",
+        id: 'immediatelyDestroy',
         tiles: [{ dx: 1, dy: 0 }],
       }),
     ],
@@ -687,7 +683,7 @@ export namespace FF7Library {
   };
 
   export const Heatseeker: CardDefinition = {
-    name: "Heatseeker",
+    name: 'Heatseeker',
     playRequirement: 1,
     power: 1,
     effects: [
@@ -701,7 +697,7 @@ export namespace FF7Library {
         CardEffect.createCardForPlayer({
           // FIXME: need to check the exact card in game, can't find a screenshot
           // of the minion card online...
-          name: "Heatseeker Minion",
+          name: 'Heatseeker Minion',
           playRequirement: 1,
           power: 1,
           effects: [
@@ -719,7 +715,7 @@ export namespace FF7Library {
   };
 
   export const Bomb: CardDefinition = {
-    name: "Bomb",
+    name: 'Bomb',
     playRequirement: 2,
     power: 2,
     effects: [
@@ -753,7 +749,7 @@ export namespace FF7Library {
   };
 
   export const Thug: CardDefinition = {
-    name: "Thug",
+    name: 'Thug',
     playRequirement: 2,
     power: 4,
     effects: [
@@ -768,7 +764,7 @@ export namespace FF7Library {
   };
 
   export const DeathClaw: CardDefinition = {
-    name: "Death Claw",
+    name: 'Death Claw',
     playRequirement: 1,
     power: 2,
     effects: [
@@ -777,15 +773,15 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       {
-        trigger: { id: "onDestroy", opponent: true },
-        actions: [{ id: "addPower", self: true, amount: +1 }],
+        trigger: { id: 'onDestroy', opponent: true },
+        actions: [{ id: 'addPower', self: true, amount: +1 }],
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 1.`,
   };
 
   export const Landworm: CardDefinition = {
-    name: "Landworm",
+    name: 'Landworm',
     playRequirement: 3,
     power: 5,
     effects: [
@@ -795,8 +791,8 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       {
-        trigger: { id: "onDestroy", opponent: true },
-        actions: [{ id: "addPower", self: true, amount: +2 }],
+        trigger: { id: 'onDestroy', opponent: true },
+        actions: [{ id: 'addPower', self: true, amount: +2 }],
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 2.`,
@@ -806,7 +802,7 @@ export namespace FF7Library {
     // This card has an incorrect description on the game8 site
     // correct info here:
     // https://www.gamerguides.com/final-fantasy-vii-rebirth/database/queens-blood/standard/045-sandspitter
-    name: "Sandspitter",
+    name: 'Sandspitter',
     playRequirement: 2,
     power: 3,
     effects: [

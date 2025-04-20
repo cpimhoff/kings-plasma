@@ -7,9 +7,14 @@ import CardLibrary from './CardLibrary';
 const CreatePlayer = () => {
   const { colorCssValue } = usePlayerSetupStore((state) => state.draftPlayer);
   return (
-    <div className="flex flex-col items-center" style={{
-      '--player-color': colorCssValue,
-    } as CSSProperties}>
+    <div
+      className="flex flex-col items-center"
+      style={
+        {
+          '--player-color': colorCssValue,
+        } as CSSProperties
+      }
+    >
       <PlayerDetails />
       <div className="flex flex-col">
         <CardDeck />

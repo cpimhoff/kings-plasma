@@ -1,1 +1,1 @@
-export type Phase = "setup" | "play" | "end";
+export type Phase = 'setup' | 'play' | 'end';

@@ -1,4 +1,4 @@
-import { useGameplayStore } from '@/gameplay/store' ;
+import { useGameplayStore } from '@/gameplay/store';
 import { getPlayerWithId } from '@/gameplay/state/Player';
 import { adaptGameState } from './adapter';
 
@@ -9,11 +9,11 @@ const Results = () => {
   return (
     <div>
       results
-      { Object.keys(pointsByPlayerId).map(playerId => (
+      {Object.keys(pointsByPlayerId).map((playerId) => (
         <div key={playerId}>
-          { getPlayerWithId(players, playerId).name } score: { pointsByPlayerId[playerId] }
+          {getPlayerWithId(players, playerId).name} score: {pointsByPlayerId[playerId]}
         </div>
-      )) }
+      ))}
     </div>
   );
 };

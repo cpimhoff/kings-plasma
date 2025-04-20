@@ -1,4 +1,4 @@
-import { Vector2 } from "@/utils/vector";
+import { Vector2 } from '@/utils/vector';
 
 export type CardTriggerCondition =
   | CardTriggerCondition.OnPlay
@@ -8,7 +8,7 @@ export type CardTriggerCondition =
 export namespace CardTriggerCondition {
   /** Triggers once for each time a card is played to the board. */
   export type OnPlay = {
-    id: "onPlay";
+    id: 'onPlay';
     // if true, trigger when this card is played
     self?: boolean;
     // if true, trigger when an allied card is played
@@ -21,7 +21,7 @@ export namespace CardTriggerCondition {
 
   /** Triggers once for each time a card is destroyed. */
   export type OnDeath = {
-    id: "onDestroy";
+    id: 'onDestroy';
     // if true, trigger on destruction of self
     self?: boolean;
     // if true, trigger on destruction of allied cards
@@ -34,7 +34,7 @@ export namespace CardTriggerCondition {
 
   /** Triggers once for each time the power of a card changes. */
   export type OnPowerChange = {
-    id: "onPowerChange";
+    id: 'onPowerChange';
     // if true, trigger on power changes to self
     self?: boolean;
     // if true, trigger on power changes to allied cards
@@ -42,7 +42,7 @@ export namespace CardTriggerCondition {
     // if true, trigger on power changes to opponent cards
     opponent?: boolean;
     // if set, only trigger on power changes in this direction
-    changeDirection?: "increasing" | "decreasing";
+    changeDirection?: 'increasing' | 'decreasing';
     // if set, only trigger when power changes on cards in these relative tiles
     tiles?: Vector2[];
   };

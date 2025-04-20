@@ -2,8 +2,8 @@ import { Player } from '@/gameplay/state/Player';
 import { GameState } from '@/gameplay/state/GameState';
 
 export type ViewState = {
-  rowScoresByPlayerId: Record<Player['id'], number[]>,
-  pointsByPlayerId: Record<Player['id'], number>,
+  rowScoresByPlayerId: Record<Player['id'], number[]>;
+  pointsByPlayerId: Record<Player['id'], number>;
 };
 
 export const adaptGameState = (gameState: GameState) => {
@@ -23,16 +23,17 @@ export const adaptGameState = (gameState: GameState) => {
   });
 
   // calculate winning row scores
-  type RowResult = {
-    winningScore: number,
-    winningPlayerId: Player['id'],
-  } | 'tie';
+  type RowResult =
+    | {
+        winningScore: number;
+        winningPlayerId: Player['id'];
+      }
+    | 'tie';
   const rowResults: RowResult[] = board[0].map((_, rowIndex) => {
-    const playerScores = Object.keys(rowScoresByPlayerId)
-      .map(playerId => ({
-        playerId,
-        rowScore: rowScoresByPlayerId[playerId][rowIndex],
-      }))
+    const playerScores = Object.keys(rowScoresByPlayerId).map((playerId) => ({
+      playerId,
+      rowScore: rowScoresByPlayerId[playerId][rowIndex],
+    }));
     if (playerScores[0].rowScore === playerScores[1].rowScore) {
       return 'tie';
     }
@@ -57,4 +58,4 @@ export const adaptGameState = (gameState: GameState) => {
     rowScoresByPlayerId,
     pointsByPlayerId,
   };
-}
+};

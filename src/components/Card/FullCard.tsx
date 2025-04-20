@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn';
 import { useMemo } from 'react';
-import { CardDefinition } from "@/gameplay/state";
+import { CardDefinition } from '@/gameplay/state';
 import {
   CardGradient,
   CardCost,
@@ -16,38 +16,34 @@ interface Props {
   color: string;
 }
 const FullCard = ({ card, color }: Props) => {
-  const effectPreviewGrid = useMemo(() => (
-    <CardEffectPreviewGrid effects={card.effects} />
-  ), [card.effects]);
+  const effectPreviewGrid = useMemo(() => <CardEffectPreviewGrid effects={card.effects} />, [card.effects]);
   return (
     <div
-      className={cn('w-50 h-70 flex flex-col items-center', {
+      className={cn('flex h-70 w-50 flex-col items-center', {
         'border border-3': true,
       })}
     >
-      <CardGradient color={color} className="w-full flex flex-col items-center">
-        <div className="w-full mb-3">
-          <div className="flex justify-between mt-2 mx-4">
+      <CardGradient color={color} className="flex w-full flex-col items-center">
+        <div className="mb-3 w-full">
+          <div className="mx-4 mt-2 flex justify-between">
             <CardCost {...card} />
-            <div className="w-8 h-8">
+            <div className="h-8 w-8">
               <CardPower {...card} />
             </div>
           </div>
         </div>
-        <div className="w-1/2">
-          { effectPreviewGrid }
-        </div>
+        <div className="w-1/2">{effectPreviewGrid}</div>
       </CardGradient>
-      <CardFooter className="w-full flex grow flex-col justify-stretch items-center">
-        <div className="flex justify-center mb-3">
+      <CardFooter className="flex w-full grow flex-col items-center justify-stretch">
+        <div className="mb-3 flex justify-center">
           <CardName {...card} />
         </div>
-        <div className="h-full flex items-center">
+        <div className="flex h-full items-center">
           <CardSpecialEffectDescription {...card} />
         </div>
       </CardFooter>
     </div>
   );
-}
+};
 
 export default FullCard;

@@ -6,12 +6,11 @@ import CreatePlayer from './CreatePlayer';
 import { Button } from '@/components/ui/button';
 
 const PlayerSetup = () => {
-  const {
-    players,
-  } = usePlayerSetupStore(
+  const { players } = usePlayerSetupStore(
     useShallow((state) => ({
       players: state.players,
-    })));
+    })),
+  );
 
   const beginGame = useGameplayStore((state) => state.beginGame);
 
@@ -21,15 +20,15 @@ const PlayerSetup = () => {
 
   return (
     <div className="mx-40">
-      { players.length < 2 ? (
+      {players.length < 2 ? (
         <CreatePlayer />
       ) : (
-        <div className="w-full h-screen flex justify-center items-center">
+        <div className="flex h-screen w-full items-center justify-center">
           <Button onClick={() => onClickStart()}>Start</Button>
         </div>
-      ) }
+      )}
     </div>
   );
-}
+};
 
 export default PlayerSetup;

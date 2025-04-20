@@ -8,26 +8,17 @@ import { getAvailableColors } from './color';
 import { MIN_CARDS_IN_DECK, MAX_CARDS_IN_DECK } from './constants';
 
 const PlayerDetails = () => {
-  const {
-    players,
-    draftPlayer,
-    setDraftPlayerName,
-    setDraftPlayerColor,
-    addPlayerFromDraft,
-  } = usePlayerSetupStore(
+  const { players, draftPlayer, setDraftPlayerName, setDraftPlayerColor, addPlayerFromDraft } = usePlayerSetupStore(
     useShallow((state) => ({
       players: state.players,
       draftPlayer: state.draftPlayer,
       setDraftPlayerName: state.setDraftPlayerName,
       setDraftPlayerColor: state.setDraftPlayerColor,
       addPlayerFromDraft: state.addPlayerFromDraft,
-    })));
+    })),
+  );
 
-  const {
-    name: draftPlayerName,
-    deckCounts: draftPlayerDeckCounts,
-    colorCssValue,
-  } = draftPlayer;
+  const { name: draftPlayerName, deckCounts: draftPlayerDeckCounts, colorCssValue } = draftPlayer;
   const deckSize = useMemo(
     () => Object.values(draftPlayerDeckCounts).reduce((s, c) => s + c, 0),
     [draftPlayerDeckCounts],
@@ -40,9 +31,7 @@ const PlayerDetails = () => {
   }, [players]);
 
   const isValid = useMemo(() => {
-    return deckSize >= MIN_CARDS_IN_DECK
-      && deckSize <= MAX_CARDS_IN_DECK
-      && !!draftPlayerName;
+    return deckSize >= MIN_CARDS_IN_DECK && deckSize <= MAX_CARDS_IN_DECK && !!draftPlayerName;
   }, [deckSize, draftPlayerName]);
 
   const handleChangeColor = useCallback((colorResult: ColorResult) => {
@@ -51,9 +40,7 @@ const PlayerDetails = () => {
 
   return (
     <div>
-      <div className="my-5">
-        {`Player ${playerIdx + 1} (${playerDirection})`}
-      </div>
+      <div className="my-5">{`Player ${playerIdx + 1} (${playerDirection})`}</div>
       <div className="flex justify-between">
         <div className="flex gap-5">
           <div className="flex-col">
@@ -76,7 +63,10 @@ const PlayerDetails = () => {
           </div>
         </div>
         <div className="mr-10">
-          <Button className="mr-4" disabled={!isValid} onClick={() => addPlayerFromDraft()}> Done </Button>
+          <Button className="mr-4" disabled={!isValid} onClick={() => addPlayerFromDraft()}>
+            {' '}
+            Done{' '}
+          </Button>
         </div>
       </div>
     </div>

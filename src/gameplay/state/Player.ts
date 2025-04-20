@@ -1,5 +1,5 @@
-import { uuid, UUID } from "@/utils";
-import { Card } from "./Card";
+import { uuid, UUID } from '@/utils';
+import { Card } from './Card';
 
 export type Player = {
   // player identity
@@ -35,5 +35,5 @@ export function createPlayer(name: string, colorCssValue: string): Player {
 }
 
 export function getPlayerWithId(players: Player[], id: Player['id']): Player {
-  return players.find(p => p.id === id) as Player;
+  return players.find((p) => p.id === id) as Player;
 }

@@ -1,1 +1,1 @@
-export * from "./ff7Library";
+export * from './ff7Library';
