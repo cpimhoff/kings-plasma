@@ -39,7 +39,7 @@ export function processCardEvents(
       ctx.addKeyframe({ major: action.id !== 'addControlledPips' });
       const didReap = reapZombieCards(state, eventQueue);
       if (didReap) {
-        ctx.addKeyframe();
+        ctx.addKeyframe({ major: true });
       }
     });
   }

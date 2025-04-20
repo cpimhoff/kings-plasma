@@ -87,19 +87,34 @@ const BoardTile = ({
     occupyingCard,
     occupyingPips,
   } = useMemo(() => {
+    let cardNode = null, pipsNode = null;
     const currentTile = state.board[position.x][position.y];
     const previewTile = previewState?.board[position.x][position.y];
     const tile = previewTile || currentTile;
-    // TODO: highlight difference in preview
-    const {
-      card,
-      pips,
-      controllerPlayerId,
-    } = tile;
-    const controllerPlayer = controllerPlayerId ? getPlayerWithId(state.players, controllerPlayerId) : null;
-    const color = controllerPlayer?.colorCssValue;
-    const cardNode = color && card && <TileCard card={card} color={color} /> || null;
-    const pipsNode = color && pips > 0 && <TilePips pips={pips} color={color} /> || null;
+    const { controllerPlayerId } = tile;
+    if (controllerPlayerId) {
+      let highlightPips = false;
+      let nerfedPower = false;
+      let buffedPower = false;
+      if (previewTile) {
+        if (currentTile.pips !== previewTile.pips || currentTile.controllerPlayerId !== previewTile.controllerPlayerId) {
+          highlightPips = true;
+        }
+        const { card: currentCard } = currentTile;
+        const { card: previewCard } = previewTile;
+        if (currentCard && previewCard && currentCard.power !== previewCard.power) {
+          if (previewCard.power < currentCard.power) {
+            nerfedPower = true;
+          } else {
+            buffedPower = true;
+          }
+        }
+      }
+      const { card, pips } = tile;
+      const color = getPlayerWithId(state.players, controllerPlayerId).colorCssValue;
+      cardNode = card && <TileCard card={card} color={color} nerfedPower={nerfedPower} buffedPower={buffedPower} /> || null;
+      pipsNode = pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} /> || null;
+    }
     return {
       occupyingCard: cardNode,
       occupyingPips: pipsNode,

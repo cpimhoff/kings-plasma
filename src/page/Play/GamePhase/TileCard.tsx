@@ -4,8 +4,10 @@ import { CardPower, CardSpecialEffectMarker, CardGradient, CardFooter, CardName 
 interface Props {
   card: ICard;
   color: string;
+  nerfedPower: boolean;
+  buffedPower: boolean;
 }
-const TileCard = ({ card, color }: Props) => {
+const TileCard = ({ card, color, nerfedPower, buffedPower }: Props) => {
   return (
     <div className="flex flex-col h-full border border-3 rounded-sm">
       <CardGradient className="flex flex-col h-full justify-between" color={color}>
@@ -14,7 +16,7 @@ const TileCard = ({ card, color }: Props) => {
             <CardSpecialEffectMarker {...card} />
           </div>
           <div className="m-1 w-7 h-7">
-            <CardPower {...card} />
+            <CardPower power={card.power} nerfed={nerfedPower} buffed={buffedPower} />
           </div>
         </div>
       </CardGradient>
