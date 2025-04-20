@@ -7,7 +7,7 @@ export type ProcessResult = {
 };
 
 export type KeyframeMetadata = {
-  major: boolean;
+  minor: boolean;
 };
 
 export type ProcessKeyframe = {
