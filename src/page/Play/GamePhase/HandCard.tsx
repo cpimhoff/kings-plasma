@@ -55,6 +55,10 @@ const HandCard = ({ idx, card, color }: Props) => {
 
   const { phase } = gameState!;
 
+  const handleHover = useCallback<(idx: number) => void>((idx) => {
+    hoverOverHandIndex(idx);
+  }, []);
+
   const handleClick = useCallback<(idx: number) => void>((idx) => {
     if (phase === 'setup') {
       toggleHandIndexToMulligan(idx);
@@ -72,7 +76,7 @@ const HandCard = ({ idx, card, color }: Props) => {
         'border-sky-300': isHovered && !isSelected,
         'border-red-600': isSelected,
       })}
-      onMouseEnter={() => hoverOverHandIndex(idx)}
+      onMouseEnter={() => handleHover(idx)}
       onMouseLeave={() => resetHover()}
       onClick={() => handleClick(idx)}
     >

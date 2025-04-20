@@ -23,12 +23,8 @@ const BoardControls = ({ player }: Props) => {
   })));
 
   const {
-    selectedHandIndex,
-    selectedBoardPosition,
     resetSelections,
   } = useInteractionStore(useShallow((state) => ({
-    selectedHandIndex: state.selectedHandIndex,
-    selectedBoardPosition: state.selectedBoardPosition,
     resetSelections: state.resetSelections,
   })));
 
@@ -40,17 +36,6 @@ const BoardControls = ({ player }: Props) => {
     });
     resetMulligans();
   }, [player.id, handIndexesToMulligan]);
-
-  const onPlayCard = useCallback(() => {
-    if (!selectedBoardPosition) return;
-    dispatchAction({
-      type: 'playCard',
-      playerId: player.id,
-      fromHandIndex: selectedHandIndex!,
-      toBoardPosition: selectedBoardPosition!,
-    });
-    resetSelections();
-  }, [selectedBoardPosition, selectedHandIndex]);
 
   const onPass = useCallback(() => {
     dispatchAction({
@@ -84,9 +69,6 @@ const BoardControls = ({ player }: Props) => {
       ) }
       { phase === 'play' && (
         <>
-          <Button disabled={selectedHandIndex === null} onClick={() => onPlayCard()}>
-            Play card
-          </Button>
           <Button onClick={() => onPass()}>
             Pass
           </Button>
