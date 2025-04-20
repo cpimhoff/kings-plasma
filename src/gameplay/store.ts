@@ -8,7 +8,7 @@ interface GameplayStore {
   gameState: GameState | null;
   previewState: GameState | null;
   historyStack: GameState[];
-  _pending: boolean;
+  animating: boolean;
 
   beginGame: (players: Player[]) => void;
   previewAction: (action: Action) => void;
@@ -22,7 +22,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
   previewState: null,
   historyStack: [],
-  _pending: false,
+  animating: false,
 
   beginGame: (players) =>
     set(() => ({
@@ -45,9 +45,9 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     }),
 
   dispatchAction: async (action) => {
-    if (get()._pending) return;
+    if (get().animating) return;
     set(() => ({
-      _pending: true,
+      animating: true,
       previewState: null,
     }));
     const oldGameState = get().gameState!;
@@ -64,14 +64,14 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     set({
       gameState: newGameState,
       historyStack: [...get().historyStack, oldGameState],
-      _pending: false,
+      animating: false,
     });
   },
 
   undo: () =>
     set((state) => {
-      const { historyStack, _pending } = state;
-      if (!historyStack.length || _pending) return {};
+      const { historyStack, animating } = state;
+      if (!historyStack.length || animating) return {};
       const stackSize = historyStack.length;
       const newState = historyStack[stackSize - 1];
       const newStack = [...historyStack].splice(0, stackSize - 1);
