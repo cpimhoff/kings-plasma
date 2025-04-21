@@ -119,9 +119,7 @@ const BoardTile = ({ position }: Props) => {
         const color = getPlayerWithId(state.players, tile.controllerPlayerId).colorCssValue;
         return (
           <Popover>
-            <div className="relative z-1">
-              <FullCard card={tile.card} color={color} />
-            </div>
+            <FullCard card={tile.card} color={color} className="relative z-1 w-50" />
           </Popover>
         );
       }

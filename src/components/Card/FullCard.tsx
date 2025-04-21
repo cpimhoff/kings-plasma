@@ -14,14 +14,13 @@ import {
 interface Props {
   card: CardDefinition;
   color: string;
+  className?: string | undefined;
 }
-const FullCard = ({ card, color }: Props) => {
+const FullCard = ({ card, color, className }: Props) => {
   const effectPreviewGrid = useMemo(() => <CardEffectPreviewGrid effects={card.effects} />, [card.effects]);
   return (
     <div
-      className={cn('flex h-70 w-50 flex-col items-center', {
-        'border border-3': true,
-      })}
+      className={cn('flex flex-col items-center border border-3', className)}
     >
       <CardGradient color={color} className="flex w-full flex-col items-center">
         <div className="mb-3 w-full">

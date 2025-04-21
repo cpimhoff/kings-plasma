@@ -26,7 +26,7 @@ const CardLibrary = () => {
               enabled={!isDeckFull && numInDeck < maxAllowedInDeck}
               onClick={() => addCardToDraftPlayerDeck(cardIdx)}
             >
-              <FullCard card={card} color={'var(--player-color)'} />
+              <FullCard card={card} color={'var(--player-color)'} className="w-60 grow" />
             </SelectableCardWrapper>
           );
         })}
