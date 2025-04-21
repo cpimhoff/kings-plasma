@@ -799,9 +799,6 @@ export namespace FF7Library {
   };
 
   export const Sandspitter: CardDefinition = {
-    // This card has an incorrect description on the game8 site
-    // correct info here:
-    // https://www.gamerguides.com/final-fantasy-vii-rebirth/database/queens-blood/standard/045-sandspitter
     name: 'Sandspitter',
     playRequirement: 2,
     power: 3,
@@ -828,7 +825,7 @@ export namespace FF7Library {
         ),
       ),
     ],
-    description: `When enemy cards are destroyed, raise this card's power by 2.`,
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
   };
 
   // To be continued...
