@@ -6,6 +6,8 @@ import { canPlayerPlaceCardAtTile } from './validation';
 import { useShallow } from 'zustand/react/shallow';
 import { getPlayerWithId } from '@/gameplay/state/Player';
 import { positionsEqual } from '@/gameplay/state/Board';
+import { Popover } from '@/components/ui/popover';
+import FullCard from '@/components/Card/FullCard';
 
 import TileContainer from './TileContainer';
 import TileCard from './TileCard';
@@ -110,6 +112,23 @@ const BoardTile = ({ position }: Props) => {
     }
   }, [activeCardHandIndex, isHovered, activePlayer, state]);
 
+  const previewCard = useMemo(() => {
+    if (activeCardHandIndex === null && highlightState === 'Hovered') {
+      const tile = state.board[position.x][position.y];
+      if (tile.card && tile.controllerPlayerId) {
+        const color = getPlayerWithId(state.players, tile.controllerPlayerId).colorCssValue;
+        return (
+          <Popover>
+            <div className="relative z-1">
+              <FullCard card={tile.card} color={color} />
+            </div>
+          </Popover>
+        );
+      }
+    }
+    return null;
+  }, [highlightState]);
+
   const overlay = useMemo(
     () => (
       <div
@@ -167,6 +186,7 @@ const BoardTile = ({ position }: Props) => {
       >
         {occupyingPips}
         {occupyingCard}
+        {previewCard}
         {overlay}
       </div>
     </TileContainer>
