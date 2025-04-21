@@ -45,7 +45,7 @@ const GameBoard = () => {
 
 function buildScoreColumnForPlayer(playerId: Player['id'], rowScores: ScoreResult[]) {
   return Array.from({ length: 3 }).map((_, i) => {
-    const rowResult = rowScores[i];
+    const rowResult = rowScores[2 - i];
     const score = rowResult.scoreByPlayer[playerId];
     const winning = rowResult.winningPlayerId === playerId;
     return (
