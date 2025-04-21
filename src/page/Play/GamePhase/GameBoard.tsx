@@ -2,7 +2,7 @@ import BoardTile from './BoardTile';
 import RowScoreTile from './RowScoreTile';
 import { useGameplayStore } from '@/gameplay/store';
 import { Player } from '@/gameplay/state/Player';
-import { adaptGameState } from './adapter';
+import { getRowScores, ScoreResult } from './scoring';
 
 const GameBoard = () => {
   const gameState = useGameplayStore((state) => state.gameState);
@@ -27,10 +27,10 @@ const GameBoard = () => {
     )),
   );
 
-  const { rowScoresByPlayerId } = adaptGameState(state);
+  const rowScores = getRowScores(state);
 
   const scoreColumns = [...players].map((player) =>
-    buildScoreColumnForPlayer(player.id, rowScoresByPlayerId[player.id]),
+    buildScoreColumnForPlayer(player.id, rowScores),
   );
 
   const columns = [scoreColumns[0], ...playColumns, scoreColumns[1]];
@@ -43,12 +43,17 @@ const GameBoard = () => {
   );
 };
 
-function buildScoreColumnForPlayer(playerId: Player['id'], rowScores: number[]) {
-  return Array.from({ length: 3 }).map((_, i) => (
-    <div key={`${playerId},${i}`} className="bg-slate-500">
-      <RowScoreTile score={rowScores[i]} />
-    </div>
-  ));
+function buildScoreColumnForPlayer(playerId: Player['id'], rowScores: ScoreResult[]) {
+  return Array.from({ length: 3 }).map((_, i) => {
+    const rowResult = rowScores[i];
+    const score = rowResult.scoreByPlayer[playerId];
+    const winning = rowResult.winningPlayerId === playerId;
+    return (
+      <div key={`${playerId},${i}`} className="bg-slate-500">
+        <RowScoreTile score={score} winning={winning} />
+      </div>
+    );
+  });
 }
 
 export default GameBoard;

@@ -1,7 +1,8 @@
 import { cn } from '@/utils/cn';
 import { BoardPosition } from '@/gameplay/state/Board';
 import { useGameplayStore } from '@/gameplay/store';
-import { useInteractionStore, canPlayerPlaceCardAtTile } from './interactionStore';
+import { useInteractionStore } from './interactionStore';
+import { canPlayerPlaceCardAtTile } from './validation';
 import { useShallow } from 'zustand/react/shallow';
 import { getPlayerWithId } from '@/gameplay/state/Player';
 import { positionsEqual } from '@/gameplay/state/Board';
@@ -9,6 +10,8 @@ import { positionsEqual } from '@/gameplay/state/Board';
 import TileContainer from './TileContainer';
 import TileCard from './TileCard';
 import TilePips from './TilePips';
+
+type HighlightState = 'Hovered' | 'ValidDestination' | null;
 
 interface Props {
   position: BoardPosition;
@@ -30,7 +33,6 @@ const BoardTile = ({ position }: Props) => {
     hoveredBoardPosition,
     hoveredHandIndex,
     selectedHandIndex,
-    selectedBoardPosition,
     hoverOverBoardPosition,
     resetHover,
     resetSelections,
@@ -39,66 +41,21 @@ const BoardTile = ({ position }: Props) => {
       hoveredBoardPosition: state.hoveredBoardPosition,
       selectedHandIndex: state.selectedHandIndex,
       hoveredHandIndex: state.hoveredHandIndex,
-      selectedBoardPosition: state.selectedBoardPosition,
       hoverOverBoardPosition: state.hoverOverBoardPosition,
       resetHover: state.resetHover,
       resetSelections: state.resetSelections,
     })),
   );
 
-  const [isHovered, isSelected] = useMemo(() => {
-    const isHovered = hoveredBoardPosition && positionsEqual(position, hoveredBoardPosition);
-    const isSelected = selectedBoardPosition && positionsEqual(position, selectedBoardPosition);
-    return [isHovered, isSelected];
-  }, [position, hoveredBoardPosition, selectedBoardPosition]);
+  const isHovered = useMemo(() => {
+    return hoveredBoardPosition && positionsEqual(position, hoveredBoardPosition);
+  }, [position, hoveredBoardPosition]);
+
+  const activeCardHandIndex = selectedHandIndex ?? hoveredHandIndex ?? null;
 
   const activePlayer = useMemo(() => {
     return getPlayerWithId(state.players, state.playPhaseActivePlayerId);
   }, [state.players, state.playPhaseActivePlayerId]);
-
-  const activeCardHandIndex = selectedHandIndex ?? hoveredHandIndex ?? null;
-
-  const isValidDestinationForActiveCard = useMemo(() => {
-    if (activeCardHandIndex === null) return false;
-    const tile = state.board[position.x][position.y];
-    const activeCard = activePlayer.hand[activeCardHandIndex];
-    return canPlayerPlaceCardAtTile(activePlayer, activeCard, tile);
-  }, [activeCardHandIndex, state]);
-
-  const handleHoverIn = useCallback(() => {
-    hoverOverBoardPosition(position);
-    if (selectedHandIndex !== null && isValidDestinationForActiveCard) {
-      previewAction({
-        type: 'playCard',
-        playerId: activePlayer.id,
-        fromHandIndex: selectedHandIndex,
-        toBoardPosition: position,
-      });
-    }
-  }, [position, selectedHandIndex, isValidDestinationForActiveCard]);
-
-  const handleHoverOut = useCallback(() => {
-    resetHover();
-    clearPreview();
-  }, []);
-
-  const handleClick = useCallback(() => {
-    if (selectedHandIndex !== null && isValidDestinationForActiveCard) {
-      dispatchAction({
-        type: 'playCard',
-        playerId: activePlayer.id,
-        fromHandIndex: selectedHandIndex!,
-        toBoardPosition: {
-          x: position.x,
-          y: position.y,
-        },
-      });
-      resetHover();
-      resetSelections();
-    } else {
-      resetSelections();
-    }
-  }, [selectedHandIndex, isValidDestinationForActiveCard, activePlayer]);
 
   const { occupyingCard, occupyingPips } = useMemo(() => {
     let cardNode = null,
@@ -140,20 +97,65 @@ const BoardTile = ({ position }: Props) => {
     };
   }, [state, previewState]);
 
-  const underlay = useMemo(
+  const highlightState: HighlightState = useMemo(() => {
+    if (activeCardHandIndex === null) {
+      if (isHovered) {
+        return 'Hovered';
+      }
+      return null;
+    } else {
+      const tile = state.board[position.x][position.y];
+      const activeCard = activePlayer.hand[activeCardHandIndex];
+      return canPlayerPlaceCardAtTile(activePlayer, activeCard, tile) ? 'ValidDestination' : null;
+    }
+  }, [activeCardHandIndex, isHovered, activePlayer, state]);
+
+  const overlay = useMemo(
     () => (
       <div
         className={cn('absolute', 'w-full', 'h-full', 'top-0', 'opacity-60', {
-          'bg-sky-100': isHovered && !isSelected,
-          'bg-sky-200': isSelected,
-          'border border-3 border-green-300': isValidDestinationForActiveCard,
+          'bg-sky-100': highlightState === 'Hovered',
+          'border border-5 border-yellow-400': highlightState === 'ValidDestination',
         })}
       >
         {' '}
       </div>
     ),
-    [isHovered, isSelected, isValidDestinationForActiveCard],
+    [highlightState],
   );
+
+  const handleHoverIn = useCallback(() => {
+    hoverOverBoardPosition(position);
+    if (selectedHandIndex !== null && highlightState === 'ValidDestination') {
+      previewAction({
+        type: 'playCard',
+        playerId: activePlayer.id,
+        fromHandIndex: selectedHandIndex,
+        toBoardPosition: position,
+      });
+    }
+  }, [position, selectedHandIndex, highlightState]);
+
+  const handleHoverOut = useCallback(() => {
+    resetHover();
+    clearPreview();
+  }, []);
+
+  const handleClick = useCallback(() => {
+    if (selectedHandIndex !== null && highlightState === 'ValidDestination') {
+      dispatchAction({
+        type: 'playCard',
+        playerId: activePlayer.id,
+        fromHandIndex: selectedHandIndex!,
+        toBoardPosition: {
+          x: position.x,
+          y: position.y,
+        },
+      });
+      resetHover();
+    }
+    resetSelections();
+  }, [selectedHandIndex, highlightState, activePlayer]);
 
   return (
     <TileContainer>
@@ -165,7 +167,7 @@ const BoardTile = ({ position }: Props) => {
       >
         {occupyingPips}
         {occupyingCard}
-        {underlay}
+        {overlay}
       </div>
     </TileContainer>
   );
