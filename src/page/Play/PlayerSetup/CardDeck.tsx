@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { usePlayerSetupStore } from './store';
-import { CardDefinition } from '@/gameplay/state';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import DeckCard from './DeckCard';
 import FullCard from '@/components/Card/FullCard';
+import { Popover } from '@/components/ui/popover';
 import { MAX_CARDS_IN_DECK } from './constants';
 
 const CardDeck = () => {
@@ -13,15 +13,16 @@ const CardDeck = () => {
 
   const deckSize = deck.reduce((s, c) => s + c, 0);
 
-  const [previewCard, setPreviewCard] = useState<CardDefinition | null>(null);
+  const [previewCardIdx, setPreviewCardIdx] = useState<number | null>(null);
+
   return (
-    <div>
+    <div className="w-full bg-slate-300 p-3">
       <h2>
         {' '}
         deck ({deckSize}/{MAX_CARDS_IN_DECK}){' '}
       </h2>
-      <div className="flex w-full justify-between">
-        <div className="flex min-h-110 w-250 flex-wrap gap-3 bg-slate-300 p-2">
+      <div className="flex flex-col items-center w-full h-58">
+        <div className="flex w-full gap-3 p-2 relative z-0 overflow-x-auto">
           {deck.map(
             (count, cardIdx) =>
               count > 0 && (
@@ -29,18 +30,25 @@ const CardDeck = () => {
                   key={cardIdx}
                   count={count}
                   onClick={() => removeCardFromDraftPlayerDeck(cardIdx)}
-                  onHoverIn={() => setPreviewCard(cardLibrary[cardIdx])}
-                  onHoverOut={() => setPreviewCard(null)}
-                  className="h-50 w-40"
+                  onHoverIn={() => setPreviewCardIdx(cardIdx)}
+                  onHoverOut={() => setPreviewCardIdx(null)}
+                  className="shrink-0 h-50 w-40"
                 >
-                  <DeckCard card={cardLibrary[cardIdx]} color={'var(--player-color)'} />
+                  <DeckCard
+                    card={cardLibrary[cardIdx]}
+                    color={'var(--player-color)'}
+                  />
                 </SelectableCardWrapper>
               ),
           )}
         </div>
-        <div className="m-auto flex w-100 flex-col items-center">
-          {previewCard && <FullCard card={previewCard} color={'var(--player-color)'} />}
-        </div>
+        { previewCardIdx !== null && (
+          <div className="relative -left-30">
+            <Popover>
+              <FullCard card={cardLibrary[previewCardIdx]} color={'var(--player-color)'} className="absolute z-50 w-60" />
+            </Popover>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -12,9 +12,9 @@ const CardLibrary = () => {
   const isDeckFull = deckSize >= MAX_CARDS_IN_DECK;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-slate-300 p-2">
       <h2> available cards </h2>
-      <div className="flex flex-wrap justify-center gap-3 bg-slate-300 p-2">
+      <div className="flex flex-wrap justify-center gap-3">
         {cardLibrary.map((card, cardIdx) => {
           const numInDeck = deck[cardIdx] ?? 0;
           const maxAllowedInDeck = card.isLegendary ? 1 : 3;

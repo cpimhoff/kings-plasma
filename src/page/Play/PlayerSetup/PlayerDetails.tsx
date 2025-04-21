@@ -39,14 +39,14 @@ const PlayerDetails = () => {
   }, []);
 
   return (
-    <div>
-      <div className="my-5">{`Player ${playerIdx + 1} (${playerDirection})`}</div>
+    <div className="bg-slate-300 p-3">
+      <div className="mb-5">{`Player ${playerIdx + 1} (${playerDirection})`}</div>
       <div className="flex justify-between">
         <div className="flex gap-5">
           <div className="flex-col">
             <Label>Name</Label>
             <Input
-              className="max-w-70"
+              className="max-w-70 bg-white mt-1"
               placeholder="Player name"
               value={draftPlayerName}
               onChange={(e) => setDraftPlayerName(e.target.value)}
@@ -54,12 +54,14 @@ const PlayerDetails = () => {
           </div>
           <div className="flex-col">
             <Label>Color</Label>
-            <CirclePicker
-              width="450px"
-              color={colorCssValue}
-              colors={getAvailableColors()}
-              onChange={handleChangeColor}
-            />
+            <div className="mt-1">
+              <CirclePicker
+                width="450px"
+                color={colorCssValue}
+                colors={getAvailableColors()}
+                onChange={handleChangeColor}
+              />
+            </div>
           </div>
         </div>
         <div className="mr-10">

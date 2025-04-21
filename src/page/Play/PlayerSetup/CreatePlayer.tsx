@@ -8,7 +8,6 @@ const CreatePlayer = () => {
   const { colorCssValue } = usePlayerSetupStore((state) => state.draftPlayer);
   return (
     <div
-      className="flex flex-col items-center"
       style={
         {
           '--player-color': colorCssValue,
@@ -16,10 +15,12 @@ const CreatePlayer = () => {
       }
     >
       <PlayerDetails />
-      <div className="flex flex-col">
+      <div className="sticky top-0 mt-3">
         <CardDeck />
       </div>
-      <CardLibrary />
+      <div className="mt-3">
+        <CardLibrary />
+      </div>
     </div>
   );
 };
