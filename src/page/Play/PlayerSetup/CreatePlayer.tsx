@@ -5,7 +5,7 @@ import CardDeck from './CardDeck';
 import CardLibrary from './CardLibrary';
 
 const CreatePlayer = () => {
-  const { colorCssValue } = usePlayerSetupStore((state) => state.draftPlayer);
+  const colorCssValue = usePlayerSetupStore((state) => state.draftPlayer.colorCssValue);
   return (
     <div
       style={
