@@ -1,9 +1,10 @@
+import { memo } from 'react';
 import { usePlayerSetupStore } from './store';
 import FullCard from '@/components/Card/FullCard';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import { MAX_CARDS_IN_DECK } from './constants';
 
-const CardLibrary = () => {
+export default memo(function CardLibrary() {
   const cardLibrary = usePlayerSetupStore((s) => s.cardLibrary);
   const deck = usePlayerSetupStore((s) => s.draftPlayer.deckCounts);
   const addCardToDraftPlayerDeck = usePlayerSetupStore((s) => s.addCardToDraftPlayerDeck);
@@ -33,6 +34,4 @@ const CardLibrary = () => {
       </div>
     </div>
   );
-};
-
-export default CardLibrary;
+});
