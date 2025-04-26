@@ -1,5 +1,5 @@
 import { uuid, UUID } from '@/utils';
-import { Card } from './Card';
+import { CardInstance } from './Card';
 
 export type Player = {
   // player identity
@@ -15,8 +15,8 @@ export type Player = {
   };
 
   // game state
-  deck: Card[];
-  hand: Card[];
+  deck: CardInstance[];
+  hand: CardInstance[];
 };
 
 export function createPlayer(name: string, colorCssValue: string): Player {

@@ -1,9 +1,13 @@
+import { UUID } from '@/utils';
 import { CardEffect } from './CardEffect';
 import { Vector2, addVector2s, invertVector2 } from '@/utils/vector';
 import { produce } from 'immer';
 
-export type Card = {
-  id: string;
+export type CardTypeId = string & { __cardTypeId: true };
+
+export type CardDefinition = {
+  typeId: CardTypeId;
+
   name: string;
 
   // requirements to play this card to the board, either a number of pips or
@@ -23,7 +27,11 @@ export type Card = {
   isLegendary?: boolean;
 };
 
-export type CardDefinition = Omit<Card, 'id'>;
+type CardInstanceId = UUID & { __cardInstanceId: true };
+
+export type CardInstance = CardDefinition & {
+  instanceId: CardInstanceId;
+}
 
 export type CardGridCell = {
   origin: boolean;

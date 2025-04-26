@@ -1,6 +1,6 @@
-import { Card, Player } from '../state';
+import { CardInstance, Player } from '../state';
 
-export function drawCardToHand(player: Player): Card | null {
+export function drawCardToHand(player: Player): CardInstance | null {
   const nextCard = player.deck.pop();
   if (!nextCard) return null;
 
@@ -8,7 +8,7 @@ export function drawCardToHand(player: Player): Card | null {
   return nextCard;
 }
 
-export function discardCardFromHand(player: Player, cardIndex: number): Card | null {
+export function discardCardFromHand(player: Player, cardIndex: number): CardInstance | null {
   const card = player.hand[cardIndex];
   if (!card) return null;
   player.hand.splice(cardIndex, 1);

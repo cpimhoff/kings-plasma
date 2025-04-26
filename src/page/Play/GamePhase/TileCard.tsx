@@ -1,4 +1,4 @@
-import { Card as ICard } from '@/gameplay/state/Card';
+import { CardDefinition as ICard } from '@/gameplay/state/Card';
 import { CardPower, CardSpecialEffectMarker, CardGradient, CardFooter, CardName } from '@/components/Card';
 
 interface Props {

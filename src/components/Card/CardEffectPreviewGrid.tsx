@@ -1,4 +1,4 @@
-import { Card as ICard, getGridForCardEffects, CardGridCell } from '@/gameplay/state/Card';
+import { CardDefinition as ICard, getGridForCardEffects, CardGridCell } from '@/gameplay/state/Card';
 import { cn } from '@/utils/cn';
 
 type Props = Pick<ICard, 'effects'>;

@@ -1,7 +1,7 @@
-import { BoardTile, Card, GameState } from '../state';
+import { BoardTile, CardDefinition, GameState } from '../state';
 
 // TODO: put this somewhere better
-export type ActionSource = BoardTile & { card: Card };
+export type ActionSource = BoardTile & { card: CardDefinition };
 
 export function* allBoardCards(state: GameState, destroyedTile?: ActionSource | null) {
   // first yield the destroyed tile, if there is one

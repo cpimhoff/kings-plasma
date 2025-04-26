@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import { Card as ICard } from '@/gameplay/state/Card/Card';
+import { CardDefinition as ICard } from '@/gameplay/state/Card/Card';
 
 interface Props {
   power: ICard['power'];

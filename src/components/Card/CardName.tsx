@@ -1,4 +1,4 @@
-import { Card as ICard } from '@/gameplay/state/Card/Card';
+import { CardDefinition as ICard } from '@/gameplay/state/Card/Card';
 
 type Props = Pick<ICard, 'name'>;
 const CardName = ({ name }: Props) => {

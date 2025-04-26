@@ -5,7 +5,7 @@ import { useMulliganStore } from './mulliganStore';
 import { useInteractionStore } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';
 
-import { Card as ICard } from '@/gameplay/state/Card';
+import { CardDefinition as ICard } from '@/gameplay/state/Card';
 import {
   CardGradient,
   CardCost,

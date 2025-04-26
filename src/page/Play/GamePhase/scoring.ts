@@ -25,7 +25,7 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
   rowResults.forEach((rowResult) => {
     const sortedPlayerScores = Object.entries(rowResult.scoreByPlayer)
       .map(([playerId, score]) => ({
-        playerId,
+        playerId: playerId as Player['id'],
         score,
       }))
       .sort(({ score: score1 }, { score: score2 }) => score2 - score1);

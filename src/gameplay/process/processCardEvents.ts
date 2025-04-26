@@ -1,4 +1,4 @@
-import { GameState, Card, BoardTile, CardAction, CardTriggerCondition } from '../state';
+import { GameState, CardDefinition, BoardTile, CardAction, CardTriggerCondition, CardInstance } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
 import { allBoardCards, ActionSource } from './iter';
@@ -60,7 +60,7 @@ function getEventTriggers(state: GameState, event: Event) {
 
 function doesEventSatisfyTriggerCondition(
   event: Event,
-  responder: BoardTile & { card: Card },
+  responder: BoardTile & { card: CardDefinition },
   triggerCond: CardTriggerCondition,
 ): boolean {
   // first check if the trigger condition is the same as the event's
@@ -143,7 +143,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
         action.player === 'allied' ? p.id === actionPlayerId : p.id !== actionPlayerId,
       )!;
       if (!player) break;
-      const card = { ...action.cardDefinition, id: uuid() };
+      const card = { ...action.cardDefinition, instanceId: uuid() as CardInstance['instanceId'] };
       switch (action.into) {
         case 'hand': {
           player.hand.push(card);
@@ -206,7 +206,7 @@ function getTileTargets(
   state: GameState,
   source: BoardTile,
   action: Partial<Pick<CardAction.AddPower, 'tiles' | 'self' | 'allied' | 'opponent'>>,
-): (BoardTile & { card: Card })[] {
+): (BoardTile & { card: CardDefinition })[] {
   // start with the targeted tiles, including self
   const targetTiles = action.tiles
     ? ([
@@ -218,7 +218,7 @@ function getTileTargets(
       ]
         .map((pos) => state.board?.[pos.x]?.[pos.y])
         .filter((t) => t) // ignore out of bounds targets
-        .filter((t) => t.card) as (BoardTile & { card: Card })[])
+        .filter((t) => t.card) as (BoardTile & { card: CardDefinition })[])
     : Array.from(allBoardCards(state));
 
   // filter out based on conditions

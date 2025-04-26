@@ -1,4 +1,4 @@
-import { Card } from './Card';
+import { CardInstance } from './Card';
 import { Player } from './Player';
 
 export type Board = Array<Array<BoardTile>>;
@@ -17,7 +17,7 @@ export function positionsEqual(pos1: BoardPosition, pos2: BoardPosition) {
 export type BoardTile = {
   position: BoardPosition;
   pips: number;
-  card: Card | null;
+  card: CardInstance | null;
   controllerPlayerId: Player['id'] | null;
 };
 

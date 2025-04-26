@@ -1,4 +1,4 @@
-import { Card as ICard, getCardHasSpecialEffect } from '@/gameplay/state/Card';
+import { CardDefinition as ICard, getCardHasSpecialEffect } from '@/gameplay/state/Card';
 
 type Props = Pick<ICard, 'effects'>;
 const CardSpecialEffectMarker = ({ effects }: Props) => {

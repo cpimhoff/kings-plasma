@@ -1,5 +1,5 @@
 import { useGameplayStore } from '@/gameplay/store';
-import { getPlayerWithId } from '@/gameplay/state/Player';
+import { getPlayerWithId, Player } from '@/gameplay/state/Player';
 import { getPlayerScores } from './scoring';
 
 const Results = () => {
@@ -11,7 +11,7 @@ const Results = () => {
       results
       {Object.keys(scoreByPlayer).map((playerId) => (
         <div key={playerId}>
-          {getPlayerWithId(players, playerId).name} score: {scoreByPlayer[playerId]}
+          {getPlayerWithId(players, playerId as Player['id']).name} score: {scoreByPlayer[playerId as Player['id']]}
         </div>
       ))}
     </div>
