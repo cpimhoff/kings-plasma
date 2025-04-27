@@ -8,20 +8,26 @@ import { uuid } from '@/utils';
 
 const DEFAULT_PLAYER_NAMES = ['Lefty', 'Righty'];
 
+export type DeckCardGroup = {
+  cardDef: CardDefinition;
+  count: number;
+}
+
 interface PlayerSetupStore {
   players: Player[];
   cardLibrary: CardDefinition[];
   draftPlayer: {
     name: string;
     colorCssValue: string;
-    deckCounts: number[];
+    deckCardGroups: DeckCardGroup[];
   };
 
   setDraftPlayerName: (name: string) => void;
   setDraftPlayerColor: (color: string) => void;
   addPlayerFromDraft: () => void;
-  addCardToDraftPlayerDeck: (cardIdx: number) => void;
-  removeCardFromDraftPlayerDeck: (cardIdx: number) => void;
+  addCardToDraftPlayerDeck: (cardDef: CardDefinition) => void;
+  removeCardFromDraftPlayerDeck: (cardTypeId: CardDefinition['typeId']) => void;
+  replaceDraftPlayerDeck: (newDeck: DeckCardGroup[]) => void;
 }
 
 export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
@@ -29,7 +35,7 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
   draftPlayer: {
     name: DEFAULT_PLAYER_NAMES[0],
     colorCssValue: getRandomColor(),
-    deckCounts: [],
+    deckCardGroups: [],
   },
   cardLibrary: FF7_LIBRARY,
 
@@ -47,26 +53,49 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
       }),
     ),
 
-  addCardToDraftPlayerDeck: (cardIdx: number) =>
+  addCardToDraftPlayerDeck: (cardDef) =>
     set(
       produce((state) => {
-        const { deckCounts } = state.draftPlayer;
-        deckCounts[cardIdx] = (deckCounts[cardIdx] ?? 0) + 1;
+        const { deckCardGroups } = state.draftPlayer;
+        const existingGroup = deckCardGroups.find((g: DeckCardGroup) => g.cardDef.typeId === cardDef.typeId);
+        if (existingGroup) {
+          existingGroup.count++;
+        } else {
+          deckCardGroups.push({
+            cardDef,
+            count: 1,
+            maxCount: cardDef.isLegendary ? 1 : 3,
+          });
+        }
       }),
     ),
 
-  removeCardFromDraftPlayerDeck: (cardIdx: number) =>
+  removeCardFromDraftPlayerDeck: (cardTypeId) =>
     set(
       produce((state) => {
-        const { deckCounts } = state.draftPlayer;
-        deckCounts[cardIdx] = (deckCounts[cardIdx] ?? 0) - 1;
+        const { deckCardGroups } = state.draftPlayer;
+        const existingGroupIndex = deckCardGroups.findIndex((g: DeckCardGroup) => g.cardDef.typeId === cardTypeId);
+        if (existingGroupIndex > -1) {
+          const existingGroup = deckCardGroups[existingGroupIndex];
+          existingGroup.count--;
+          if (existingGroup.count === 0) {
+            deckCardGroups.splice(existingGroupIndex, 1);
+          }
+        }
+      }),
+    ),
+
+  replaceDraftPlayerDeck: (newDeckCardGroups) =>
+    set(
+      produce((state) => {
+        state.draftPlayer.deckCardGroups = newDeckCardGroups;
       }),
     ),
 
   addPlayerFromDraft: () =>
     set((state) => {
       const player = createPlayer(state.draftPlayer.name, state.draftPlayer.colorCssValue);
-      player.deck = createDeckFromDraft(state.cardLibrary, state.draftPlayer.deckCounts);
+      player.deck = createDeckFromDraft(state.draftPlayer.deckCardGroups);
       // (player.hand gets created by game processor)
       let newColor;
       do {
@@ -77,18 +106,17 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
         draftPlayer: {
           name: DEFAULT_PLAYER_NAMES[1],
           colorCssValue: newColor,
-          deckCounts: [],
+          deckCardGroups: [],
         },
         cardLibrary: state.cardLibrary.map(withReversedVectors),
       };
     }),
 }));
 
-function createDeckFromDraft(library: CardDefinition[], deckCounts: number[]) {
-  const deck: Player['deck'] = [];
-  deckCounts.forEach((count, cardIdx) => {
-    const cardDef = library[cardIdx];
-    deck.push(...Array.from({ length: count }).map(() => ({ ...cardDef, instanceId: uuid() as CardInstance['instanceId'] })));
-  });
-  return deck;
+function createDeckFromDraft(deckCardGroups: DeckCardGroup[]): CardInstance[] {
+  return deckCardGroups
+    .map((cardGroup) => {
+      return new Array(cardGroup.count).fill(0).map(() => ({ ...cardGroup.cardDef, instanceId: uuid() as CardInstance['instanceId'] }));
+    })
+    .reduce((accum, curr) => [...accum, ...curr]);
 }

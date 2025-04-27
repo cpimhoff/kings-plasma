@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react';
 import { usePlayerSetupStore } from './store';
 import PlayerDetails from './PlayerDetails';
-import CardDeck from './CardDeck';
+import PlayerDeck from './PlayerDeck';
 import CardLibrary from './CardLibrary';
 
 const CreatePlayer = () => {
@@ -16,7 +16,7 @@ const CreatePlayer = () => {
     >
       <PlayerDetails />
       <div className="sticky top-0 mt-3">
-        <CardDeck />
+        <PlayerDeck />
       </div>
       <div className="mt-3">
         <CardLibrary />

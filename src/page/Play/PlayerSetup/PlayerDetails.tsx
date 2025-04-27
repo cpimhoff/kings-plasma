@@ -18,9 +18,9 @@ const PlayerDetails = () => {
     })),
   );
 
-  const { name: draftPlayerName, deckCounts: draftPlayerDeckCounts, colorCssValue } = draftPlayer;
+  const { name: draftPlayerName, deckCardGroups: draftPlayerDeckCounts, colorCssValue } = draftPlayer;
   const deckSize = useMemo(
-    () => Object.values(draftPlayerDeckCounts).reduce((s, c) => s + c, 0),
+    () => Object.values(draftPlayerDeckCounts).reduce((s, g) => s + g.count, 0),
     [draftPlayerDeckCounts],
   );
 
@@ -65,7 +65,7 @@ const PlayerDetails = () => {
           </div>
         </div>
         <div className="mr-10">
-          <Button className="mr-4" disabled={!isValid} onClick={() => addPlayerFromDraft()}>
+          <Button disabled={!isValid} onClick={() => addPlayerFromDraft()}>
             {' '}
             Done{' '}
           </Button>
