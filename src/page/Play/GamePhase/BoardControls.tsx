@@ -5,6 +5,7 @@ import { useMulliganStore } from './mulliganStore';
 import { useInteractionStore } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
+import { chooseAction } from '@/intelligence/choice';
 
 interface Props {
   player: Player;
@@ -27,6 +28,11 @@ const BoardControls = ({ player }: Props) => {
       resetSelections: state.resetSelections,
     })),
   );
+
+  const onAuto = useCallback(() => {
+    const action = chooseAction(gameState!, player.id);
+    dispatchAction(action);
+  }, [player.id]);
 
   const onMulligan = useCallback(() => {
     dispatchAction({
@@ -62,6 +68,7 @@ const BoardControls = ({ player }: Props) => {
 
   return (
     <div className="flex flex-col gap-3">
+      <Button onClick={() => onAuto()}>Auto</Button>
       {phase === 'setup' && (
         <Button onClick={() => onMulligan()}>
           {handIndexesToMulligan.length > 0 ? 'Mulligan and begin' : 'Begin'}
