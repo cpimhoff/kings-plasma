@@ -1,6 +1,5 @@
+import { MAX_CARDS_TO_MULLIGAN } from '@/gameplay/constants';
 import { create } from 'zustand';
-
-const MAX_CARDS_TO_MULLIGAN = 3;
 
 interface MulliganStore {
   handIndexesToMulligan: number[];

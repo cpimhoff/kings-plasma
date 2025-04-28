@@ -1,8 +1,7 @@
 import { Action, GameState, getPlayerWithId, Player } from "@/gameplay";
+import { MAX_CARDS_TO_MULLIGAN } from "@/gameplay/constants";
 import { allBoardTiles } from "@/gameplay/process/iter";
 import { canPlayerPlaceCardAtTile } from "@/gameplay/validation";
-
-const MAX_CARDS_TO_MULLIGAN = 3; // TODO: unify this with mulliganStore
 
 export function* validActionsForPlayer(gameState: GameState, playerId: Player['id']): Generator<Action> {
     const { phase } = gameState;

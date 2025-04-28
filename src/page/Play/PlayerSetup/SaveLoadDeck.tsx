@@ -13,7 +13,7 @@ import { useDeckStorage, StoredDeck } from './storage';
 import DeckCard from './DeckCard';
 import CardCountWrapper from './CardCountWrapper';
 import { CardDefinition } from '@/gameplay';
-import { MIN_CARDS_IN_DECK } from './constants';
+import { MIN_CARDS_IN_DECK } from '@/gameplay/constants';
 
 export default function SaveLoadDeck() {
     return (

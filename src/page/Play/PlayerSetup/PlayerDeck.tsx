@@ -5,7 +5,7 @@ import DeckCard from './DeckCard';
 import SaveLoadDeck from './SaveLoadDeck';
 import FullCard from '@/components/Card/FullCard';
 import { Popover } from '@/components/ui/popover';
-import { MAX_CARDS_IN_DECK } from './constants';
+import { MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import CardCountWrapper from './CardCountWrapper';
 import { CardDefinition } from '@/gameplay';
 

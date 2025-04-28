@@ -4,7 +4,7 @@ import { CardDefinition } from '@/gameplay';
 import { usePlayerSetupStore } from './PlayerSetupStore';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import CardCountWrapper from './CardCountWrapper';
-import { MAX_CARDS_IN_DECK } from './constants';
+import { MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import { useLibraryControlsStore } from './LibraryControlsStore';
 
 const LibraryCardView = memo(() => {
