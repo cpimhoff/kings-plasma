@@ -8,6 +8,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -50,16 +52,71 @@ export default memo(function CardLibrary() {
   }, [cardLibrary]);
   const [powerRange, setPowerRange] = useState<PowerRange>([0, maxPower]);
 
-  const filteredLibrary = useMemo(() => {
+  type SortableCard = CardDefinition & {
+    index: number;
+  }
+  type SortAttribute = 'index' | 'rank' | 'power';
+  type SortDirection = 'ascending' | 'descending';
+  type SortMethod = {
+    attribute: SortAttribute,
+    direction: SortDirection,
+  };
+  const [sortMethod, setSortMethod] = useState<SortMethod>({
+    attribute: 'index',
+    direction: 'ascending',
+  });
+
+  const serializeSortMethod = useCallback((sortMethod: SortMethod) => {
+    const { attribute, direction } = sortMethod;
+    return `${attribute}|${direction}`;
+  }, []);
+  const sortOptions = useMemo(() => {
+    return ['index', 'rank', 'power'].map((attribute) => {
+      return ['ascending', 'descending'].map((direction) => {
+        const method = {
+          attribute: attribute as SortAttribute,
+          direction: direction as SortDirection,
+        };
+        return {
+          method,
+          value: serializeSortMethod(method),
+          label: `${attribute} (${direction})`,
+        };
+      });
+    }).reduce((accum, curr) => [...accum, ...curr]);
+  }, []);
+
+  const sortFunction = useCallback<(c1: SortableCard, c2: SortableCard) => number>((cardDef1, cardDef2) => {
+    const { attribute, direction } = sortMethod;
+    const flipFactor = direction === 'ascending' ? 1 : -1;
+    switch (attribute) {
+      case 'index':
+        return (cardDef1.index - cardDef2.index) * flipFactor;
+      case 'rank':
+        return (getOrdinalForPlayRequirement(cardDef1.playRequirement) - getOrdinalForPlayRequirement(cardDef2.playRequirement)) * flipFactor;
+      case 'power':
+        return (cardDef1.power - cardDef2.power) * flipFactor;
+      default:
+        attribute satisfies never;
+        return 0;
+    }
+  }, [sortMethod]);
+
+  const filteredSortedLibrary = useMemo(() => {
     return cardLibrary
+      .map((c, i) => ({
+        ...c,
+        index: i,
+      }))
       .filter((cardDef) => {
         const rank = cardDef.playRequirement;
         const passesRankFilter = rankFilters[rank];
         const power = cardDef.power;
         const passesPowerFilter = power >= powerRange[0] && power <= powerRange[1];
         return passesRankFilter && passesPowerFilter;
-      });
-  }, [cardLibrary, rankFilters, powerRange]);
+      })
+      .sort(sortFunction);
+  }, [cardLibrary, rankFilters, powerRange, sortFunction]);
 
   return (
     <div className="flex flex-col bg-slate-300 p-2">
@@ -103,16 +160,28 @@ export default memo(function CardLibrary() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild><Button variant="outline">Sort</Button></DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-60">
-              <DropdownMenuItem>Rank (low to high, replacement last)</DropdownMenuItem>
-              <DropdownMenuItem>Rank (high to low, replacement first)</DropdownMenuItem>
-              <DropdownMenuItem>Power (low to high)</DropdownMenuItem>
-              <DropdownMenuItem>Power (high to low)</DropdownMenuItem>
+              <DropdownMenuRadioGroup
+                value={serializeSortMethod(sortMethod)}
+                onValueChange={(newValue) => {
+                  const [ attribute, direction ] = newValue.split('|');
+                  setSortMethod({
+                    attribute,
+                    direction,
+                  } as SortMethod);
+                }}
+              >
+                { sortOptions.map((sortOption) => {
+                  return (
+                    <DropdownMenuRadioItem key={sortOption.value} value={sortOption.value}>{sortOption.label}</DropdownMenuRadioItem>
+                  );
+                })}
+              </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
       <div className="flex flex-wrap justify-center gap-3">
-        {filteredLibrary.map((card) => {
+        {filteredSortedLibrary.map((card) => {
           const deckCardGroup = deckCardsById[card.typeId];
           const numInDeck = deckCardGroup?.count ?? 0;
           const maxAllowedInDeck = card.isLegendary ? 1 : 3;
@@ -135,3 +204,10 @@ export default memo(function CardLibrary() {
     </div>
   );
 });
+
+function getOrdinalForPlayRequirement(pr: CardDefinition['playRequirement']) {
+  if (pr === 'replace') {
+    return 0;
+  }
+  return pr;
+}
