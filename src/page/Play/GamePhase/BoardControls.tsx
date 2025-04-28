@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 import { Player } from '@/gameplay/state/Player';
 import { useMulliganStore } from './mulliganStore';
 import { useInteractionStore } from './interactionStore';

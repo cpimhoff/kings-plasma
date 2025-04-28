@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { usePlayerSetupStore } from './store';
-import { useGameplayStore } from '@/gameplay/store';
+import { usePlayerSetupStore } from './PlayerSetupStore';
+import { useGameplayStore } from '../GamePhase/GameplayStore';
 import { useShallow } from 'zustand/react/shallow';
 import CreatePlayer from './CreatePlayer';
 import { Button } from '@/components/ui/button';

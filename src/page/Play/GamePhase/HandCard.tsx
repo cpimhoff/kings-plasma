@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn';
 import { useMemo, useCallback } from 'react';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 import { useMulliganStore } from './mulliganStore';
 import { useInteractionStore } from './interactionStore';
 import { useShallow } from 'zustand/react/shallow';

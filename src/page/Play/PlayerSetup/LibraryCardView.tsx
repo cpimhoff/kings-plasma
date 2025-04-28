@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import FullCard from '@/components/Card/FullCard';
 import { CardDefinition } from '@/gameplay';
-import { usePlayerSetupStore } from './store';
+import { usePlayerSetupStore } from './PlayerSetupStore';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import CardCountWrapper from './CardCountWrapper';
 import { MAX_CARDS_IN_DECK } from './constants';

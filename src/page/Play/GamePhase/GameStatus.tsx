@@ -1,4 +1,4 @@
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 import { Player } from '@/gameplay/state/Player';
 
 interface Props {

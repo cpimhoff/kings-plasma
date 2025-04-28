@@ -1,6 +1,6 @@
 import BoardTile from './BoardTile';
 import RowScoreTile from './RowScoreTile';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from '@/page/Play/GamePhase/GameplayStore';
 import { Player } from '@/gameplay/state/Player';
 import { getRowScores, ScoreResult } from './scoring';
 

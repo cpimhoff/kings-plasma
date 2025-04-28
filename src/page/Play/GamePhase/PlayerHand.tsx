@@ -1,5 +1,5 @@
 import { Player } from '@/gameplay/state/Player';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 import HandCard from './HandCard';
 
 interface Props {

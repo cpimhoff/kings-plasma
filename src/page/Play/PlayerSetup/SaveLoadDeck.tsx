@@ -8,7 +8,7 @@ import {
     DialogContent,
     DialogTitle
 } from '@/components/ui/dialog';
-import { usePlayerSetupStore } from './store';
+import { usePlayerSetupStore } from './PlayerSetupStore';
 import { useDeckStorage, StoredDeck } from './storage';
 import DeckCard from './DeckCard';
 import CardCountWrapper from './CardCountWrapper';

@@ -4,7 +4,7 @@ import BoardControls from './BoardControls';
 import PlayerHand from './PlayerHand';
 import Results from './Results';
 import GameStatus from './GameStatus';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 
 const EndPhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);

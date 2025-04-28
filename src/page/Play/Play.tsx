@@ -1,4 +1,4 @@
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GamePhase/GameplayStore';
 import PlayerSetup from './PlayerSetup/PlayerSetup';
 import GamePhase from './GamePhase/GamePhase';
 import { Button } from '@/components/ui/button';

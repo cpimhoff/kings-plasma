@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DeckCardGroup, usePlayerSetupStore } from './store';
+import { DeckCardGroup, usePlayerSetupStore } from './PlayerSetupStore';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import DeckCard from './DeckCard';
 import SaveLoadDeck from './SaveLoadDeck';

@@ -1,7 +1,7 @@
 import SetupPhase from './SetupPhase';
 import PlayPhase from './PlayPhase';
 import EndPhase from './EndPhase';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 
 const GamePhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);

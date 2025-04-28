@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn';
 import { BoardPosition } from '@/gameplay/state/Board';
-import { useGameplayStore } from '@/gameplay/store';
+import { useGameplayStore } from './GameplayStore';
 import { useInteractionStore } from './interactionStore';
 import { canPlayerPlaceCardAtTile } from './validation';
 import { useShallow } from 'zustand/react/shallow';

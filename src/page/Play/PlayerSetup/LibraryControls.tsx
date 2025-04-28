@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Slider } from '@/components/ui/slider';
-import { usePlayerSetupStore } from './store';
+import { usePlayerSetupStore } from './PlayerSetupStore';
 import { useLibraryControlsStore, Rank, PowerRange, SortAttribute, SortDirection, SortMethod } from './LibraryControlsStore';
 
 const LibraryControls = memo(() => {

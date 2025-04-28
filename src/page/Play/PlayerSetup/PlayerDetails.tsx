@@ -1,4 +1,4 @@
-import { usePlayerSetupStore } from './store';
+import { usePlayerSetupStore } from './PlayerSetupStore';
 import { useShallow } from 'zustand/react/shallow';
 import { CirclePicker, ColorResult } from 'react-color';
 import { Button } from '@/components/ui/button';

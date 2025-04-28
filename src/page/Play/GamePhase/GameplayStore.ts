@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { GameState, createInitialState } from './state/GameState';
-import { Player } from './state/Player';
-import { Action } from './state/Action';
-import { process } from './process/process';
+import { GameState, createInitialState } from '@/gameplay/state/GameState';
+import { Player } from '@/gameplay/state/Player';
+import { Action } from '@/gameplay/state/Action';
+import { process } from '@/gameplay/process/process';
 
 interface GameplayStore {
   gameState: GameState | null;

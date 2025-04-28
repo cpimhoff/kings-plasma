@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { usePlayerSetupStore } from './store';
+import { usePlayerSetupStore } from './PlayerSetupStore';
 import PlayerDetails from './PlayerDetails';
 import PlayerDeck from './PlayerDeck';
 import CardLibrary from './CardLibrary';
