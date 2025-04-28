@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useGameplayStore } from './GameplayStore';
 import { Player } from '@/gameplay/state/Player';
-import { useMulliganStore } from './mulliganStore';
-import { useInteractionStore } from './interactionStore';
+import { useMulliganStore } from './MulliganStore';
+import { useInteractionStore } from './InteractionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import { chooseAction } from '@/intelligence/choice';
