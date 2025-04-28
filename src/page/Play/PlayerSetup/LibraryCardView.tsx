@@ -41,6 +41,8 @@ const LibraryCardView = memo(() => {
         }
     }, [sortMethod]);
 
+    const deferredSortFunction = useDeferredValue(sortFunction);
+
     const cardLibrary = usePlayerSetupStore((s) => s.cardLibrary);
     type SortableCard = CardDefinition & {
         index: number;
@@ -61,8 +63,8 @@ const LibraryCardView = memo(() => {
             const passesPowerFilter = power >= powerRange[0] && (powerRange[1] < 0 || power <= powerRange[1]);
             return passesRankFilter && passesPowerFilter;
         })
-        .sort(sortFunction);
-    }, [indexedLibrary, rankFilters, powerRange, sortFunction]);
+        .sort(deferredSortFunction);
+    }, [indexedLibrary, rankFilters, powerRange, deferredSortFunction]);
         
     const addCardToDraftPlayerDeck = usePlayerSetupStore((s) => s.addCardToDraftPlayerDeck);
 
