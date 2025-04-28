@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 
 interface Props {
   enabled?: boolean;
@@ -10,7 +10,7 @@ interface Props {
   children: ReactNode;
 }
 
-const SelectableCardWrapper = ({
+const SelectableCardWrapper = memo(({
   enabled = true,
   onHoverIn,
   onHoverOut,
@@ -28,6 +28,6 @@ const SelectableCardWrapper = ({
       {children}
     </div>
   );
-};
+});
 
 export default SelectableCardWrapper;

@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 
 interface Props {
   count: number;
@@ -8,7 +8,7 @@ interface Props {
   children: ReactNode;
 }
 
-const CardCountWrapper = ({
+const CardCountWrapper = memo(({
   count,
   maxCount,
   className,
@@ -23,6 +23,6 @@ const CardCountWrapper = ({
       </div>
     </div>
   );
-};
+});
 
 export default CardCountWrapper;

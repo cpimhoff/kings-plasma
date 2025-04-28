@@ -1,5 +1,4 @@
 import { cn } from '@/utils/cn';
-import { useMemo } from 'react';
 import { CardDefinition } from '@/gameplay/state';
 import {
   CardGradient,
