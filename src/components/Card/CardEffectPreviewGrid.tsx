@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { CardDefinition as ICard, getGridForCardEffects, CardGridCell } from '@/gameplay/state/Card';
 import { cn } from '@/utils/cn';
 
 type Props = Pick<ICard, 'effects'>;
-const CardEffectPreviewGrid = ({ effects }: Props) => {
+const CardEffectPreviewGrid = memo(({ effects }: Props) => {
   const grid = useMemo(() => {
     return getGridForCardEffects(effects);
   }, [effects]);
@@ -11,7 +12,7 @@ const CardEffectPreviewGrid = ({ effects }: Props) => {
       {grid.map((col, i) => col.map((cell, j) => <div key={`${i},${j}`} className={cn(classesForCell(cell))}></div>))}
     </div>
   );
-};
+});
 
 function classesForCell(cell: CardGridCell) {
   return {

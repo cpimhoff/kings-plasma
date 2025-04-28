@@ -16,8 +16,7 @@ interface Props {
   color: string;
   className?: string | undefined;
 }
-const FullCard = ({ card, color, className }: Props) => {
-  const effectPreviewGrid = useMemo(() => <CardEffectPreviewGrid effects={card.effects} />, [card.effects]);
+const FullCard = memo(({ card, color, className }: Props) => {
   return (
     <div
       className={cn('flex flex-col items-center border border-3', className)}
@@ -31,7 +30,9 @@ const FullCard = ({ card, color, className }: Props) => {
             </div>
           </div>
         </div>
-        <div className="w-1/2">{effectPreviewGrid}</div>
+        <div className="w-1/2">
+          <CardEffectPreviewGrid effects={card.effects} />
+        </div>
       </CardGradient>
       <CardFooter className="flex w-full grow flex-col items-center justify-stretch">
         <div className="mb-3 flex justify-center">
@@ -43,6 +44,6 @@ const FullCard = ({ card, color, className }: Props) => {
       </CardFooter>
     </div>
   );
-};
+});
 
 export default FullCard;
