@@ -5,7 +5,7 @@ import { useMulliganStore } from './MulliganStore';
 import { useInteractionStore } from './InteractionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
-import { chooseAction } from '@/intelligence/choice';
+import { chooseAction } from '@/agent/choice';
 
 interface Props {
   player: Player;
