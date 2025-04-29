@@ -1,17 +1,11 @@
 import { useCallback } from 'react';
 import { usePlayerSetupStore } from './PlayerSetupStore';
 import { useGameplayStore } from '../GamePhase/GameplayStore';
-import { useShallow } from 'zustand/react/shallow';
 import CreatePlayer from './CreatePlayer';
 import { Button } from '@/components/ui/button';
 
 const PlayerSetup = () => {
-  const { players } = usePlayerSetupStore(
-    useShallow((state) => ({
-      players: state.players,
-    })),
-  );
-
+  const players = usePlayerSetupStore((state) => state.players);
   const beginGame = useGameplayStore((state) => state.beginGame);
 
   const onClickStart = useCallback(() => {

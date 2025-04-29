@@ -20,8 +20,9 @@ interface Props {
   idx: number;
   card: ICard;
   color: string;
+  locked?: boolean;
 }
-const HandCard = ({ idx, card, color }: Props) => {
+const HandCard = ({ idx, card, color, locked }: Props) => {
   const { handIndexesToMulligan, toggleHandIndexToMulligan } = useMulliganStore(
     useShallow((state) => ({
       handIndexesToMulligan: state.handIndexesToMulligan,
@@ -53,11 +54,13 @@ const HandCard = ({ idx, card, color }: Props) => {
   const { phase } = gameState!;
 
   const handleHover = useCallback<(idx: number) => void>((idx) => {
+    if (locked) return;
     hoverOverHandIndex(idx);
-  }, []);
+  }, [locked]);
 
   const handleClick = useCallback<(idx: number) => void>(
     (idx) => {
+      if (locked) return;
       if (phase === 'setup') {
         toggleHandIndexToMulligan(idx);
       } else {
@@ -65,7 +68,7 @@ const HandCard = ({ idx, card, color }: Props) => {
         clearPreview();
       }
     },
-    [phase],
+    [locked, phase],
   );
 
   return (

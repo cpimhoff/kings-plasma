@@ -9,9 +9,10 @@ import { chooseAction } from '@/agent/choice';
 
 interface Props {
   player: Player;
+  locked?: boolean;
 }
 
-const BoardControls = ({ player }: Props) => {
+const BoardControls = ({ player, locked }: Props) => {
   const [gameState, animating, dispatchAction, undo] = useGameplayStore(useShallow((state) => {
     return [state.gameState, state.animating, state.dispatchAction, state.undo];
   }));
@@ -70,21 +71,21 @@ const BoardControls = ({ player }: Props) => {
     <div className="flex flex-col gap-3">
       <Button onClick={() => onAuto()}>Auto</Button>
       {phase === 'setup' && (
-        <Button onClick={() => onMulligan()}>
+        <Button disabled={locked} onClick={() => onMulligan()}>
           {handIndexesToMulligan.length > 0 ? 'Mulligan and begin' : 'Begin'}
         </Button>
       )}
       {phase === 'play' && (
         <>
-          <Button disabled={animating} onClick={() => onPass()}>Pass</Button>
+          <Button disabled={animating || locked} onClick={() => onPass()}>Pass</Button>
         </>
       )}
       {phase === 'end' && (
         <>
-          <Button onClick={() => onRematch()}>Rematch</Button>
+          <Button disabled={locked} onClick={() => onRematch()}>Rematch</Button>
         </>
       )}
-      <Button disabled={animating} onClick={() => onUndo()}>Undo</Button>
+      <Button disabled={animating || locked} onClick={() => onUndo()}>Undo</Button>
     </div>
   );
 };
