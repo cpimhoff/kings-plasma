@@ -17,9 +17,7 @@ interface Props {
 }
 const FullCard = memo(({ card, color, className }: Props) => {
   return (
-    <div
-      className={cn('flex flex-col items-center border border-3', className)}
-    >
+    <div className={cn('flex flex-col items-center border border-3', className)}>
       <CardGradient color={color} className="flex w-full flex-col items-center">
         <div className="mb-3 w-full">
           <div className="mx-4 mt-2 flex justify-between">

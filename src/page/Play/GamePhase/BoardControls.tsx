@@ -13,9 +13,11 @@ interface Props {
 }
 
 const BoardControls = ({ player, locked }: Props) => {
-  const [gameState, animating, dispatchAction, undo] = useGameplayStore(useShallow((state) => {
-    return [state.gameState, state.animating, state.dispatchAction, state.undo];
-  }));
+  const [gameState, animating, dispatchAction, undo] = useGameplayStore(
+    useShallow((state) => {
+      return [state.gameState, state.animating, state.dispatchAction, state.undo];
+    }),
+  );
 
   const { handIndexesToMulligan, resetMulligans } = useMulliganStore(
     useShallow((state) => ({
@@ -77,15 +79,21 @@ const BoardControls = ({ player, locked }: Props) => {
       )}
       {phase === 'play' && (
         <>
-          <Button disabled={animating || locked} onClick={() => onPass()}>Pass</Button>
+          <Button disabled={animating || locked} onClick={() => onPass()}>
+            Pass
+          </Button>
         </>
       )}
       {phase === 'end' && (
         <>
-          <Button disabled={locked} onClick={() => onRematch()}>Rematch</Button>
+          <Button disabled={locked} onClick={() => onRematch()}>
+            Rematch
+          </Button>
         </>
       )}
-      <Button disabled={animating || locked} onClick={() => onUndo()}>Undo</Button>
+      <Button disabled={animating || locked} onClick={() => onUndo()}>
+        Undo
+      </Button>
     </div>
   );
 };

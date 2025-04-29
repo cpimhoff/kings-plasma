@@ -8,7 +8,7 @@ export function* allBoardCards(state: GameState, destroyedTile?: ActionSource | 
   if (destroyedTile) yield destroyedTile;
   // then iterate over all cards on the board
   for (let tile of allBoardTiles(state)) {
-      if (tile.card) yield tile as ActionSource;
+    if (tile.card) yield tile as ActionSource;
   }
 }
 

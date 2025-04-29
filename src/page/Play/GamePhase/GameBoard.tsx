@@ -29,9 +29,7 @@ const GameBoard = () => {
 
   const rowScores = getRowScores(state);
 
-  const scoreColumns = [...players].map((player) =>
-    buildScoreColumnForPlayer(player.id, rowScores),
-  );
+  const scoreColumns = [...players].map((player) => buildScoreColumnForPlayer(player.id, rowScores));
 
   const columns = [scoreColumns[0], ...playColumns, scoreColumns[1]];
   const tiles = columns.reduce((accum, curr) => [...accum, ...curr], []);

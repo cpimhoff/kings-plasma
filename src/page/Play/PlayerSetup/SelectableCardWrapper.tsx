@@ -10,14 +10,7 @@ interface Props {
   children: ReactNode;
 }
 
-const SelectableCardWrapper = memo(({
-  enabled = true,
-  onHoverIn,
-  onHoverOut,
-  onClick,
-  className,
-  children,
-}: Props) => {
+const SelectableCardWrapper = memo(({ enabled = true, onHoverIn, onHoverOut, onClick, className, children }: Props) => {
   return (
     <div
       className={cn('flex flex-col p-2 hover:cursor-pointer hover:bg-slate-100', className)}

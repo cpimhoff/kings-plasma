@@ -7,8 +7,8 @@ interface Props {
 }
 const DeckCard = ({ card, color }: Props) => {
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex flex-col grow rounded-sm border border-3">
+    <div className="flex h-full flex-col">
+      <div className="flex grow flex-col rounded-sm border border-3">
         <CardGradient className="flex h-full w-full flex-col" color={color}>
           <div className="mx-2 mt-2 flex grow flex-col justify-between">
             <div className="flex justify-between">

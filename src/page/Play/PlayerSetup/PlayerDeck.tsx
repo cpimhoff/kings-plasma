@@ -30,30 +30,25 @@ const PlayerDeck = () => {
         </span>
         <SaveLoadDeck />
       </div>
-      <div className="flex flex-col items-center w-full h-58">
-        <div className="flex w-full gap-3 p-2 relative z-0 overflow-x-auto">
-          {deckCardGroups.map(
-            (cardGroup) => {
-              return (
-                <SelectableCardWrapper
-                  key={cardGroup.cardDef.typeId}
-                  onClick={() => handleClickCard(cardGroup)}
-                  onHoverIn={() => setPreviewCard(cardGroup.cardDef)}
-                  onHoverOut={() => setPreviewCard(null)}
-                  className="shrink-0 h-50 w-40"
-                >
-                  <CardCountWrapper count={cardGroup.count}>
-                    <DeckCard
-                      card={cardGroup.cardDef}
-                      color={'var(--player-color)'}
-                    />
-                  </CardCountWrapper>
-                </SelectableCardWrapper>
-              );
-            }
-          )}
+      <div className="flex h-58 w-full flex-col items-center">
+        <div className="relative z-0 flex w-full gap-3 overflow-x-auto p-2">
+          {deckCardGroups.map((cardGroup) => {
+            return (
+              <SelectableCardWrapper
+                key={cardGroup.cardDef.typeId}
+                onClick={() => handleClickCard(cardGroup)}
+                onHoverIn={() => setPreviewCard(cardGroup.cardDef)}
+                onHoverOut={() => setPreviewCard(null)}
+                className="h-50 w-40 shrink-0"
+              >
+                <CardCountWrapper count={cardGroup.count}>
+                  <DeckCard card={cardGroup.cardDef} color={'var(--player-color)'} />
+                </CardCountWrapper>
+              </SelectableCardWrapper>
+            );
+          })}
         </div>
-        { previewCard !== null && (
+        {previewCard !== null && (
           <div className="relative -left-30">
             <Popover>
               <FullCard card={previewCard} color={'var(--player-color)'} className="absolute z-50 w-60" />

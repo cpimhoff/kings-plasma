@@ -11,7 +11,7 @@ const DEFAULT_PLAYER_NAMES = ['Lefty', 'Righty'];
 export type DeckCardGroup = {
   cardDef: CardDefinition;
   count: number;
-}
+};
 
 interface PlayerSetupStore {
   players: Player[];
@@ -116,7 +116,9 @@ export const usePlayerSetupStore = create<PlayerSetupStore>((set) => ({
 function createDeckFromDraft(deckCardGroups: DeckCardGroup[]): CardInstance[] {
   return deckCardGroups
     .map((cardGroup) => {
-      return new Array(cardGroup.count).fill(0).map(() => ({ ...cardGroup.cardDef, instanceId: uuid() as CardInstance['instanceId'] }));
+      return new Array(cardGroup.count)
+        .fill(0)
+        .map(() => ({ ...cardGroup.cardDef, instanceId: uuid() as CardInstance['instanceId'] }));
     })
     .reduce((accum, curr) => [...accum, ...curr]);
 }

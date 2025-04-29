@@ -16,7 +16,7 @@ interface GameplayStore {
   dispatchAction: (action: Action) => void;
   undo: () => void;
   _setDebugState: (state: GameState) => void;
-};
+}
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
@@ -82,8 +82,8 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
       };
     }),
 
-  _setDebugState: (state) => set({
-    gameState: state,
-  }),
-
+  _setDebugState: (state) =>
+    set({
+      gameState: state,
+    }),
 }));

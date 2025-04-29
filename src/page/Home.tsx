@@ -15,8 +15,12 @@ export const Home = ({ ...rest }: Props) => {
         <div className="flex flex-col items-center">
           Play
           <div className="flex gap-5">
-            <Link to="/play" viewTransition onClick={() => setGameMode('local-1p')}>1 Player (vs CPU)</Link>
-            <Link to="/play" viewTransition onClick={() => setGameMode('local-2p')}>2 Players (PvP)</Link>
+            <Link to="/play" viewTransition onClick={() => setGameMode('local-1p')}>
+              1 Player (vs CPU)
+            </Link>
+            <Link to="/play" viewTransition onClick={() => setGameMode('local-2p')}>
+              2 Players (PvP)
+            </Link>
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ const PlayerDetails = () => {
           <div className="flex-col">
             <Label>Name</Label>
             <Input
-              className="max-w-70 bg-white mt-1"
+              className="mt-1 max-w-70 bg-white"
               placeholder="Player name"
               value={draftPlayerName}
               onChange={(e) => setDraftPlayerName(e.target.value)}

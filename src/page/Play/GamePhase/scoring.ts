@@ -1,7 +1,6 @@
 import { Player } from '@/gameplay/state/Player';
 import { GameState } from '@/gameplay/state/GameState';
 
-
 export type ScoreByPlayer = Record<Player['id'], number>;
 
 export type ScoreResult = {
@@ -36,7 +35,7 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
   });
 
   return rowResults;
-};
+}
 
 export function getPlayerScores(gameState: GameState): ScoreResult {
   const rowScores = getRowScores(gameState);

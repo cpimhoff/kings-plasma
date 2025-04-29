@@ -53,10 +53,13 @@ const HandCard = ({ idx, card, color, locked }: Props) => {
 
   const { phase } = gameState!;
 
-  const handleHover = useCallback<(idx: number) => void>((idx) => {
-    if (locked) return;
-    hoverOverHandIndex(idx);
-  }, [locked]);
+  const handleHover = useCallback<(idx: number) => void>(
+    (idx) => {
+      if (locked) return;
+      hoverOverHandIndex(idx);
+    },
+    [locked],
+  );
 
   const handleClick = useCallback<(idx: number) => void>(
     (idx) => {

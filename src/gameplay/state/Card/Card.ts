@@ -31,7 +31,7 @@ type CardInstanceId = UUID & { __cardInstanceId: true };
 
 export type CardInstance = CardDefinition & {
   instanceId: CardInstanceId;
-}
+};
 
 export type CardGridCell = {
   origin: boolean;

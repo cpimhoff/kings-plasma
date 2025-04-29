@@ -6,7 +6,7 @@ import { CHAIN_STATE } from './GamePhase/chain';
 
 const Play = () => {
   const gameState = useGameplayStore((state) => state.gameState);
-  const _setDebugState = useGameplayStore(state => state._setDebugState);
+  const _setDebugState = useGameplayStore((state) => state._setDebugState);
   if (gameState) {
     return <GamePhase />;
   }
