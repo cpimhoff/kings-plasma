@@ -2,12 +2,13 @@ import { useMemo, useCallback, useState, CSSProperties } from 'react';
 import { Button } from '@/components';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { usePlayerSetupStore } from './PlayerSetupStore';
 import { useDeckStorage, StoredDeck } from './storage';
-import DeckCard from './DeckCard';
-import CardCountWrapper from './CardCountWrapper';
 import { CardDefinition } from '@/gameplay';
 import { MIN_CARDS_IN_DECK } from '@/gameplay/constants';
+import { useCreatePlayerStore } from './CreatePlayerStore';
+import { hydrateCardGroups } from '@/deck';
+import ReadOnlyDeck from './ReadOnlyDeck';
+import { useCardLibraryStore } from './CardLibraryStore';
 
 export default function SaveLoadDeck() {
   return (
@@ -26,12 +27,12 @@ export default function SaveLoadDeck() {
 }
 
 function StoredDecks() {
-  const colorCssValue = usePlayerSetupStore((state) => state.draftPlayer.colorCssValue);
+  const colorCssValue = useCreatePlayerStore((state) => state.draftPlayer.colorCssValue);
 
   const { storedDecks, saveDeckToLocalStorage, deleteStoredDeck } = useDeckStorage();
 
   // save current deck
-  const currentDeckCardGroups = usePlayerSetupStore((store) => store.draftPlayer.deckCardGroups);
+  const currentDeckCardGroups = useCreatePlayerStore((store) => store.draftPlayer.deckCardGroups);
   const [deckName, setDeckName] = useState<string | null>(null);
   const isValidDeck = useMemo(() => {
     const isValidName = !!deckName && !storedDecks.some((deck) => deck.name === deckName);
@@ -57,18 +58,8 @@ function StoredDecks() {
   }, []);
 
   // load stored deck
-  const replaceDraftPlayerDeck = usePlayerSetupStore((store) => store.replaceDraftPlayerDeck);
-  const cardLibrary = usePlayerSetupStore((store) => store.cardLibrary);
-  const allCardDefsById = useMemo(
-    () =>
-      Object.assign(
-        {},
-        ...cardLibrary.map((cardDef) => ({
-          [cardDef.typeId]: cardDef,
-        })),
-      ),
-    [cardLibrary],
-  );
+  const replaceDraftPlayerDeck = useCreatePlayerStore((store) => store.replaceDraftPlayerDeck);
+  const allCardDefsById = useCardLibraryStore((store) => store.cardDefByTypeId);
   const handleLoadDeck = useCallback(
     (storedDeck: StoredDeck) => {
       const deckCardGroups = storedDeck.cardGroups.map((storedCardGroup) => {
@@ -121,6 +112,7 @@ interface DeckPreviewProps {
   onDelete: (name: string) => void;
 }
 function DeckPreview({ deck, allCardDefsById, onLoad, onDelete }: DeckPreviewProps) {
+  const hydratedCardGroups = hydrateCardGroups(deck.cardGroups, allCardDefsById);
   return (
     <div className="flex">
       <div className="flex flex-col">
@@ -128,16 +120,7 @@ function DeckPreview({ deck, allCardDefsById, onLoad, onDelete }: DeckPreviewPro
         <Button onClick={() => onLoad(deck)}>Load</Button>
         <Button onClick={() => onDelete(deck.name)}>Delete</Button>
       </div>
-      <div className="flex">
-        {deck.cardGroups.map(({ cardTypeId, count }) => {
-          const cardDef = allCardDefsById[cardTypeId];
-          return (
-            <CardCountWrapper key={cardTypeId} count={count} className="w-30">
-              <DeckCard card={cardDef} color={'var(--player-color)'} />
-            </CardCountWrapper>
-          );
-        })}
-      </div>
+      <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} />
     </div>
   );
 }

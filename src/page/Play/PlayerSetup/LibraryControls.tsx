@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Slider } from '@/components/ui/slider';
-import { usePlayerSetupStore } from './PlayerSetupStore';
 import {
   useLibraryControlsStore,
   Rank,
@@ -19,6 +18,7 @@ import {
   SortDirection,
   SortMethod,
 } from './LibraryControlsStore';
+import { useCardLibraryStore } from './CardLibraryStore';
 
 const LibraryControls = memo(() => {
   const { rankFilters, powerRange, sortMethod, toggleRankFilter, setPowerRange, setSortMethod } =
@@ -47,7 +47,7 @@ const LibraryControls = memo(() => {
       .reduce((accum, curr) => [...accum, ...curr]);
   }, []);
 
-  const cardLibrary = usePlayerSetupStore((s) => s.cardLibrary);
+  const cardLibrary = useCardLibraryStore((s) => s.cardLibrary);
   const maxPower = useMemo(() => {
     return cardLibrary.reduce((accum, curr) => {
       return Math.max(accum, curr.power);

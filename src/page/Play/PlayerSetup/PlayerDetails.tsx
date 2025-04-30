@@ -1,4 +1,3 @@
-import { usePlayerSetupStore } from './PlayerSetupStore';
 import { useShallow } from 'zustand/react/shallow';
 import { CirclePicker, ColorResult } from 'react-color';
 import { Button } from '@/components/ui/button';
@@ -6,15 +5,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getAvailableColors } from './color';
 import { MIN_CARDS_IN_DECK, MAX_CARDS_IN_DECK } from '@/gameplay/constants';
+import { useCreatePlayerStore } from './CreatePlayerStore';
+import { Player } from '@/gameplay';
 
-const PlayerDetails = () => {
-  const { players, draftPlayer, setDraftPlayerName, setDraftPlayerColor, addPlayerFromDraft } = usePlayerSetupStore(
+interface Props {
+  onSubmit: (p: Player) => void;
+}
+
+export default function PlayerDetails({ onSubmit }: Props) {
+  const { draftPlayer, setDraftPlayerName, setDraftPlayerColor, getPlayer } = useCreatePlayerStore(
     useShallow((state) => ({
-      players: state.players,
       draftPlayer: state.draftPlayer,
       setDraftPlayerName: state.setDraftPlayerName,
       setDraftPlayerColor: state.setDraftPlayerColor,
-      addPlayerFromDraft: state.addPlayerFromDraft,
+      getPlayer: state.getPlayer,
     })),
   );
 
@@ -24,12 +28,6 @@ const PlayerDetails = () => {
     [draftPlayerDeckCounts],
   );
 
-  const [playerIdx, playerDirection] = useMemo(() => {
-    const idx = players.length;
-    const dir = idx === 0 ? 'Left' : 'Right';
-    return [idx, dir];
-  }, [players]);
-
   const isValid = useMemo(() => {
     return deckSize >= MIN_CARDS_IN_DECK && deckSize <= MAX_CARDS_IN_DECK && !!draftPlayerName;
   }, [deckSize, draftPlayerName]);
@@ -38,11 +36,15 @@ const PlayerDetails = () => {
     setDraftPlayerColor(colorResult.hex);
   }, []);
 
+  const handleSubmit = useCallback(() => {
+    const player = getPlayer();
+    onSubmit(player);
+  }, []);
+
   return (
     <div className="bg-slate-300 p-3">
-      <div className="mb-5">{`Player ${playerIdx + 1} (${playerDirection})`}</div>
-      <div className="flex justify-between">
-        <div className="flex gap-5">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-5">
           <div className="flex-col">
             <Label>Name</Label>
             <Input
@@ -64,15 +66,10 @@ const PlayerDetails = () => {
             </div>
           </div>
         </div>
-        <div className="mr-10">
-          <Button disabled={!isValid} onClick={() => addPlayerFromDraft()}>
-            {' '}
-            Done{' '}
-          </Button>
-        </div>
+        <Button disabled={!isValid} onClick={() => handleSubmit()}>
+          Save
+        </Button>
       </div>
     </div>
   );
-};
-
-export default PlayerDetails;
+}

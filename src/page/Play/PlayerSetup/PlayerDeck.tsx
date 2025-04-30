@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { DeckCardGroup, usePlayerSetupStore } from './PlayerSetupStore';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import DeckCard from './DeckCard';
 import SaveLoadDeck from './SaveLoadDeck';
@@ -8,16 +7,18 @@ import { Popover } from '@/components/ui/popover';
 import { MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import CardCountWrapper from './CardCountWrapper';
 import { CardDefinition } from '@/gameplay';
+import { useCreatePlayerStore } from './CreatePlayerStore';
+import { HydratedCardGroup } from '@/deck';
 
 const PlayerDeck = () => {
-  const deckCardGroups = usePlayerSetupStore((s) => s.draftPlayer.deckCardGroups);
-  const removeCardFromDraftPlayerDeck = usePlayerSetupStore((s) => s.removeCardFromDraftPlayerDeck);
+  const deckCardGroups = useCreatePlayerStore((s) => s.draftPlayer.deckCardGroups);
+  const removeCardFromDraftPlayerDeck = useCreatePlayerStore((s) => s.removeCardFromDraftPlayerDeck);
 
   const deckSize = deckCardGroups.reduce((s, c) => s + c.count, 0);
 
   const [previewCard, setPreviewCard] = useState<CardDefinition | null>(null);
 
-  const handleClickCard = useCallback((cardGroup: DeckCardGroup) => {
+  const handleClickCard = useCallback((cardGroup: HydratedCardGroup) => {
     removeCardFromDraftPlayerDeck(cardGroup.cardDef.typeId);
     setPreviewCard(null);
   }, []);

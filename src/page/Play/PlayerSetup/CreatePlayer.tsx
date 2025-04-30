@@ -1,11 +1,16 @@
 import { CSSProperties } from 'react';
-import { usePlayerSetupStore } from './PlayerSetupStore';
 import PlayerDetails from './PlayerDetails';
 import PlayerDeck from './PlayerDeck';
 import CardLibrary from './CardLibrary';
+import { useCreatePlayerStore } from './CreatePlayerStore';
+import { Player } from '@/gameplay';
 
-const CreatePlayer = () => {
-  const colorCssValue = usePlayerSetupStore((state) => state.draftPlayer.colorCssValue);
+interface Props {
+  onSubmit: (p: Player) => void;
+}
+
+export default function CreatePlayer({ onSubmit }: Props) {
+  const colorCssValue = useCreatePlayerStore((state) => state.draftPlayer.colorCssValue);
   return (
     <div
       style={
@@ -14,7 +19,7 @@ const CreatePlayer = () => {
         } as CSSProperties
       }
     >
-      <PlayerDetails />
+      <PlayerDetails onSubmit={onSubmit} />
       <div className="sticky top-0 mt-3">
         <PlayerDeck />
       </div>
@@ -23,6 +28,4 @@ const CreatePlayer = () => {
       </div>
     </div>
   );
-};
-
-export default CreatePlayer;
+}

@@ -21,6 +21,14 @@ export function getRandomColor(): string {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
+export function getRandomAvailableColor(existingColor?: string) {
+  let newColor;
+  do {
+    newColor = getRandomColor();
+  } while (newColor === existingColor);
+  return newColor;
+}
+
 export function stringifyHSLColor(color: HSLColor): string {
   return `hsl(${color.h}, ${color.s * 100}%, ${color.l * 100}%)`;
 }

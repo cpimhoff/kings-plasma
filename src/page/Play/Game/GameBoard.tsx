@@ -1,16 +1,13 @@
 import BoardTile from './BoardTile';
 import RowScoreTile from './RowScoreTile';
-import { useGameplayStore } from '@/page/Play/GamePhase/GameplayStore';
+import { useGameplayStore } from '@/page/Play/Game/GameplayStore';
 import { Player } from '@/gameplay/state/Player';
 import { getRowScores, ScoreResult } from './scoring';
 
 const GameBoard = () => {
   const gameState = useGameplayStore((state) => state.gameState);
   const state = gameState!;
-  const {
-    players,
-    // playPhaseActivePlayerId: playerId, // see below
-  } = state!;
+  const { players } = state!;
 
   const { board: trueBoard } = state!;
   // reverse each column for rendering with css grid

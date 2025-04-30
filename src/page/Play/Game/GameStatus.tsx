@@ -1,17 +1,14 @@
 import { useGameplayStore } from './GameplayStore';
-import { Player } from '@/gameplay/state/Player';
+import { ControllerPlayerContext } from './ControllerPlayerContext';
 
-interface Props {
-  player: Player;
-}
-
-const GameStatus = ({ player }: Props) => {
+const GameStatus = () => {
   const gameState = useGameplayStore((state) => state.gameState);
+  const { controllerPlayer: currentPlayer } = useContext(ControllerPlayerContext)!;
   const { phase } = gameState!;
   return (
     <div>
       <p> current phase: {phase} </p>
-      <p> current player: {player.name} </p>
+      <p> current player: {currentPlayer.name} </p>
     </div>
   );
 };

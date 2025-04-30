@@ -15,14 +15,14 @@ import {
   CardName,
   CardSpecialEffectDescription,
 } from '@/components/Card';
+import { ControllerPlayerContext } from './ControllerPlayerContext';
 
 interface Props {
   idx: number;
   card: ICard;
   color: string;
-  locked?: boolean;
 }
-const HandCard = ({ idx, card, color, locked }: Props) => {
+const HandCard = ({ idx, card, color }: Props) => {
   const { handIndexesToMulligan, toggleHandIndexToMulligan } = useMulliganStore(
     useShallow((state) => ({
       handIndexesToMulligan: state.handIndexesToMulligan,
@@ -52,6 +52,8 @@ const HandCard = ({ idx, card, color, locked }: Props) => {
   );
 
   const { phase } = gameState!;
+
+  const { controlsLocked: locked } = useContext(ControllerPlayerContext)!;
 
   const handleHover = useCallback<(idx: number) => void>(
     (idx) => {

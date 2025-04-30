@@ -1,12 +1,19 @@
 import { create } from 'zustand';
 import { GameState, createInitialState } from '@/gameplay/state/GameState';
-import { Player } from '@/gameplay/state/Player';
+import { getPlayerWithId, Player } from '@/gameplay/state/Player';
 import { Action } from '@/gameplay/state/Action';
 import { process } from '@/gameplay/process/process';
+
+type ActionRecord = {
+  subject: string;
+  verb: string;
+  object: string | null;
+};
 
 interface GameplayStore {
   gameState: GameState | null;
   previewState: GameState | null;
+  actionLog: ActionRecord[];
   historyStack: GameState[];
   animating: boolean;
 
@@ -21,6 +28,7 @@ interface GameplayStore {
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
   gameState: null,
   previewState: null,
+  actionLog: [],
   historyStack: [],
   animating: false,
 
@@ -48,6 +56,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     if (get().animating) return;
     set(() => ({
       animating: true,
+      actionLog: [...get().actionLog, getRecordForAction(action, get().gameState!.players)],
       previewState: null,
     }));
     const oldGameState = get().gameState!;
@@ -70,14 +79,16 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
 
   undo: () =>
     set((state) => {
-      const { historyStack, animating } = state;
+      const { historyStack, animating, actionLog } = state;
       if (!historyStack.length || animating) return {};
       const stackSize = historyStack.length;
       const newState = historyStack[stackSize - 1];
       const newStack = [...historyStack].splice(0, stackSize - 1);
+      const newLog = [...actionLog].splice(0, stackSize - 1);
       return {
         gameState: newState,
         previewState: null,
+        actionLog: newLog,
         historyStack: newStack,
       };
     }),
@@ -87,3 +98,25 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
       gameState: state,
     }),
 }));
+
+function getRecordForAction(action: Action, players: Player[]) {
+  const player = getPlayerWithId(players, action.playerId);
+  const subject = player.name;
+  const verb = {
+    playCard: 'played',
+    pass: 'passed',
+    mulligan: 'mulliganed',
+    rematch: 'requested a rematch',
+  }[action.type];
+  let object = null;
+  if (action.type === 'playCard') {
+    object = player.hand[action.fromHandIndex].name;
+  } else if (action.type === 'mulligan') {
+    object = `${action.handIndexes.length} cards`;
+  }
+  return {
+    subject,
+    verb,
+    object,
+  };
+}

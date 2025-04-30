@@ -1,18 +1,12 @@
 import { useCallback } from 'react';
 import { useGameplayStore } from './GameplayStore';
-import { Player } from '@/gameplay/state/Player';
 import { useMulliganStore } from './MulliganStore';
 import { useInteractionStore } from './InteractionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
-import { chooseAction } from '@/agent/choice';
+import { ControllerPlayerContext } from './ControllerPlayerContext';
 
-interface Props {
-  player: Player;
-  locked?: boolean;
-}
-
-const BoardControls = ({ player, locked }: Props) => {
+const BoardControls = () => {
   const [gameState, animating, dispatchAction, undo] = useGameplayStore(
     useShallow((state) => {
       return [state.gameState, state.animating, state.dispatchAction, state.undo];
@@ -32,10 +26,7 @@ const BoardControls = ({ player, locked }: Props) => {
     })),
   );
 
-  const onAuto = useCallback(() => {
-    const action = chooseAction(gameState!, player.id);
-    dispatchAction(action);
-  }, [player.id]);
+  const { controllerPlayer: player, controlsLocked: locked } = useContext(ControllerPlayerContext)!;
 
   const onMulligan = useCallback(() => {
     dispatchAction({
@@ -71,7 +62,6 @@ const BoardControls = ({ player, locked }: Props) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <Button onClick={() => onAuto()}>Auto</Button>
       {phase === 'setup' && (
         <Button disabled={locked} onClick={() => onMulligan()}>
           {handIndexesToMulligan.length > 0 ? 'Mulligan and begin' : 'Begin'}

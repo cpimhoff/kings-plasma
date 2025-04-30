@@ -1,13 +1,10 @@
-import { Player } from '@/gameplay/state/Player';
 import { useGameplayStore } from './GameplayStore';
 import HandCard from './HandCard';
+import { ControllerPlayerContext } from './ControllerPlayerContext';
 
-interface Props {
-  player: Player;
-  locked?: boolean;
-}
-const PlayerHand = ({ player, locked }: Props) => {
-  const { hand, colorCssValue: color } = player;
+const PlayerHand = () => {
+  const { controllerPlayer: currentPlayer } = useContext(ControllerPlayerContext)!;
+  const { hand, colorCssValue: color } = currentPlayer;
   const gameState = useGameplayStore((state) => state.gameState);
   const { phase } = gameState!;
 
@@ -16,7 +13,7 @@ const PlayerHand = ({ player, locked }: Props) => {
       <div className="mb-3">{phase === 'setup' ? 'Select up to three cards to mulligan.' : null}</div>
       <div className="flex h-80 w-[70rem] items-center gap-3 overflow-x-auto bg-slate-300 p-2">
         {hand.map((card, idx) => (
-          <HandCard key={`${player.id},${card.typeId},${idx}`} idx={idx} card={card} color={color} locked={locked} />
+          <HandCard key={`${currentPlayer.id},${card.typeId},${idx}`} idx={idx} card={card} color={color} />
         ))}
       </div>
     </div>

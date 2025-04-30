@@ -1,14 +1,10 @@
 import { useSyncExternalStore } from 'react';
 import { produce } from 'immer';
-import { CardDefinition } from '@/gameplay';
+import { DehydratedCardGroup } from '@/deck';
 
-export type StoredCardGroup = {
-  cardTypeId: CardDefinition['typeId'];
-  count: number;
-};
 export type StoredDeck = {
   name: string;
-  cardGroups: StoredCardGroup[];
+  cardGroups: DehydratedCardGroup[];
 };
 
 export function useDeckStorage() {

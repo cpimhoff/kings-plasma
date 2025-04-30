@@ -1,14 +1,15 @@
 import { memo } from 'react';
 import FullCard from '@/components/Card/FullCard';
 import { CardDefinition } from '@/gameplay';
-import { usePlayerSetupStore } from './PlayerSetupStore';
 import SelectableCardWrapper from './SelectableCardWrapper';
 import CardCountWrapper from './CardCountWrapper';
 import { MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import { useLibraryControlsStore } from './LibraryControlsStore';
+import { useCreatePlayerStore } from './CreatePlayerStore';
+import { useCardLibraryStore } from './CardLibraryStore';
 
 const LibraryCardView = memo(() => {
-  const deckCardGroups = usePlayerSetupStore((s) => s.draftPlayer.deckCardGroups);
+  const deckCardGroups = useCreatePlayerStore((s) => s.draftPlayer.deckCardGroups);
   const deckCardsById = useMemo(() => {
     return Object.assign(
       {},
@@ -49,7 +50,7 @@ const LibraryCardView = memo(() => {
 
   const deferredSortFunction = useDeferredValue(sortFunction);
 
-  const cardLibrary = usePlayerSetupStore((s) => s.cardLibrary);
+  const cardLibrary = useCardLibraryStore((s) => s.cardLibrary);
   type SortableCard = CardDefinition & {
     index: number;
   };
@@ -71,7 +72,7 @@ const LibraryCardView = memo(() => {
       .sort(deferredSortFunction);
   }, [indexedLibrary, rankFilters, powerRange, deferredSortFunction]);
 
-  const addCardToDraftPlayerDeck = usePlayerSetupStore((s) => s.addCardToDraftPlayerDeck);
+  const addCardToDraftPlayerDeck = useCreatePlayerStore((s) => s.addCardToDraftPlayerDeck);
 
   return (
     <div className="flex flex-wrap justify-center gap-3">
