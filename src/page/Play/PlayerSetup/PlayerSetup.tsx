@@ -5,7 +5,7 @@ import CreatePlayer from './CreatePlayer';
 import { Button } from '@/components/ui/button';
 import { useGameModeStore } from '../GameModeStore';
 import { useShallow } from 'zustand/react/shallow';
-import { Character } from '@/character/Character';
+import { Character } from '@/agent/character/Character';
 import ChooseCharacter from './ChooseCharacter';
 import { createPlayer } from '@/gameplay';
 import { useCreatePlayerStore } from './CreatePlayerStore';

@@ -12,18 +12,22 @@ export default function ChooseCharacter({ onSubmit }: Props) {
   const allCardDefsById = useCardLibraryStore((state) => state.cardDefByTypeId);
   return (
     <div>
-      choose character
-      <div>
+      <p className="mb-3">choose character</p>
+      <div className="flex flex-col gap-5">
         {OPPONENTS.map((character) => {
           const hydratedCardGroups = hydrateCardGroups(character.deck, allCardDefsById);
           return (
-            <div key={character.name}>
-              <p>name: {character.name}</p>
-              <p>description: {character.description}</p>
-              <p>
+            <div key={character.name} className="flex flex-col">
+              <div className="flex justify-between">
+                <div>
+                  <p>name: {character.name}</p>
+                  <p>description: {character.description}</p>
+                </div>
                 <Button onClick={() => onSubmit(character)}>Choose</Button>
-              </p>
-              <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} />
+              </div>
+              <div className="overflow-x-auto">
+                <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} />
+              </div>
             </div>
           );
         })}

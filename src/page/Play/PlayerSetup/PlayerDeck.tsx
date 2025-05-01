@@ -42,7 +42,7 @@ const PlayerDeck = () => {
                 onHoverOut={() => setPreviewCard(null)}
                 className="h-50 w-40 shrink-0"
               >
-                <CardCountWrapper count={cardGroup.count}>
+                <CardCountWrapper count={cardGroup.count} className="grow">
                   <DeckCard card={cardGroup.cardDef} color={'var(--player-color)'} />
                 </CardCountWrapper>
               </SelectableCardWrapper>

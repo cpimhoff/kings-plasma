@@ -86,7 +86,7 @@ const LibraryCardView = memo(() => {
             enabled={!isDeckFull && numInDeck < maxAllowedInDeck}
             onClick={() => addCardToDraftPlayerDeck(card)}
           >
-            <CardCountWrapper count={maxAllowedInDeck - numInDeck} maxCount={maxAllowedInDeck}>
+            <CardCountWrapper count={maxAllowedInDeck - numInDeck} maxCount={maxAllowedInDeck} className="grow">
               <FullCard card={card} color={'var(--player-color)'} className="w-60 grow" />
             </CardCountWrapper>
           </SelectableCardWrapper>

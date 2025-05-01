@@ -115,12 +115,16 @@ function DeckPreview({ deck, allCardDefsById, onLoad, onDelete }: DeckPreviewPro
   const hydratedCardGroups = hydrateCardGroups(deck.cardGroups, allCardDefsById);
   return (
     <div className="flex">
-      <div className="flex flex-col">
+      <div className="max-w-250">
         {deck.name}
+        <div className="overflow-x-auto">
+          <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} />
+        </div>
+      </div>
+      <div className="flex flex-col justify-center grow gap-3 mx-3">
         <Button onClick={() => onLoad(deck)}>Load</Button>
         <Button onClick={() => onDelete(deck.name)}>Delete</Button>
       </div>
-      <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} />
     </div>
   );
 }
