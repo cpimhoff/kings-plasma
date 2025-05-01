@@ -29,5 +29,5 @@ export const defeat: Heuristic = (gameState, playerId) => {
   const isEnd = gameState.phase === 'end';
   const { winningPlayerId } = getPlayerScores(gameState);
   const isLoser = isEnd && !!winningPlayerId && winningPlayerId !== playerId;
-  return isLoser ? -1 : 0;
+  return isLoser ? 1 : 0;
 };
