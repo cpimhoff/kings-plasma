@@ -2,7 +2,7 @@ import BoardTile from './BoardTile';
 import RowScoreTile from './RowScoreTile';
 import { useGameplayStore } from '@/page/Play/Game/GameplayStore';
 import { Player } from '@/gameplay/state/Player';
-import { getRowScores, ScoreResult } from './scoring';
+import { getRowScores, ScoreResult } from '../../../gameplay/scoring';
 
 const GameBoard = () => {
   const gameState = useGameplayStore((state) => state.gameState);

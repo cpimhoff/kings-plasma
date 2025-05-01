@@ -22,16 +22,7 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
   });
   // calculate winners of each row
   rowResults.forEach((rowResult) => {
-    const sortedPlayerScores = Object.entries(rowResult.scoreByPlayer)
-      .map(([playerId, score]) => ({
-        playerId: playerId as Player['id'],
-        score,
-      }))
-      .sort(({ score: score1 }, { score: score2 }) => score2 - score1);
-    if (sortedPlayerScores[0].score !== sortedPlayerScores[1].score) {
-      const winningPlayerId = sortedPlayerScores[0].playerId;
-      rowResult.winningPlayerId = winningPlayerId;
-    }
+    rowResult.winningPlayerId = getWinningPlayerId(rowResult.scoreByPlayer);
   });
 
   return rowResults;
@@ -39,13 +30,15 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
 
 export function getPlayerScores(gameState: GameState): ScoreResult {
   const rowScores = getRowScores(gameState);
-  return rowScores.reduce((finalScore, rowScore) => {
+  const finalScores: ScoreResult = rowScores.reduce((finalScore, rowScore) => {
     const { scoreByPlayer, winningPlayerId } = rowScore;
     if (winningPlayerId !== null) {
       finalScore.scoreByPlayer[winningPlayerId] += scoreByPlayer[winningPlayerId];
     }
     return finalScore;
   }, getEmptyScores(gameState.players));
+  finalScores.winningPlayerId = getWinningPlayerId(finalScores.scoreByPlayer);
+  return finalScores;
 }
 
 // private functions
@@ -55,4 +48,17 @@ function getEmptyScores(players: Player[]): ScoreResult {
     scoreByPlayer: Object.assign({}, ...players.map((p) => ({ [p.id]: 0 }))),
     winningPlayerId: null,
   };
+}
+
+function getWinningPlayerId(scores: ScoreByPlayer): Player['id'] | null {
+  const sortedPlayerScores = Object.entries(scores)
+    .map(([playerId, score]) => ({
+      playerId: playerId as Player['id'],
+      score,
+    }))
+    .sort(({ score: score1 }, { score: score2 }) => score2 - score1);
+  if (sortedPlayerScores[0].score !== sortedPlayerScores[1].score) {
+    return sortedPlayerScores[0].playerId;
+  }
+  return null;
 }

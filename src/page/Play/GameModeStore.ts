@@ -1,4 +1,4 @@
-import { Character } from '@/agent/character/Character';
+import { Character } from '@/character/Character';
 import { Player } from '@/gameplay';
 import { produce } from 'immer';
 import { create } from 'zustand';

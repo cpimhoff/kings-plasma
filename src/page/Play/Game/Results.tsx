@@ -1,6 +1,6 @@
 import { useGameplayStore } from './GameplayStore';
 import { getPlayerWithId, Player } from '@/gameplay/state/Player';
-import { getPlayerScores } from './scoring';
+import { getPlayerScores } from '../../../gameplay/scoring';
 
 const Results = () => {
   const gameState = useGameplayStore((state) => state.gameState);

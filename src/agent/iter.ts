@@ -13,15 +13,15 @@ export function* validActionsForPlayer(gameState: GameState, playerId: Player['i
       yield* validPlayPhaseActionsForPlayer(gameState, playerId);
       break;
     case 'end':
-      // TODO
+      yield* validEndPhaseActionsForPlayer(playerId);
       break;
     default:
-      phase satisfies GameState['phase'];
+      phase satisfies never;
       break;
   }
 }
 
-function* validSetupPhaseActionsForPlayer(gameState: GameState, playerId: Player['id']): Generator<Action> {
+export function* validSetupPhaseActionsForPlayer(gameState: GameState, playerId: Player['id']): Generator<Action> {
   const { hand } = getPlayerWithId(gameState.players, playerId);
   yield* validMulligansWithPrefix([], hand.length, playerId);
 }
@@ -44,7 +44,7 @@ function* validMulligansWithPrefix(prefix: number[], handSize: number, playerId:
   }
 }
 
-function* validPlayPhaseActionsForPlayer(gameState: GameState, playerId: Player['id']): Generator<Action> {
+export function* validPlayPhaseActionsForPlayer(gameState: GameState, playerId: Player['id']): Generator<Action> {
   yield {
     type: 'pass',
     playerId,
@@ -64,4 +64,14 @@ function* validPlayPhaseActionsForPlayer(gameState: GameState, playerId: Player[
       }
     }
   }
+}
+
+function* validEndPhaseActionsForPlayer(playerId: Player['id']): Generator<Action> {
+  return [true, false].map((rematch) => {
+    return {
+      type: 'rematch',
+      playerId,
+      rematch,
+    };
+  })[Symbol.iterator];
 }

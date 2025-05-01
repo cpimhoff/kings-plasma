@@ -70,9 +70,15 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
         });
       });
     }, Promise.resolve());
+    let newHistoryStack: GameState[];
+    if (action.type === 'rematch' && newGameState.phase === 'setup') {
+      newHistoryStack = [];
+    } else {
+      newHistoryStack = [...get().historyStack, oldGameState];
+    }
     set({
       gameState: newGameState,
-      historyStack: [...get().historyStack, oldGameState],
+      historyStack: newHistoryStack,
       animating: false,
     });
   },

@@ -1,5 +1,5 @@
-import { Character } from '@/agent/character/Character';
-import OPPONENTS from '@/agent/character/roster';
+import { Character } from '@/character/Character';
+import OPPONENTS from '@/character/roster';
 import { Button } from '@/components/ui/button';
 import ReadOnlyDeck from './ReadOnlyDeck';
 import { hydrateCardGroups } from '@/deck';
