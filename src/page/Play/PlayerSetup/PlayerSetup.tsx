@@ -95,7 +95,7 @@ export default function PlayerSetup() {
   const handleBack = useMemo(() => {
     if (playerViewIdx === 1) {
       return () => {
-        const newPlayerIdx = (playerIdx - 1) % 2;
+        const newPlayerIdx = Math.abs(playerIdx - 1) % 2;
         setPlayerIdx(newPlayerIdx);
         const newPlayer = players[newPlayerIdx];
         populatePlayerCreator(newPlayer!); // should exist if we're going back
