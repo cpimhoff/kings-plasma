@@ -1,4 +1,4 @@
-import { GreedyMixedHeuristic, RandomChoice } from '@/agent';
+import { GreedyHeuristic, RandomChoice } from '@/agent';
 import { Character } from './Character';
 import { DehydratedCardGroup } from '@/deck';
 import { MinimaxThreeHeuristic } from '@/agent/agents/MinimaxThreeHeuristic';
@@ -25,7 +25,7 @@ const roster: Character[] = [
       { cardTypeId: 'quetzalcoatl', count: 2 },
       { cardTypeId: 'ogre', count: 2 },
     ] as Array<DehydratedCardGroup>,
-    agent: GreedyMixedHeuristic,
+    agent: GreedyHeuristic,
   },
   {
     name: 'Hank',
