@@ -1,6 +1,7 @@
 import { GreedyMixedHeuristic, RandomChoice } from '@/agent';
 import { Character } from './Character';
 import { DehydratedCardGroup } from '@/deck';
+import { MinimaxThreeHeuristic } from '@/agent/agents/MinimaxThreeHeuristic';
 
 const roster: Character[] = [
   {
@@ -25,6 +26,20 @@ const roster: Character[] = [
       { cardTypeId: 'ogre', count: 2 },
     ] as Array<DehydratedCardGroup>,
     agent: GreedyMixedHeuristic,
+  },
+  {
+    name: 'Hank',
+    description: 'Smart guy',
+    deck: [
+      { cardTypeId: 'security-officer', count: 2 },
+      { cardTypeId: 'j-unit-sweeper', count: 1 },
+      { cardTypeId: 'levrikon', count: 2 },
+      { cardTypeId: 'grasslands-wolf', count: 2 },
+      { cardTypeId: 'crystalline-crab', count: 2 },
+      { cardTypeId: 'quetzalcoatl', count: 2 },
+      { cardTypeId: 'ogre', count: 2 },
+    ] as Array<DehydratedCardGroup>,
+    agent: MinimaxThreeHeuristic,
   },
   // {
   //   name: 'God',

@@ -1,9 +1,9 @@
 import { createAgentByPhase } from '../Agent';
 import { mulliganHighRankCards } from '../choice/mulligan';
-import { ownScore } from '../choice/heuristic/playPhaseHeuristics';
 import { greedyChoiceFunction } from '../choice/minimax';
+import { WEIGHTED_HEURISTIC } from '../choice/heuristic/weights';
 
-export const GreedyScore = createAgentByPhase({
+export const GreedyMixedHeuristic = createAgentByPhase({
   setup: mulliganHighRankCards,
-  play: greedyChoiceFunction(ownScore),
+  play: greedyChoiceFunction(WEIGHTED_HEURISTIC),
 });

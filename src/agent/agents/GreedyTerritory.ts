@@ -1,9 +1,9 @@
 import { createAgentByPhase } from '../Agent';
-import { greedyPlayPhaseChoiceFunction } from '../greedy';
-import { mulliganHighRankCards } from '../heuristic/setupPhase';
-import { ownTerritory } from '../heuristic/playPhase';
+import { greedyChoiceFunction } from '../choice/minimax';
+import { mulliganHighRankCards } from '../choice/mulligan';
+import { ownTerritory } from '../choice/heuristic/playPhaseHeuristics';
 
 export const GreedyTerritory = createAgentByPhase({
   setup: mulliganHighRankCards,
-  play: greedyPlayPhaseChoiceFunction(ownTerritory),
+  play: greedyChoiceFunction(ownTerritory),
 });
