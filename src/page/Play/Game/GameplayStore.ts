@@ -40,10 +40,9 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
   previewAction: (action) =>
     set(() => {
       const { keyframes } = process(get().gameState!, action);
-      const majorFrames = keyframes.filter((kf) => !kf.meta?.minor);
-      const previewState = [...majorFrames, keyframes[0]].map((kf) => kf.snapshot)[0];
+      const previewFrame = keyframes.find((kf) => kf.meta?.preview);
       return {
-        previewState,
+        previewState: previewFrame!.snapshot,
       };
     }),
 
@@ -61,7 +60,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     }));
     const oldGameState = get().gameState!;
     const { keyframes, state: newGameState } = process(oldGameState, action);
-    const keyframeStates = keyframes.map((kf) => kf.snapshot);
+    const keyframeStates = keyframes.filter((kf) => !kf.meta?.preview).map((kf) => kf.snapshot);
     await keyframeStates.reduce((accum, curr) => {
       return accum.then(() => {
         return new Promise((resolve) => {

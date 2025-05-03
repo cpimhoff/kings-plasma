@@ -22,17 +22,23 @@ type TriggeredAction = CardAction & {
 
 export function processCardEvents(state: GameState, initialEvent: Events.CardPlayed, ctx: ProcessCtx) {
   const eventQueue: Event[] = [initialEvent];
+  let hasCapturedPreview = false;
   while (eventQueue.length > 0) {
     const event = eventQueue.shift()!;
     const triggeredActions = getEventTriggers(state, event);
     triggeredActions.forEach((action) => {
       processTriggeredCardAction(state, action, eventQueue);
-      ctx.addKeyframe({ minor: action.id === 'addControlledPips' });
+      ctx.addKeyframe();
       const didReap = reapZombieCards(state, eventQueue);
       if (didReap) {
         ctx.addKeyframe();
       }
     });
+    if (!hasCapturedPreview) {
+      // we capture a special keyframe for rendering previews after processing the initial event
+      ctx.addKeyframe({ preview: true });
+      hasCapturedPreview = true;
+    }
   }
   // note that the final keyframe will be equal to the final gamestate in board state,
   // but will differ in player state (because it will be the other player's turn)
