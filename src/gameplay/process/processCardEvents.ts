@@ -5,9 +5,9 @@ import { allBoardCards, ActionSource } from './iter';
 import { nextStableInt } from './rng';
 import { uuid } from '@/utils';
 
-type Event = Event.CardPlayed | Event.PowerChanged | Event.CardDestroyed;
-namespace Event {
-  export type CardPlayed = { triggerId: 'onPlay'; tile: BoardTile };
+type Event = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed;
+export namespace Events {
+  export type CardPlayed = { triggerId: 'onPlay'; tile: ActionSource };
   export type PowerChanged = {
     triggerId: 'onPowerChange';
     tile: BoardTile;
@@ -20,7 +20,7 @@ type TriggeredAction = CardAction & {
   source: ActionSource;
 };
 
-export function processCardEvents(state: GameState, initialEvent: Event, ctx: ProcessCtx) {
+export function processCardEvents(state: GameState, initialEvent: Events.CardPlayed, ctx: ProcessCtx) {
   const eventQueue: Event[] = [initialEvent];
   while (eventQueue.length > 0) {
     const event = eventQueue.shift()!;

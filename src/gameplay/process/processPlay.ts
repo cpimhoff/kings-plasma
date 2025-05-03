@@ -1,6 +1,7 @@
 import { GameState, Action, Player } from '../state';
 import { ProcessCtx } from './ctx';
 import { discardCardFromHand, drawCardToHand } from './draw';
+import { ActionSource } from './iter';
 import { processCardEvents } from './processCardEvents';
 
 export function processPlay(state: GameState, action: Action, ctx: ProcessCtx) {
@@ -19,7 +20,7 @@ function processPlayCard(state: GameState, action: Action.PlayCard, ctx: Process
   tile.card = card;
   tile.controllerPlayerId = action.playerId;
   tile.pips = 0;
-  processCardEvents(state, { triggerId: 'onPlay', tile }, ctx);
+  processCardEvents(state, { triggerId: 'onPlay', tile: tile as ActionSource }, ctx);
 
   markPlayerPassed(state, action.playerId, false);
   nextPlayer(state);
