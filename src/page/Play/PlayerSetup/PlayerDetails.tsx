@@ -7,6 +7,7 @@ import { getAvailableColors } from './color';
 import { MIN_CARDS_IN_DECK, MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import { useCreatePlayerStore } from './CreatePlayerStore';
 import { Player } from '@/gameplay';
+import ColorPicker from './ColorPicker';
 
 interface Props {
   onSubmit: (p: Player) => void;
@@ -32,8 +33,8 @@ export default function PlayerDetails({ onSubmit }: Props) {
     return deckSize >= MIN_CARDS_IN_DECK && deckSize <= MAX_CARDS_IN_DECK && !!draftPlayerName;
   }, [deckSize, draftPlayerName]);
 
-  const handleChangeColor = useCallback((colorResult: ColorResult) => {
-    setDraftPlayerColor(colorResult.hex);
+  const handleChangeColor = useCallback((color: string) => {
+    setDraftPlayerColor(color);
   }, []);
 
   const handleSubmit = useCallback(() => {
@@ -54,17 +55,7 @@ export default function PlayerDetails({ onSubmit }: Props) {
               onChange={(e) => setDraftPlayerName(e.target.value)}
             />
           </div>
-          <div className="flex-col">
-            <Label>Color</Label>
-            <div className="mt-1">
-              <CirclePicker
-                width="450px"
-                color={colorCssValue}
-                colors={getAvailableColors()}
-                onChange={handleChangeColor}
-              />
-            </div>
-          </div>
+          <ColorPicker color={colorCssValue} onSelectColor={handleChangeColor} />
         </div>
         <Button disabled={!isValid} onClick={() => handleSubmit()}>
           Save

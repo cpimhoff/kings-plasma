@@ -75,7 +75,7 @@ function StoredDecks() {
   );
 
   return (
-    <div style={{ '--player-color': colorCssValue } as CSSProperties}>
+    <div>
       <div className="flex">
         <Button disabled={!isValidDeck} onClick={handleSaveCurrentDeck}>
           Save current deck
@@ -95,6 +95,7 @@ function StoredDecks() {
               key={deck.name}
               deck={deck}
               allCardDefsById={allCardDefsById}
+              color={colorCssValue}
               onLoad={(deck) => handleLoadDeck(deck)}
               onDelete={(deckName) => handleDeleteDeck(deckName)}
             />
@@ -108,17 +109,18 @@ function StoredDecks() {
 interface DeckPreviewProps {
   deck: StoredDeck;
   allCardDefsById: Record<CardDefinition['typeId'], CardDefinition>;
+  color: string;
   onLoad: (deck: StoredDeck) => void;
   onDelete: (name: string) => void;
 }
-function DeckPreview({ deck, allCardDefsById, onLoad, onDelete }: DeckPreviewProps) {
+function DeckPreview({ deck, allCardDefsById, color, onLoad, onDelete }: DeckPreviewProps) {
   const hydratedCardGroups = hydrateCardGroups(deck.cardGroups, allCardDefsById);
   return (
     <div className="flex">
       <div className="max-w-250">
         {deck.name}
         <div className="overflow-x-auto">
-          <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} />
+          <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} color={color} />
         </div>
       </div>
       <div className="flex flex-col justify-center grow gap-3 mx-3">

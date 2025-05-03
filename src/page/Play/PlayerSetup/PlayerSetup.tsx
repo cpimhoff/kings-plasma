@@ -28,7 +28,7 @@ export default function PlayerSetup() {
   const populatePlayerCreator = useCreatePlayerStore((state) => state.populate);
   const beginGame = useGameplayStore((state) => state.beginGame);
 
-  const { gameMode, setCharacterForPlayer } = useGameModeStore(
+  const { gameMode, charactersByPlayerId, setCharacterForPlayer } = useGameModeStore(
     useShallow((state) => ({
       gameMode: state.gameMode,
       charactersByPlayerId: state.charactersByPlayerId,
@@ -117,13 +117,28 @@ export default function PlayerSetup() {
             />
           );
         }
+        const player = players[playerIdx] ?? null;
+        const characterSelection = player && charactersByPlayerId[player.id] || null;
+        const existingColor = player?.colorCssValue ?? null;
+        const changeCharacterColor = (newColor: string) => {
+          if (player) {
+            setPlayer({
+              ...player,
+              colorCssValue: newColor,
+            });
+          }
+        }
         return (
           <ChooseCharacter
-            onSubmit={(character) => {
+            onSubmit={(character, color) => {
               const player = createPlayerFromCharacter(character);
+              player.colorCssValue = color;
               setPlayer(player);
               setCharacterForPlayer(character, player.id);
             }}
+            selectedCharacterName={characterSelection?.name ?? null}
+            initialColor={existingColor}
+            onChangeColor={changeCharacterColor}
           />
         );
       }
@@ -139,7 +154,18 @@ export default function PlayerSetup() {
       default:
         break;
     }
-  }, [gameMode, playerIdx]);
+  }, [gameMode, playerIdx, players, charactersByPlayerId]);
+
+  const headerTitle = useMemo(() => {
+    switch (gameMode) {
+      case 'local-1p': {
+        return playerViewIdx === 0 ? 'Choose your opponent' : 'Assemble your deck';
+      }
+      case 'local-2p': {
+        return `Player ${playerViewIdx + 1}: Assemble your deck`;
+      }
+    }
+  }, [gameMode, playerViewIdx]);
 
   return (
     <div className="mx-40">
@@ -147,6 +173,7 @@ export default function PlayerSetup() {
         <Button disabled={!handleBack} onClick={() => handleBack?.()}>
           Back
         </Button>
+        { headerTitle }
         <Button disabled={!handleNext} onClick={() => handleNext?.()}>
           Next
         </Button>
