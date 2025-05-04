@@ -24,9 +24,9 @@ export function resetGameState(oldGameState: GameState): GameState {
       // un-mark as request rematch
       player.phase.end.requestRematch = false;
       // put all cards back in decks
-      player.hand.forEach((_) => {
+      while (player.hand.length > 0) {
         moveCardFromHandToDeck(player, 0);
-      });
+      };
       // including cards on the board
       for (let source of allBoardCards(oldGameState)) {
         if (source.controllerPlayerId === player.id && source.card) {
