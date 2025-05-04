@@ -55,7 +55,6 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     if (get().animating) return;
     set(() => ({
       animating: true,
-      actionLog: [...get().actionLog, getRecordForAction(action, get().gameState!.players)],
       previewState: null,
     }));
     const oldGameState = get().gameState!;
@@ -70,14 +69,18 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
       });
     }, Promise.resolve());
     let newHistoryStack: GameState[];
+    let newActionLog: ActionRecord[];
     if (action.type === 'rematch' && newGameState.phase === 'setup') {
       newHistoryStack = [];
+      newActionLog = [];
     } else {
       newHistoryStack = [...get().historyStack, oldGameState];
+      newActionLog = [...get().actionLog, getRecordForAction(action, oldGameState.players)];
     }
     set({
       gameState: newGameState,
       historyStack: newHistoryStack,
+      actionLog: newActionLog,
       animating: false,
     });
   },
