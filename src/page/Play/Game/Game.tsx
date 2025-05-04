@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useGameplayStore } from './GameplayStore';
 import { useGameModeStore } from '../GameModeStore';
 import { Agent } from '@/agent/Agent';
@@ -50,14 +50,20 @@ const GamePhase = () => {
     }
   }, [phase, findPlayer, players, playPhaseActivePlayerId]);
 
+  const animating = useGameplayStore((state) => state.animating);
   const activeAgent = useMemo<Agent | null>(() => {
+    if (animating) return null;
     return charactersByPlayerId[activePlayer.id]?.agent ?? null;
-  }, [charactersByPlayerId, activePlayer]);
+  }, [animating, charactersByPlayerId, activePlayer]);
 
+  const didDispatch = useRef(false); // prevent double-firing mulligans in react strict mode
   useEffect(() => {
-    if (activeAgent) {
+    if (activeAgent && !didDispatch.current) {
+      didDispatch.current = true;
       const action = activeAgent.chooseAction(gameState!, activePlayer.id);
       dispatchAction(action);
+    } else if (didDispatch.current) {
+      didDispatch.current = false;
     }
   }, [activeAgent, gameState, activePlayer]);
 
