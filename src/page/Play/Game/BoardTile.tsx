@@ -100,6 +100,7 @@ const BoardTile = ({ position }: Props) => {
   }, [state, previewState]);
 
   const highlightState: HighlightState = useMemo(() => {
+    if (gameState!.phase !== 'play') return null;
     if (activeCardHandIndex === null) {
       if (isHovered) {
         return 'Hovered';
