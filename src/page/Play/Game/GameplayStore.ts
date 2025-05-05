@@ -54,34 +54,36 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
   dispatchAction: async (action) => {
     if (get().animating) return;
     set(() => ({
-      animating: true,
       previewState: null,
     }));
     const oldGameState = get().gameState!;
     const { keyframes, state: newGameState } = process(oldGameState, action);
-    const keyframeStates = keyframes.filter((kf) => !kf.meta?.preview).map((kf) => kf.snapshot);
-    await keyframeStates.reduce((accum, curr) => {
-      return accum.then(() => {
-        return new Promise((resolve) => {
-          set({ gameState: curr });
-          setTimeout(resolve, 1000);
-        });
-      });
-    }, Promise.resolve());
-    let newHistoryStack: GameState[];
-    let newActionLog: ActionRecord[];
-    if (action.type === 'rematch' && newGameState.phase === 'setup') {
-      newHistoryStack = [];
-      newActionLog = [];
+    if (oldGameState.phase === 'end' && newGameState.phase === 'setup') {
+      set(() => ({
+        historyStack: [],
+        actionLog: [],
+      }));
     } else {
-      newHistoryStack = [...get().historyStack, oldGameState];
-      newActionLog = [...get().actionLog, getRecordForAction(action, oldGameState.players)];
+      set(() => ({
+        animating: true,
+        actionLog: [...get().actionLog, getRecordForAction(action, oldGameState.players)],
+      }));
+      const keyframeStates = keyframes.filter((kf) => !kf.meta?.preview).map((kf) => kf.snapshot);
+      await keyframeStates.reduce((accum, curr) => {
+        return accum.then(() => {
+          return new Promise((resolve) => {
+            set({ gameState: curr });
+            setTimeout(resolve, 1000);
+          });
+        });
+      }, Promise.resolve());
+      set(() => ({
+        animating: false,
+        historyStack: [...get().historyStack, oldGameState],
+      }));
     }
     set({
       gameState: newGameState,
-      historyStack: newHistoryStack,
-      actionLog: newActionLog,
-      animating: false,
     });
   },
 
