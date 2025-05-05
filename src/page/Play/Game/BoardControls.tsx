@@ -5,6 +5,7 @@ import { useInteractionStore } from './InteractionStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import { ControllerPlayerContext } from './ControllerPlayerContext';
+import { useGameModeStore } from '../GameModeStore';
 
 const BoardControls = () => {
   const [gameState, animating, dispatchAction, undo] = useGameplayStore(
@@ -53,10 +54,15 @@ const BoardControls = () => {
     });
   }, [player.id]);
 
+  const gameMode = useGameModeStore((state) => state.gameMode);
   const onUndo = useCallback(() => {
     undo();
+    if (gameMode === 'local-1p') {
+      // undo the opponent's action as well
+      undo();
+    }
     resetSelections();
-  }, []);
+  }, [gameMode]);
 
   const { phase } = gameState!;
 
@@ -81,7 +87,7 @@ const BoardControls = () => {
           </Button>
         </>
       )}
-      <Button disabled={animating || locked} onClick={() => onUndo()}>
+      <Button disabled={animating || locked || phase === 'setup'} onClick={() => onUndo()}>
         Undo
       </Button>
     </div>
