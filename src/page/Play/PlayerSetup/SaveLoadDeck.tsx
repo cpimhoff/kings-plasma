@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, CSSProperties } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { Button } from '@/components';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle } from '@/components/ui/dialog';

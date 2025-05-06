@@ -1,9 +1,7 @@
 import { useShallow } from 'zustand/react/shallow';
-import { CirclePicker, ColorResult } from 'react-color';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { getAvailableColors } from './color';
 import { MIN_CARDS_IN_DECK, MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import { useCreatePlayerStore } from './CreatePlayerStore';
 import { Player } from '@/gameplay';
