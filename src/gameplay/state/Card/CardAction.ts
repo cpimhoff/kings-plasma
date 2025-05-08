@@ -1,6 +1,6 @@
-import { CardDefinition } from './Card';
 import { Vector2 } from '@/utils/vector';
-import { CardEffectFilters } from './CardEffect';
+import { CardDefinition } from './Card';
+import { CardEffectFilters } from './CardEffectFilters';
 
 export type CardAction =
   | CardAction.AddControlledPips
@@ -13,7 +13,7 @@ export namespace CardAction {
    * This is the most common action in the game. */
   export type AddControlledPips = {
     id: 'addControlledPips';
-    // the tiles to add pips to
+    // where to add the pips, relative to the current card
     tiles: Array<Vector2>;
     // the amount of pips to add to a controlled tile; typically 1
     amount: number;

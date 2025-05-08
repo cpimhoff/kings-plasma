@@ -46,10 +46,10 @@ export function getCardPower(card: CardInstance): number {
   return card.basePower + card.powerModifier;
 }
 
-export type CardPowerStatus = 'buffed' | 'debuffed' | null;
+export type CardPowerStatus = 'empowered' | 'enfeebled' | 'neutral';
 export function getCardPowerStatus(card: CardInstance): CardPowerStatus {
-  if (card.powerModifier === 0) return null;
-  return card.powerModifier > 0 ? 'buffed' : 'debuffed';
+  if (card.powerModifier === 0) return 'neutral';
+  return card.powerModifier > 0 ? 'empowered' : 'enfeebled';
 }
 
 export type CardGridCell = {
@@ -73,25 +73,29 @@ export function getGridForCardEffects(effects: CardDefinition['effects']): CardG
   grid[origin.dx][origin.dy].origin = true;
   effects.forEach((effect) => {
     effect.actions.forEach((action) => {
-      switch (action.id) {
-        case 'addControlledPips':
-        case 'addPower': {
-          action.tiles?.forEach((vector) => {
-            let claims = false,
-              affects = false;
-            if (effect.trigger.id === 'onPlay' && action.id === 'addControlledPips') {
-              claims = true;
-            } else {
-              affects = true;
-            }
-            const coords = addVector2s(origin, vector);
-            const cell = grid[coords.dx][4 - coords.dy]; // reverse each column for rendering with css grid
-            cell.claims = cell.claims || claims;
-            cell.affects = cell.affects || affects;
-          });
-          break;
-        }
+      let tiles: Array<Vector2>;
+      if ('tiles' in action && action.tiles) {
+        // addControlledPips
+        tiles = action.tiles;
+      } else if ('limitTo' in action && action.limitTo && 'tiles' in action.limitTo && action.limitTo.tiles) {
+        // addPower, immediatelyDestroy
+        tiles = action.limitTo.tiles;
+      } else {
+        tiles = [];
       }
+      tiles.forEach((vector) => {
+        let claims = false,
+          affects = false;
+        if (effect.trigger.id === 'onPlay' && action.id === 'addControlledPips') {
+          claims = true;
+        } else {
+          affects = true;
+        }
+        const coords = addVector2s(origin, vector);
+        const cell = grid[coords.dx][4 - coords.dy]; // reverse each column for rendering with css grid
+        cell.claims = cell.claims || claims;
+        cell.affects = cell.affects || affects;
+      });
     });
   });
   return grid;
@@ -119,10 +123,13 @@ export const getCardHasSpecialEffect = (effects: CardDefinition['effects']) => {
 export function withReversedVectors(card: CardDefinition): CardDefinition {
   return produce(card, (draft) => {
     draft.effects = draft.effects?.map((effect) => {
-      effect.trigger.tiles = effect.trigger?.tiles?.map((vector: Vector2) => invertVector2(vector));
+      let tiles: Array<Vector2> | null = effect.trigger.limitTo?.tiles ?? null;
+      if (tiles) {
+        effect.trigger.limitTo!.tiles = tiles.map((vector: Vector2) => invertVector2(vector));
+      }
       effect.actions = effect.actions.map((action) => {
-        if ('tiles' in action) {
-          action.tiles = action.tiles?.map((tile: Vector2) => invertVector2(tile));
+        if ('limitTo' in action && action.limitTo && 'tiles' in action.limitTo && action.limitTo.tiles) {
+          action.limitTo.tiles = action.limitTo.tiles.map((tile: Vector2) => invertVector2(tile));
         }
         if ('cardDefinition' in action) {
           action.cardDefinition = withReversedVectors(action.cardDefinition);

@@ -1,4 +1,5 @@
-import { CardEffectFilters } from './CardEffect';
+import { CardPowerStatus } from "./Card";
+import { CardEffectFilters } from "./CardEffectFilters";
 
 export type CardTriggerCondition =
   | CardTriggerCondition.OnPlay
@@ -24,10 +25,10 @@ export namespace CardTriggerCondition {
     // if set, only trigger when the card changes its buffed/debuffed status accordingly
     powerStatusChange?: {
       // what status do we care about
-      status: 'buffed' | 'debuffed';
+      status: CardPowerStatus;
       // do we care about the status triggering on or triggering off
       onOff: 'on' | 'off';
-      // e.g.: 'on' + 'debuffed' = card goes from not being debuffed to being debuffed
+      // e.g.: 'on' + 'enfeebled' = card goes from being neutral/empowered to being enfeebled
     },
   };
 }

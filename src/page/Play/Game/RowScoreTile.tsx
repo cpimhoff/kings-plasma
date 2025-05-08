@@ -11,7 +11,7 @@ const RowScoreTile = ({ score, winning }: Props) => {
       <div className="flex h-full w-full items-center justify-center">
         <div className="h-12 w-12">
           {/* TODO: make this a bespoke thing, don't reuse the card component */}
-          <CardPower power={score} powerStatus={winning ? 'buffed' : null} />
+          <CardPower power={score} powerStatus={winning ? 'empowered' : 'neutral'} />
         </div>
       </div>
     </TileContainer>

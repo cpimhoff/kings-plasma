@@ -41,7 +41,16 @@ export namespace FF7Library {
     name: 'Grenadier',
     playRequirement: 2,
     basePower: 1,
-    effects: [CardEffect.onThisPlayed(CardEffect.addPower([{ dx: 2, dy: 0 }], -4, { opponent: true }))],
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-4, {
+          limitTo: {
+            tiles: [{ dx: 2, dy: 0 }],
+          },
+          allegiance: 'opponent',
+        }),
+      ),
+    ],
     description: `When played, lower the power of enemy cards on affected tiles by 4.`,
   };
 
@@ -84,9 +93,10 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       CardEffect.onThisPlayed(
-        CardEffect.addPower([{ dx: 1, dy: -1 }], -3, {
-          allied: true,
-          opponent: true,
+        CardEffect.addPower(-3, {
+          limitTo: {
+            tiles: [{ dx: 1, dy: -1 }],
+          }
         }),
       ),
     ],
@@ -129,8 +139,11 @@ export namespace FF7Library {
         { dx: 1, dy: 1 },
         { dx: 1, dy: 0 },
       ]),
-      ...CardEffect.passiveBoardPowerChange([{ dx: 0, dy: -1 }], +1, {
-        allied: true,
+      ...CardEffect.passiveBoardPowerChange(+1, {
+        limitTo: {
+          tiles: [{ dx: 0, dy: -1 }],
+        },
+        allegiance: 'allied',
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 1 while this card is in play.`,
@@ -188,8 +201,11 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
         { dx: 0, dy: -1 },
       ]),
-      ...CardEffect.passiveBoardPowerChange([{ dx: 1, dy: -2 }], +3, {
-        allied: true,
+      ...CardEffect.passiveBoardPowerChange(+3, {
+        limitTo: {
+          tiles: [{ dx: 1, dy: -2 }],
+        },
+        allegiance: 'allied',
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
@@ -206,8 +222,11 @@ export namespace FF7Library {
         { dx: 0, dy: 1 },
         { dx: 1, dy: 0 },
       ]),
-      ...CardEffect.passiveBoardPowerChange([{ dx: 0, dy: 1 }], +2, {
-        allied: true,
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [{ dx: 0, dy: 1 }],
+        },
+        allegiance: 'allied',
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
@@ -318,8 +337,11 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
       CardEffect.onThisPlayed(
-        CardEffect.addPower([{ dx: 1, dy: 0 }], -3, {
-          opponent: true,
+        CardEffect.addPower(-3, {
+          limitTo: {
+            tiles: [{ dx: 1, dy: 0 }],
+          },
+          allegiance: 'opponent',
         }),
       ),
     ],
@@ -348,17 +370,14 @@ export namespace FF7Library {
     basePower: 1,
     effects: [
       CardEffect.onThisPlayed(
-        CardEffect.addPower(
-          [
-            { dx: 2, dy: 2 },
-            { dx: 2, dy: -2 },
-          ],
-          -3,
-          {
-            allied: true,
-            opponent: true,
+        CardEffect.addPower(-3, {
+          limitTo: {
+            tiles: [
+              { dx: 2, dy: 2 },
+              { dx: 2, dy: -2 },
+            ],
           },
-        ),
+        }),
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 3.`,
@@ -390,8 +409,11 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
         { dx: 1, dy: -1 },
       ]),
-      ...CardEffect.passiveBoardPowerChange([{ dx: -1, dy: 0 }], +3, {
-        allied: true,
+      ...CardEffect.passiveBoardPowerChange(+3, {
+        limitTo: {
+          tiles: [{ dx: -1, dy: 0 }],
+        },
+        allegiance: 'allied',
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
@@ -407,14 +429,15 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
         { dx: 0, dy: -2 },
       ]),
-      ...CardEffect.passiveBoardPowerChange(
-        [
-          { dx: 1, dy: 0 },
-          { dx: 0, dy: -2 },
-        ],
-        +2,
-        { allied: true },
-      ),
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [
+            { dx: 1, dy: 0 },
+            { dx: 0, dy: -2 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
     ],
     description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
   };
@@ -431,14 +454,14 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       CardEffect.onThisPlayed(
-        CardEffect.addPower(
-          [
-            { dx: 0, dy: 1 },
-            { dx: 0, dy: -1 },
-          ],
-          -1,
-          { allied: true, opponent: true },
-        ),
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+            ],
+          },
+        }),
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
@@ -455,16 +478,16 @@ export namespace FF7Library {
         { dx: 1, dy: 1 },
         { dx: 0, dy: -1 },
       ]),
-      ...CardEffect.passiveBoardPowerChange(
-        [
-          { dx: 0, dy: 1 },
-          { dx: 1, dy: 1 },
-          { dx: 0, dy: -1 },
-          { dx: 1, dy: -1 },
-        ],
-        -1,
-        { allied: true, opponent: true },
-      ),
+      ...CardEffect.passiveBoardPowerChange(-1, {
+        limitTo: {
+          tiles: [
+            { dx: 0, dy: 1 },
+            { dx: 1, dy: 1 },
+            { dx: 0, dy: -1 },
+            { dx: 1, dy: -1 },
+          ],
+        },
+      }),
     ],
     description: `Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
   };
@@ -479,14 +502,14 @@ export namespace FF7Library {
         { dx: 0, dy: 2 },
         { dx: 0, dy: -2 },
       ]),
-      ...CardEffect.passiveBoardPowerChange(
-        [
-          { dx: 0, dy: 1 },
-          { dx: 0, dy: -1 },
-        ],
-        +1,
-        { allied: true, opponent: true },
-      ),
+      ...CardEffect.passiveBoardPowerChange(+1, {
+        limitTo: {
+          tiles: [
+            { dx: 0, dy: 1 },
+            { dx: 0, dy: -1 },
+          ],
+        },
+      }),
     ],
     description: `Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
   };
@@ -504,16 +527,15 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       CardEffect.onThisPlayed(
-        CardEffect.addPower(
-          [
-            { dx: 1, dy: 0 },
-            { dx: 1, dy: -1 },
-          ],
-          -3,
-          {
-            opponent: true,
+        CardEffect.addPower(-3, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+            ],
           },
-        ),
+          allegiance: 'opponent',
+        }),
       ),
     ],
     description: `When played, lower the power of enemy cards on affected tiles by 3.`,
@@ -533,18 +555,15 @@ export namespace FF7Library {
         { dx: -1, dy: -1 },
       ]),
       CardEffect.onThisDestroyed(
-        CardEffect.addPower(
-          [
-            { dx: -1, dy: 1 },
-            { dx: -1, dy: 0 },
-            { dx: -1, dy: -1 },
-          ],
-          -3,
-          {
-            allied: true,
-            opponent: true,
+        CardEffect.addPower(-3, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: -1, dy: 0 },
+              { dx: -1, dy: -1 },
+            ],
           },
-        ),
+        }),
       ),
     ],
     description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 3.`,
@@ -561,8 +580,11 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
         { dx: 1, dy: 0 },
       ]),
-      ...CardEffect.passiveBoardPowerChange([{ dx: 0, dy: -1 }], +2, {
-        allied: true,
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [{ dx: 0, dy: -1 }],
+        },
+        allegiance: 'allied',
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
@@ -580,8 +602,16 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       {
-        trigger: { id: 'onPlay', allied: true },
-        actions: [{ id: 'addPower', self: true, amount: +1 }],
+        trigger: { id: 'onPlay', allegiance: 'allied' },
+        actions: [
+          {
+            id: 'addPower',
+            amount: +1,
+            limitTo: {
+              self: true,
+            },
+          },
+        ],
       },
     ],
     description: `When allied cards are played from hand, raise this card's power by 1.`,
@@ -598,8 +628,11 @@ export namespace FF7Library {
         { dx: 1, dy: 1 },
         { dx: 1, dy: 0 },
       ]),
-      ...CardEffect.passiveBoardPowerChange([{ dx: 0, dy: 1 }], +4, {
-        allied: true,
+      ...CardEffect.passiveBoardPowerChange(+4, {
+        limitTo: {
+          tiles: [{ dx: 0, dy: 1 }],
+        },
+        allegiance: 'allied',
       }),
     ],
     description: `Raise the power of allied cards on affected tiles by 4 while this card is in play.`,
@@ -617,14 +650,14 @@ export namespace FF7Library {
         { dx: 1, dy: -2 },
       ]),
       CardEffect.onThisPlayed(
-        CardEffect.addPower(
-          [
-            { dx: 1, dy: -1 },
-            { dx: 1, dy: -2 },
-          ],
-          -2,
-          { allied: true, opponent: true },
-        ),
+        CardEffect.addPower(-2, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: -1 },
+              { dx: 1, dy: -2 },
+            ],
+          },
+        }),
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 2.`,
@@ -638,8 +671,8 @@ export namespace FF7Library {
     effects: [
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       {
-        trigger: { id: 'onDestroy', allied: true },
-        actions: [{ id: 'addPower', self: true, amount: +2 }],
+        trigger: { id: 'onDestroy', allegiance: 'allied' },
+        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +2 }],
       },
     ],
     description: `When allied cards are destroyed, raise this card's power by 2.`,
@@ -656,14 +689,15 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       CardEffect.onThisDestroyed(
-        CardEffect.addPower(
-          [
-            { dx: 0, dy: 1 },
-            { dx: 1, dy: 0 },
-          ],
-          +3,
-          { allied: true },
-        ),
+        CardEffect.addPower(+3, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 1 },
+              { dx: 1, dy: 0 },
+            ],
+          },
+          allegiance: 'allied',
+        }),
       ),
     ],
     description: `When destroyed, raise the power of allied cards on affected tile by 3.`,
@@ -680,9 +714,10 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       CardEffect.onThisDestroyed(
-        CardEffect.addPower([{ dx: 2, dy: 0 }], -4, {
-          allied: true,
-          opponent: true,
+        CardEffect.addPower(-4, {
+          limitTo: {
+            tiles: [{ dx: 2, dy: 0 }],
+          },
         }),
       ),
     ],
@@ -700,8 +735,8 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       {
-        trigger: { id: 'onPlay', opponent: true },
-        actions: [{ id: 'addPower', self: true, amount: +1 }],
+        trigger: { id: 'onPlay', allegiance: 'opponent' }, // TODO: what about enemy cards played by enemy cards?
+        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +1 }],
       },
     ],
     description: `When enemy cards are played from hand, raise this card's power by 1.`,
@@ -716,7 +751,9 @@ export namespace FF7Library {
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       CardEffect.onThisPlayed({
         id: 'immediatelyDestroy',
-        tiles: [{ dx: 1, dy: 0 }],
+        limitTo: {
+          tiles: [{ dx: 1, dy: 0 }],
+        },
       }),
     ],
     description: `When played, destroy allied and enemy cards on affected tiles.`,
@@ -769,23 +806,20 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       CardEffect.onThisDestroyed(
-        CardEffect.addPower(
-          [
-            { dx: -1, dy: 1 },
-            { dx: 0, dy: 1 },
-            { dx: 1, dy: 1 },
-            { dx: 1, dy: 0 },
-            { dx: 1, dy: -1 },
-            { dx: 0, dy: -1 },
-            { dx: -1, dy: -1 },
-            { dx: -1, dy: 0 },
-          ],
-          -4,
-          {
-            allied: true,
-            opponent: true,
+        CardEffect.addPower(-4, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: 0, dy: 1 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+              { dx: 0, dy: -1 },
+              { dx: -1, dy: -1 },
+              { dx: -1, dy: 0 },
+            ],
           },
-        ),
+        }),
       ),
     ],
     description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 4.`,
@@ -818,8 +852,8 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       {
-        trigger: { id: 'onDestroy', opponent: true },
-        actions: [{ id: 'addPower', self: true, amount: +1 }],
+        trigger: { id: 'onDestroy', allegiance: 'opponent' },
+        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +1 }],
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 1.`,
@@ -837,8 +871,8 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       {
-        trigger: { id: 'onDestroy', opponent: true },
-        actions: [{ id: 'addPower', self: true, amount: +2 }],
+        trigger: { id: 'onDestroy', allegiance: 'opponent' },
+        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +2 }],
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 2.`,
@@ -857,19 +891,16 @@ export namespace FF7Library {
         { dx: 1, dy: -2 },
       ]),
       CardEffect.onThisPlayed(
-        CardEffect.addPower(
-          [
-            { dx: 0, dy: 2 },
-            { dx: 1, dy: 2 },
-            { dx: 0, dy: -2 },
-            { dx: 1, dy: -2 },
-          ],
-          -1,
-          {
-            allied: true,
-            opponent: true,
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 2 },
+              { dx: 1, dy: 2 },
+              { dx: 0, dy: -2 },
+              { dx: 1, dy: -2 },
+            ],
           },
-        ),
+        }),
       ),
     ],
     description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
@@ -887,8 +918,10 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(2, {
-        opponent: true,
-        debuffed: true,
+        allegiance: 'opponent',
+        powerStatus: {
+          enfeebled: true,
+        },
       }),
     ],
     description: `Raise power by 2 for each enfeebled enemy card.`,
@@ -907,21 +940,58 @@ export namespace FF7Library {
         { dx: 1, dy: -2 },
       ]),
       {
-        trigger: {
-          id: 'onDestroy',
-          allied: true,
-          opponent: true,
-        },
+        trigger: { id: 'onDestroy' },
         actions: [
           {
             id: 'addPower',
-            self: true,
-            amount: 1,
+            limitTo: {
+              self: true,
+            },
+            amount: +1,
           },
         ],
       },
     ],
+    description: `When allied and enemy cards are destroyed, raise this card's power by 1.`,
   };
+
+  export const Amphidex: CardDefinition = {
+    typeId: 'amphidex' as CardDefinition['typeId'],
+    name: 'Amphidex',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'increasing',
+        },
+        actions: [
+          {
+            id: 'addPower',
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: 2 },
+              ],
+            },
+            allegiance: 'allied',
+            amount: 3,
+          },
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `The first time this card is enhanced, raise the power of allied cards on affected tiles by 3.`,
+  };
+
 }
 
 export const FF7_LIBRARY = [
@@ -972,4 +1042,5 @@ export const FF7_LIBRARY = [
   FF7Library.Sandspitter,
   FF7Library.Chimera,
   FF7Library.Joker,
+  FF7Library.Amphidex,
 ];

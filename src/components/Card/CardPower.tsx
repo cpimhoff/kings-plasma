@@ -6,17 +6,17 @@ interface Props {
   powerStatus?: CardPowerStatus;
 }
 const classes = 'border border-3 rounded-full w-full h-full flex justify-center items-center bg-slate-700 font-bold';
-const CardPower = ({ power, powerStatus }: Props) => {
-  const highlight = !!powerStatus;
+const CardPower = ({ power, powerStatus = 'neutral' }: Props) => {
+  const highlight = powerStatus !== 'neutral';
   return (
     <div
       className={cn(classes, {
         'text-yellow-500': !highlight,
         'border-yellow-500': !highlight,
-        'text-red-500': powerStatus === 'debuffed',
-        'border-red-500': powerStatus === 'debuffed',
-        'text-green-500': powerStatus === 'buffed',
-        'border-green-500': powerStatus === 'buffed',
+        'text-red-500': powerStatus === 'enfeebled',
+        'border-red-500': powerStatus === 'enfeebled',
+        'text-green-500': powerStatus === 'empowered',
+        'border-green-500': powerStatus === 'empowered',
       })}
     >
       {power}
