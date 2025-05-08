@@ -10,11 +10,12 @@ export function greedyChoiceFunction(heuristic: Heuristic): ChoiceFunction {
 
 export function maxDepthMinimaxChoiceFunction(heuristic: Heuristic, maxDepth: number): ChoiceFunction {
   return (gameState, playerId) => {
-    const result = minimaxRecursive(gameState, playerId, playerId, heuristic, false, maxDepth);
+    const result = minimaxRecursive(gameState, playerId, playerId, heuristic, false, maxDepth, {});
     return result.action;
   };
 }
 
+type Cache = Record<string, MinimaxResult>;
 type MinimaxResult = {
   action: Action;
   value: number;
@@ -26,6 +27,7 @@ function minimaxRecursive(
   heuristic: Heuristic,
   isMinimizing: boolean,
   depth: number,
+  cache: Cache,
 ): MinimaxResult {
   let searchResult: MinimaxResult | null = null;
   for (let currentAction of validPlayPhaseActionsForPlayer(gameState, currentPlayerId)) {
@@ -37,21 +39,30 @@ function minimaxRecursive(
         value: heuristic(newGameState, originPlayerId),
       };
     } else {
-      const recursiveResult = minimaxRecursive(
-        newGameState,
-        originPlayerId,
-        getOtherPlayer(gameState.players, currentPlayerId).id,
-        heuristic,
-        !isMinimizing,
-        depth - 1,
-      );
+      const cacheKey = JSON.stringify(newGameState);
+      const cacheResult = cache[cacheKey];
+      let recursiveResult;
+      if (cacheResult) {
+        recursiveResult = cacheResult;
+      } else {
+        recursiveResult = minimaxRecursive(
+          newGameState,
+          originPlayerId,
+          getOtherPlayer(gameState.players, currentPlayerId).id,
+          heuristic,
+          !isMinimizing,
+          depth - 1,
+          cache,
+        );
+        cache[cacheKey] = recursiveResult;
+      }
       currentResult = {
         action: currentAction,
         value: recursiveResult.value,
       };
     }
     const factor = isMinimizing ? -1 : 1;
-    if (searchResult === null || (factor * currentResult.value) > (factor * searchResult.value)) {
+    if (searchResult === null || factor * currentResult.value > factor * searchResult.value) {
       searchResult = currentResult;
     }
   }
