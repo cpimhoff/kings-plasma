@@ -894,8 +894,34 @@ export namespace FF7Library {
     description: `Raise power by 2 for each enfeebled enemy card.`,
   };
 
-  // To be continued...
-  // left off at `Chimera`
+  export const Joker: CardDefinition = {
+    typeId: 'joker' as CardDefinition['typeId'],
+    name: 'Joker',
+    playRequirement: 2,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 1, dy: 2 },
+        { dx: 0, dy: -2 },
+        { dx: 1, dy: -2 },
+      ]),
+      {
+        trigger: {
+          id: 'onDestroy',
+          allied: true,
+          opponent: true,
+        },
+        actions: [
+          {
+            id: 'addPower',
+            self: true,
+            amount: 1,
+          },
+        ],
+      },
+    ],
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -945,4 +971,5 @@ export const FF7_LIBRARY = [
   FF7Library.Landworm,
   FF7Library.Sandspitter,
   FF7Library.Chimera,
+  FF7Library.Joker,
 ];
