@@ -1,4 +1,4 @@
-import { CardDefinition } from './Card';
+import { CardDefinition, CardPowerStatus } from './Card';
 import { Vector2 } from '@/utils/vector';
 import { CardAction } from './CardAction';
 import { CardTriggerCondition } from './CardTriggerCondition';
@@ -6,6 +6,22 @@ import { CardTriggerCondition } from './CardTriggerCondition';
 export type CardEffect = {
   trigger: CardTriggerCondition;
   actions: CardAction[];
+};
+
+export type CardEffectFilters = {
+  // if true, only match this card
+  self?: boolean;
+  // if set, only match cards in these relative tiles
+  tiles?: Array<Vector2>;
+  // if true, match allied cards
+  allied?: boolean;
+  // if true, match opponent cards
+  opponent?: boolean;
+  // if true, only match buffed cards
+  buffed?: boolean;
+  // if true, only match debuffed cards
+  debuffed?: boolean;
+  // TODO: allow setting both buffed and debuffed to match either one?
 };
 
 /** A collection of functions for easier creation of card effects. */
@@ -31,7 +47,7 @@ export namespace CardEffect {
   export function passiveBoardPowerChange(
     tiles: Vector2[],
     amount: number,
-    targets: Pick<CardAction.AddPower, 'allied' | 'opponent'>,
+    targets: CardEffectFilters,
   ): CardEffect[] {
     const addPowerAction = addPower(tiles, amount, targets);
     const removePowerAction = { ...addPowerAction, amount: -amount };
@@ -58,6 +74,89 @@ export namespace CardEffect {
     ];
   }
 
+  export function scalePowerByNumMatchingCards(baseAmount: number, filters: CardEffectFilters): CardEffect[] {
+    const onPlayEffect = {
+      trigger: { id: 'onPlay', self: true },
+      actions: [
+        {
+          id: 'addPower',
+          amount: baseAmount,
+          self: true,
+          scaleBy: filters,
+        },
+      ],
+    } satisfies CardEffect;
+    const onDestroyEffect = {
+      trigger: {
+        id: 'onDestroy',
+        ...filters,
+      },
+      actions: [
+        {
+          id: 'addPower',
+          amount: -1 * baseAmount,
+          self: true,
+        },
+      ],
+    } satisfies CardEffect;
+    const statuses = ['buffed', 'debuffed'] satisfies CardPowerStatus[];
+    let powerChangeEffects = [];
+    if (statuses.length === 1) {
+      // ^if both are set, we won't match anything.
+      // if none are set, we don't need to add these effects.
+      const status = statuses[0];
+      const modifiedFilters = {
+        ...filters,
+      };
+      delete modifiedFilters.buffed;
+      delete modifiedFilters.debuffed;
+      powerChangeEffects.push(
+        {
+          trigger: {
+            id: 'onPowerChange',
+            ...modifiedFilters,
+            powerStatusChange: {
+              status,
+              onOff: 'on',
+            },
+          },
+          actions: [
+            {
+              id: 'addPower',
+              amount: baseAmount,
+              self: true,
+            },
+          ],
+        } satisfies CardEffect,
+        {
+          trigger: {
+            id: 'onPowerChange',
+            ...modifiedFilters,
+            powerStatusChange: {
+              status,
+              onOff: 'off',
+            },
+          },
+          actions: [
+            {
+              id: 'addPower',
+              amount: -1 * baseAmount,
+              self: true,
+            },
+          ],
+        } satisfies CardEffect,
+      );
+    }
+    return [
+      // on play this card, increase own power by the base amount scaled by the number of matching cards
+      onPlayEffect,
+      // increase/decrease own power as matching cards gain/lose buffed/debuffed status, if needed
+      ...powerChangeEffects,
+      // as matching cards are destroyed, decrease own power by the base amount
+      onDestroyEffect,
+    ];
+  }
+
   export function addPips(tiles: Vector2[], amount: number = 1): CardAction.AddControlledPips {
     return {
       id: 'addControlledPips',
@@ -69,7 +168,7 @@ export namespace CardEffect {
   export function addPower(
     tiles: Vector2[],
     amount: number,
-    targets: Pick<CardAction.AddPower, 'allied' | 'opponent'>,
+    targets: CardEffectFilters,
   ): CardAction.AddPower {
     return {
       id: 'addPower',

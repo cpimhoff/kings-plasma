@@ -1,4 +1,4 @@
-import { Vector2 } from '@/utils/vector';
+import { CardEffectFilters } from './CardEffect';
 
 export type CardTriggerCondition =
   | CardTriggerCondition.OnPlay
@@ -7,43 +7,27 @@ export type CardTriggerCondition =
 
 export namespace CardTriggerCondition {
   /** Triggers once for each time a card is played to the board. */
-  export type OnPlay = {
+  export type OnPlay = CardEffectFilters & {
     id: 'onPlay';
-    // if true, trigger when this card is played
-    self?: boolean;
-    // if true, trigger when an allied card is played
-    allied?: boolean;
-    // if true, trigger when an opponent card is played
-    opponent?: boolean;
-    // if set, only trigger when a card is played in these relative tiles
-    tiles?: Vector2[];
   };
 
   /** Triggers once for each time a card is destroyed. */
-  export type OnDeath = {
+  export type OnDeath = CardEffectFilters & {
     id: 'onDestroy';
-    // if true, trigger on destruction of self
-    self?: boolean;
-    // if true, trigger on destruction of allied cards
-    allied?: boolean;
-    // if true, trigger on destruction of opponent cards
-    opponent?: boolean;
-    // if set, only trigger on destruction of cards in these relative tiles
-    tiles?: Vector2[];
   };
 
   /** Triggers once for each time the power of a card changes. */
-  export type OnPowerChange = {
+  export type OnPowerChange = CardEffectFilters & {
     id: 'onPowerChange';
-    // if true, trigger on power changes to self
-    self?: boolean;
-    // if true, trigger on power changes to allied cards
-    allied?: boolean;
-    // if true, trigger on power changes to opponent cards
-    opponent?: boolean;
     // if set, only trigger on power changes in this direction
     changeDirection?: 'increasing' | 'decreasing';
-    // if set, only trigger when power changes on cards in these relative tiles
-    tiles?: Vector2[];
+    // if set, only trigger when the card changes its buffed/debuffed status accordingly
+    powerStatusChange?: {
+      // what status do we care about
+      status: 'buffed' | 'debuffed';
+      // do we care about the status triggering on or triggering off
+      onOff: 'on' | 'off';
+      // e.g.: 'on' + 'debuffed' = card goes from not being debuffed to being debuffed
+    },
   };
 }

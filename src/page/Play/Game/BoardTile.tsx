@@ -68,29 +68,10 @@ const BoardTile = ({ position }: Props) => {
     const { controllerPlayerId } = tile;
     if (controllerPlayerId) {
       let highlightPips = false;
-      let nerfedPower = false;
-      let buffedPower = false;
-      if (previewTile) {
-        if (
-          currentTile.pips !== previewTile.pips ||
-          currentTile.controllerPlayerId !== previewTile.controllerPlayerId
-        ) {
-          highlightPips = true;
-        }
-        const { card: currentCard } = currentTile;
-        const { card: previewCard } = previewTile;
-        if (currentCard && previewCard && currentCard.def.power !== previewCard.def.power) {
-          if (previewCard.def.power < currentCard.def.power) {
-            nerfedPower = true;
-          } else {
-            buffedPower = true;
-          }
-        }
-      }
       const { card, pips } = tile;
       const color = getPlayerWithId(state.players, controllerPlayerId).colorCssValue;
       cardNode =
-        (card && <TileCard card={card.def} color={color} nerfedPower={nerfedPower} buffedPower={buffedPower} />) || null;
+        (card && <TileCard card={card} color={color} />) || null;
       pipsNode = (pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} />) || null;
     }
     return {

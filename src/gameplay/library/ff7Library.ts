@@ -875,6 +875,25 @@ export namespace FF7Library {
     description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
   };
 
+  export const Chimera: CardDefinition = {
+    typeId: 'chimera' as CardDefinition['typeId'],
+    name: 'Chimera',
+    playRequirement: 2,
+    power: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(2, {
+        opponent: true,
+        debuffed: true,
+      }),
+    ],
+    description: `Raise power by 2 for each enfeebled enemy card.`,
+  };
+
   // To be continued...
   // left off at `Chimera`
 }
@@ -925,4 +944,5 @@ export const FF7_LIBRARY = [
   FF7Library.DeathClaw,
   FF7Library.Landworm,
   FF7Library.Sandspitter,
+  FF7Library.Chimera,
 ];

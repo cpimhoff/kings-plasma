@@ -1,5 +1,6 @@
 import { Player } from '@/gameplay/state/Player';
 import { GameState } from '@/gameplay/state/GameState';
+import { getCardPower } from './state';
 
 export type ScoreByPlayer = Record<Player['id'], number>;
 
@@ -16,7 +17,7 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
     col.forEach((tile, rowIdx) => {
       const { controllerPlayerId: playerId, card } = tile;
       if (card && playerId) {
-        rowResults[rowIdx].scoreByPlayer[playerId] += card.def.power;
+        rowResults[rowIdx].scoreByPlayer[playerId] += getCardPower(card);
       }
     });
   });

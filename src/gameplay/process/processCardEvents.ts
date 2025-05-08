@@ -1,4 +1,4 @@
-import { GameState, CardDefinition, BoardTile, CardAction, CardTriggerCondition, createCardInstance } from '../state';
+import { GameState, CardAction, CardTriggerCondition, createCardInstance, CardEffectFilters, getCardPower, getCardPowerStatus } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
 import { allBoardCards, OccupiedTile } from './iter';
@@ -9,8 +9,8 @@ export namespace Events {
   export type CardPlayed = { triggerId: 'onPlay'; tile: OccupiedTile };
   export type PowerChanged = {
     triggerId: 'onPowerChange';
-    tile: BoardTile;
-    changeDirection: 'increasing' | 'decreasing';
+    tile: OccupiedTile;
+    oldPowerModifier: number;
   };
   export type CardDestroyed = { triggerId: 'onDestroy'; tile: OccupiedTile };
 }
@@ -73,12 +73,29 @@ function doesEventSatisfyTriggerCondition(
 
   // special cases for specific trigger conditions are represented as
   // guard conditions and come first:
-  if (
-    triggerCond.id === 'onPowerChange' &&
-    event.triggerId === 'onPowerChange' &&
-    triggerCond.changeDirection !== event.changeDirection
-  )
-    return false;
+  if (triggerCond.id === 'onPowerChange' && event.triggerId === 'onPowerChange') {
+    const oldCard = {
+      ...event.tile.card,
+      powerModifier: event.oldPowerModifier,
+    };
+    if (triggerCond.changeDirection) {
+      const oldPower = getCardPower(oldCard);
+      const newPower = getCardPower(event.tile.card);
+      if (triggerCond.changeDirection !== (newPower - oldPower > 0 ? 'increasing' : 'decreasing')) {
+        return false;
+      }
+    }
+    if (triggerCond.powerStatusChange) {
+      const oldStatus = getCardPowerStatus(oldCard);
+      const newStatus = getCardPowerStatus(event.tile.card);
+      const targetStatus = triggerCond.powerStatusChange.status;
+      if (triggerCond.powerStatusChange.onOff === 'on') {
+        return newStatus === targetStatus && oldStatus !== targetStatus;
+      } else {
+        return newStatus !== targetStatus && oldStatus === targetStatus;
+      }
+    }
+  }
 
   // the rest are general conditions:
   if (
@@ -92,6 +109,12 @@ function doesEventSatisfyTriggerCondition(
   const isEventFromAlly = event.tile.controllerPlayerId === responder.controllerPlayerId;
   if (!triggerCond.allied && isEventFromAlly) return false;
   if (!triggerCond.opponent && !isEventFromAlly) return false;
+
+  if (triggerCond.buffed || triggerCond.debuffed) {
+    const powerStatus = getCardPowerStatus(event.tile.card);
+    if (triggerCond.buffed && powerStatus !== 'buffed') return false
+    if (triggerCond.debuffed && powerStatus !== 'debuffed') return false
+  }
 
   if (triggerCond.tiles) {
     return triggerCond.tiles.some(
@@ -130,15 +153,17 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
 
     case 'addPower': {
       if (action.amount === 0) break;
-      const targets = getTileTargets(state, action.source, action);
+      const targets = findMatchingCards(state, action.source, action);
+      const scalingFactor = action.scaleBy ? findMatchingCards(state, action.source, action.scaleBy).length : 1;
       for (const t of targets) {
-        // TODO: don't modify the power of the card definition, add a power modifier on the card instance
-        t.card.def.power += action.amount;
+        const delta = scalingFactor * action.amount;
+        const oldPowerModifier = t.card.powerModifier;
+        t.card.powerModifier += delta;
         if (t.card.def.power < 0) t.card.def.power = 0;
         eventQueue.push({
           triggerId: 'onPowerChange',
           tile: t,
-          changeDirection: action.amount > 0 ? 'increasing' : 'decreasing',
+          oldPowerModifier,
         });
       }
       break;
@@ -169,7 +194,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
     }
 
     case 'immediatelyDestroy': {
-      const targets = getTileTargets(state, action.source, action);
+      const targets = findMatchingCards(state, action.source, action);
       for (const t of targets) {
         const oldTile = destroyCardAtTile(t);
         eventQueue.push({ triggerId: 'onDestroy', tile: oldTile });
@@ -208,28 +233,30 @@ function reapZombieCards(state: GameState, eventQueue: Event[]): boolean {
   return didReap;
 }
 
-function getTileTargets(
+function findMatchingCards(
   state: GameState,
-  source: BoardTile,
-  action: Partial<Pick<CardAction.AddPower, 'tiles' | 'self' | 'allied' | 'opponent'>>,
+  source: OccupiedTile,
+  filters: CardEffectFilters,
 ): OccupiedTile[] {
   // start with the targeted tiles, including self
-  const targetTiles = action.tiles
+  const targetTiles = filters.tiles
     ? ([
         source.position,
-        ...action.tiles.map((deltaTile) => ({
+        ...filters.tiles.map((deltaTile) => ({
           x: source.position.x + deltaTile.dx,
           y: source.position.y + deltaTile.dy,
         })),
       ]
         .map((pos) => state.board?.[pos.x]?.[pos.y])
         .filter((t) => t) // ignore out of bounds targets
-        .filter((t) => t.card) as (BoardTile & { card: CardDefinition })[])
+        .filter((t) => t.card) as OccupiedTile[])
     : Array.from(allBoardCards(state));
 
   // filter out based on conditions
   return targetTiles
-    .filter((t) => action.self || t.card !== source.card)
-    .filter((t) => action.allied || t.controllerPlayerId !== source.controllerPlayerId)
-    .filter((t) => action.opponent || t.controllerPlayerId === source.controllerPlayerId);
+    .filter((t) => filters.self ? t.card === source.card : true)
+    .filter((t) => filters.allied ? t.controllerPlayerId === source.controllerPlayerId : true)
+    .filter((t) => filters.opponent ? t.controllerPlayerId !== source.controllerPlayerId : true)
+    .filter((t) => filters.buffed ? t.card.powerModifier > 0 : true)
+    .filter((t) => filters.debuffed ? t.card.powerModifier < 0 : true);
 }

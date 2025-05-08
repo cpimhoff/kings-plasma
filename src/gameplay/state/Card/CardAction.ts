@@ -1,5 +1,6 @@
 import { CardDefinition } from './Card';
 import { Vector2 } from '@/utils/vector';
+import { CardEffectFilters } from './CardEffect';
 
 export type CardAction =
   | CardAction.AddControlledPips
@@ -19,30 +20,16 @@ export namespace CardAction {
   };
 
   /** Change the power of cards */
-  export type AddPower = {
+  export type AddPower = CardEffectFilters & {
     id: 'addPower';
-    // if true, add power to this card; ignores `.tiles`
-    self?: boolean;
-    // if true, add power to allied cards
-    allied?: boolean;
-    // if true, add power to opponent cards
-    opponent?: boolean;
-    // if set, add power only to played cards in these relative tiles
-    tiles?: Array<Vector2>;
     // the amount of power to add -- can be negative for debuffs
     amount: number;
+    // if set, scale the amount by the number of cards on the board that match these filters
+    scaleBy?: Omit<CardEffectFilters, 'self'>;
   };
 
-  export type ImmediatelyDestroy = {
+  export type ImmediatelyDestroy = CardEffectFilters & {
     id: 'immediatelyDestroy';
-    // if true, destroy this card (ignores `.tiles`)
-    self?: boolean;
-    // if true, destroy allied cards
-    allied?: boolean;
-    // if true, destroy opponent cards
-    opponent?: boolean;
-    // destroy the card at these locations
-    tiles: Array<Vector2>;
   };
 
   /** Create a card and add it to the target player's hand. */

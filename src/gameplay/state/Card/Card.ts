@@ -32,13 +32,25 @@ type CardInstanceId = UUID & { __cardInstanceId: true };
 export type CardInstance = {
   instanceId: CardInstanceId;
   def: CardDefinition;
+  powerModifier: number;
 };
 
 export function createCardInstance(cardDef: CardDefinition): CardInstance {
   return {
     instanceId: uuid() as CardInstanceId,
     def: cardDef,
+    powerModifier: 0,
   };
+}
+
+export function getCardPower(card: CardInstance): number {
+  return card.def.power + card.powerModifier;
+}
+
+export type CardPowerStatus = 'buffed' | 'debuffed' | null;
+export function getCardPowerStatus(card: CardInstance): CardPowerStatus {
+  if (card.powerModifier === 0) return null;
+  return card.powerModifier > 0 ? 'buffed' : 'debuffed';
 }
 
 export type CardGridCell = {
