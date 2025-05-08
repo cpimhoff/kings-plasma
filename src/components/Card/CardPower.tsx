@@ -1,8 +1,8 @@
 import { cn } from '@/utils/cn';
-import { CardPowerStatus, CardDefinition as ICard } from '@/gameplay/state/Card/Card';
+import { CardPowerStatus, CardDefinition } from '@/gameplay/state/Card/Card';
 
 interface Props {
-  power: ICard['power'];
+  power: CardDefinition['basePower'];
   powerStatus?: CardPowerStatus;
 }
 const classes = 'border border-3 rounded-full w-full h-full flex justify-center items-center bg-slate-700 font-bold';

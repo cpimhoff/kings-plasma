@@ -50,7 +50,7 @@ const LibraryControls = memo(() => {
   const cardLibrary = useCardLibraryStore((s) => s.cardLibrary);
   const maxPower = useMemo(() => {
     return cardLibrary.reduce((accum, curr) => {
-      return Math.max(accum, curr.power);
+      return Math.max(accum, curr.basePower);
     }, 0);
   }, [cardLibrary]);
   const translatedPowerRange = useMemo(() => {

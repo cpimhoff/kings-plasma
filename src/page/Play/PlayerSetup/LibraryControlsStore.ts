@@ -4,7 +4,7 @@ import { CardDefinition } from '@/gameplay';
 
 export type Rank = CardDefinition['playRequirement'];
 export type RankFilters = Record<Rank, boolean>;
-export type Power = CardDefinition['power'];
+export type Power = CardDefinition['basePower'];
 export type PowerRange = [Power, Power];
 export type SortAttribute = 'index' | 'rank' | 'power';
 export type SortDirection = 'ascending' | 'descending';

@@ -39,7 +39,7 @@ const LibraryCardView = memo(() => {
             flipFactor
           );
         case 'power':
-          return (cardDef1.power - cardDef2.power) * flipFactor;
+          return (cardDef1.basePower - cardDef2.basePower) * flipFactor;
         default:
           attribute satisfies never;
           return 0;
@@ -65,7 +65,7 @@ const LibraryCardView = memo(() => {
       .filter((cardDef) => {
         const rank = cardDef.playRequirement;
         const passesRankFilter = rankFilters[rank];
-        const power = cardDef.power;
+        const power = cardDef.basePower;
         const passesPowerFilter = power >= powerRange[0] && (powerRange[1] < 0 || power <= powerRange[1]);
         return passesRankFilter && passesPowerFilter;
       })

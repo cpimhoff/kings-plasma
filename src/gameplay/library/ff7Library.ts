@@ -9,7 +9,7 @@ export namespace FF7Library {
     typeId: 'security-officer' as CardDefinition['typeId'],
     name: 'Security Officer',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -24,7 +24,7 @@ export namespace FF7Library {
     typeId: 'riot-trooper' as CardDefinition['typeId'],
     name: 'Riot Trooper',
     playRequirement: 2,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 2 },
@@ -40,7 +40,7 @@ export namespace FF7Library {
     typeId: 'grenadier' as CardDefinition['typeId'],
     name: 'Grenadier',
     playRequirement: 2,
-    power: 1,
+    basePower: 1,
     effects: [CardEffect.onThisPlayed(CardEffect.addPower([{ dx: 2, dy: 0 }], -4, { opponent: true }))],
     description: `When played, lower the power of enemy cards on affected tiles by 4.`,
   };
@@ -49,7 +49,7 @@ export namespace FF7Library {
     typeId: 'j-unit-sweeper' as CardDefinition['typeId'],
     name: 'J-Unit Sweeper',
     playRequirement: 2,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -64,7 +64,7 @@ export namespace FF7Library {
     typeId: 'queen-bee' as CardDefinition['typeId'],
     name: 'Queen Bee',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 2 },
@@ -77,7 +77,7 @@ export namespace FF7Library {
     typeId: 'toxirat' as CardDefinition['typeId'],
     name: 'Toxirat',
     playRequirement: 2,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: -1 },
@@ -97,7 +97,7 @@ export namespace FF7Library {
     typeId: 'levrikon' as CardDefinition['typeId'],
     name: 'Levrikon',
     playRequirement: 1,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -110,7 +110,7 @@ export namespace FF7Library {
     typeId: 'grasslands-wolf' as CardDefinition['typeId'],
     name: 'Grasslands Wolf',
     playRequirement: 1,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -123,7 +123,7 @@ export namespace FF7Library {
     typeId: 'mu' as CardDefinition['typeId'],
     name: 'Mu',
     playRequirement: 2,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 1 },
@@ -140,7 +140,7 @@ export namespace FF7Library {
     typeId: 'mandragora' as CardDefinition['typeId'],
     name: 'Mandragora',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -151,7 +151,7 @@ export namespace FF7Library {
           typeId: 'mandragora-minion' as CardDefinition['typeId'],
           name: 'Mandragora Minion',
           playRequirement: 1,
-          power: 1,
+          basePower: 1,
           effects: [
             CardEffect.onThisPlayedAddPips([
               { dx: 0, dy: 1 },
@@ -168,7 +168,7 @@ export namespace FF7Library {
     typeId: 'elphadunk' as CardDefinition['typeId'],
     name: 'Elphadunk',
     playRequirement: 2,
-    power: 4,
+    basePower: 4,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -182,7 +182,7 @@ export namespace FF7Library {
     typeId: 'cactuar' as CardDefinition['typeId'],
     name: 'Cactuar',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -199,7 +199,7 @@ export namespace FF7Library {
     typeId: 'crystalline-crab' as CardDefinition['typeId'],
     name: 'Crystalline Crab',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -217,7 +217,7 @@ export namespace FF7Library {
     typeId: 'quetzalcoatl' as CardDefinition['typeId'],
     name: 'Quetzalcoatl',
     playRequirement: 2,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 2 },
@@ -232,7 +232,7 @@ export namespace FF7Library {
     typeId: 'zu' as CardDefinition['typeId'],
     name: 'Zu',
     playRequirement: 2,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 1 },
@@ -247,7 +247,7 @@ export namespace FF7Library {
     typeId: 'devil-rider' as CardDefinition['typeId'],
     name: 'Devil Rider',
     playRequirement: 2,
-    power: 4,
+    basePower: 4,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -262,7 +262,7 @@ export namespace FF7Library {
     typeId: 'screamer' as CardDefinition['typeId'],
     name: 'Screamer',
     playRequirement: 3,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 1 },
@@ -281,7 +281,7 @@ export namespace FF7Library {
     typeId: 'flan' as CardDefinition['typeId'],
     name: 'Flan',
     playRequirement: 1,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 1 },
@@ -295,7 +295,7 @@ export namespace FF7Library {
     typeId: 'crawler' as CardDefinition['typeId'],
     name: 'Crawler',
     playRequirement: 1,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -310,7 +310,7 @@ export namespace FF7Library {
     typeId: 'archdragon' as CardDefinition['typeId'],
     name: 'Archdragon',
     playRequirement: 1,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -330,7 +330,7 @@ export namespace FF7Library {
     typeId: 'ogre' as CardDefinition['typeId'],
     name: 'Ogre',
     playRequirement: 2,
-    power: 5,
+    basePower: 5,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 2 },
@@ -345,7 +345,7 @@ export namespace FF7Library {
     typeId: 'deathwheel' as CardDefinition['typeId'],
     name: 'Deathwheel',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayed(
         CardEffect.addPower(
@@ -368,7 +368,7 @@ export namespace FF7Library {
     typeId: 'fleetwing' as CardDefinition['typeId'],
     name: 'Fleetwing',
     playRequirement: 1,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 1 },
@@ -383,7 +383,7 @@ export namespace FF7Library {
     typeId: 'zemzelett' as CardDefinition['typeId'],
     name: 'Zemzelett',
     playRequirement: 2,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -401,7 +401,7 @@ export namespace FF7Library {
     typeId: 'ignilisk' as CardDefinition['typeId'],
     name: 'Ignilisk',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -423,7 +423,7 @@ export namespace FF7Library {
     typeId: 'capparwire' as CardDefinition['typeId'],
     name: 'Capparwire',
     playRequirement: 1,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -448,7 +448,7 @@ export namespace FF7Library {
     typeId: 'mind-flayer' as CardDefinition['typeId'],
     name: 'Mind Flayer',
     playRequirement: 2,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -473,7 +473,7 @@ export namespace FF7Library {
     typeId: 'scrutineye' as CardDefinition['typeId'],
     name: 'Scrutineye',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 2 },
@@ -495,7 +495,7 @@ export namespace FF7Library {
     typeId: 'hell-rider-ii' as CardDefinition['typeId'],
     name: 'Hell Rider II',
     playRequirement: 3,
-    power: 5,
+    basePower: 5,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: -1 },
@@ -523,7 +523,7 @@ export namespace FF7Library {
     typeId: 'flametrooper' as CardDefinition['typeId'],
     name: 'Flametrooper',
     playRequirement: 1,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -554,7 +554,7 @@ export namespace FF7Library {
     typeId: 'spearhawk' as CardDefinition['typeId'],
     name: 'Spearhawk',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -572,7 +572,7 @@ export namespace FF7Library {
     typeId: 'sea-devil' as CardDefinition['typeId'],
     name: 'Sea Devil',
     playRequirement: 3,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -591,7 +591,7 @@ export namespace FF7Library {
     typeId: 'shoalopod' as CardDefinition['typeId'],
     name: 'Shoalopod',
     playRequirement: 2,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -609,7 +609,7 @@ export namespace FF7Library {
     typeId: 'crown-lance' as CardDefinition['typeId'],
     name: 'Crown Lance',
     playRequirement: 2,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: -1 },
@@ -634,7 +634,7 @@ export namespace FF7Library {
     typeId: 'tonberry-king' as CardDefinition['typeId'],
     name: 'Tonberry King',
     playRequirement: 2,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       {
@@ -649,7 +649,7 @@ export namespace FF7Library {
     typeId: 'sandhog-pie' as CardDefinition['typeId'],
     name: 'Sandhog Pie',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -673,7 +673,7 @@ export namespace FF7Library {
     typeId: 'bloatfloat' as CardDefinition['typeId'],
     name: 'Bloatfloat',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -693,7 +693,7 @@ export namespace FF7Library {
     typeId: 'bagnadrana' as CardDefinition['typeId'],
     name: 'Bagnadrana',
     playRequirement: 3,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -711,7 +711,7 @@ export namespace FF7Library {
     typeId: 'cockatrice' as CardDefinition['typeId'],
     name: 'Cockatrice',
     playRequirement: 2,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       CardEffect.onThisPlayed({
@@ -726,7 +726,7 @@ export namespace FF7Library {
     typeId: 'heatseeker' as CardDefinition['typeId'],
     name: 'Heatseeker',
     playRequirement: 1,
-    power: 1,
+    basePower: 1,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -741,7 +741,7 @@ export namespace FF7Library {
           typeId: 'heatseeker-minion' as CardDefinition['typeId'],
           name: 'Heatseeker Minion',
           playRequirement: 1,
-          power: 1,
+          basePower: 1,
           effects: [
             CardEffect.onThisPlayedAddPips([
               { dx: -1, dy: 0 },
@@ -760,7 +760,7 @@ export namespace FF7Library {
     typeId: 'bomb' as CardDefinition['typeId'],
     name: 'Bomb',
     playRequirement: 2,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -795,7 +795,7 @@ export namespace FF7Library {
     typeId: 'thug' as CardDefinition['typeId'],
     name: 'Thug',
     playRequirement: 2,
-    power: 4,
+    basePower: 4,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: -1, dy: 0 },
@@ -811,7 +811,7 @@ export namespace FF7Library {
     typeId: 'death-claw' as CardDefinition['typeId'],
     name: 'Death Claw',
     playRequirement: 1,
-    power: 2,
+    basePower: 2,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },
@@ -829,7 +829,7 @@ export namespace FF7Library {
     typeId: 'landworm' as CardDefinition['typeId'],
     name: 'Landworm',
     playRequirement: 3,
-    power: 5,
+    basePower: 5,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 1, dy: 0 },
@@ -848,7 +848,7 @@ export namespace FF7Library {
     typeId: 'sandspitter' as CardDefinition['typeId'],
     name: 'Sandspitter',
     playRequirement: 2,
-    power: 3,
+    basePower: 3,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 2 },
@@ -879,7 +879,7 @@ export namespace FF7Library {
     typeId: 'chimera' as CardDefinition['typeId'],
     name: 'Chimera',
     playRequirement: 2,
-    power: 4,
+    basePower: 4,
     effects: [
       CardEffect.onThisPlayedAddPips([
         { dx: 0, dy: 1 },

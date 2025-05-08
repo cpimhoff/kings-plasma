@@ -36,13 +36,13 @@ export function fromCardInstances(cardInstances: CardInstance[]): HydratedCardGr
   const typeIdToIndex: Record<CardDefinition['typeId'], number> = {};
   const hydratedCardGroups: HydratedCardGroup[] = [];
   cardInstances.forEach((cardInstance) => {
-    const { typeId } = cardInstance.def;
+    const { typeId } = cardInstance;
     const index = typeIdToIndex[typeId] ?? null;
     if (index !== null) {
       hydratedCardGroups[index].count++;
     } else {
       hydratedCardGroups.push({
-        cardDef: cardInstance.def,
+        cardDef: cardInstance, // a bit annoying that we're leaving the instance properties around
         count: 1,
       });
       typeIdToIndex[typeId] = hydratedCardGroups.length - 1;

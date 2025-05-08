@@ -23,7 +23,7 @@ const FullCard = memo(({ card, color, className }: Props) => {
           <div className="mx-4 mt-2 flex justify-between">
             <CardCost {...card} />
             <div className="h-8 w-8">
-              <CardPower power={card.power} />
+              <CardPower power={card.basePower} />
             </div>
           </div>
         </div>

@@ -18,7 +18,7 @@ const DeckCard = ({ card, color, className }: Props) => {
                 <CardCost {...card} />
               </div>
               <div className="m-1 h-7 w-7">
-                <CardPower {...card} />
+                <CardPower power={card.basePower} />
               </div>
             </div>
             <div className="flex align-bottom">

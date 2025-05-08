@@ -90,7 +90,7 @@ const BoardTile = ({ position }: Props) => {
     } else {
       const tile = state.board[position.x][position.y];
       const activeCard = activePlayer.hand[activeCardHandIndex];
-      return canPlayerPlaceCardAtTile(activePlayer, activeCard.def, tile) ? 'ValidDestination' : null;
+      return canPlayerPlaceCardAtTile(activePlayer, activeCard, tile) ? 'ValidDestination' : null;
     }
   }, [activeCardHandIndex, isHovered, activePlayer, state]);
 
@@ -101,7 +101,7 @@ const BoardTile = ({ position }: Props) => {
         const color = getPlayerWithId(state.players, tile.controllerPlayerId).colorCssValue;
         return (
           <Popover>
-            <FullCard card={tile.card.def} color={color} className="relative z-1 w-50" />
+            <FullCard card={tile.card} color={color} className="relative z-1 w-50" />
           </Popover>
         );
       }

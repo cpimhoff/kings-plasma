@@ -54,7 +54,7 @@ export function* validPlayPhaseActionsForPlayer(gameState: GameState, playerId: 
   for (let handIndex = 0; handIndex < hand.length; handIndex++) {
     const card = hand[handIndex];
     for (let tile of allBoardTiles(gameState)) {
-      if (canPlayerPlaceCardAtTile(player, card.def, tile)) {
+      if (canPlayerPlaceCardAtTile(player, card, tile)) {
         yield {
           type: 'playCard',
           playerId,

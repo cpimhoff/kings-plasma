@@ -11,7 +11,7 @@ const TileCard = ({ card, color }: Props) => {
       <CardGradient className="flex h-full flex-col justify-between" color={color}>
         <div className="flex w-full justify-between">
           <div className="m-1 h-7 w-7">
-            <CardSpecialEffectMarker {...card.def} />
+            <CardSpecialEffectMarker {...card} />
           </div>
           <div className="m-1 h-7 w-7">
             <CardPower power={getCardPower(card)} powerStatus={getCardPowerStatus(card)} />
@@ -19,7 +19,7 @@ const TileCard = ({ card, color }: Props) => {
         </div>
       </CardGradient>
       <CardFooter className="w-full">
-        <CardName {...card.def} />
+        <CardName {...card} />
       </CardFooter>
     </div>
   );

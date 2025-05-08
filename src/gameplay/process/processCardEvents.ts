@@ -49,7 +49,7 @@ function getEventTriggers(state: GameState, event: Event) {
   let destroyedTile = event.triggerId === 'onDestroy' ? event.tile : null;
   let responders = allBoardCards(state, destroyedTile);
   for (const responder of responders) {
-    for (const effect of responder.card.def.effects) {
+    for (const effect of responder.card.effects) {
       if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger)) {
         triggeredActions.push(
           ...effect.actions.map((action) => ({
@@ -159,7 +159,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
         const delta = scalingFactor * action.amount;
         const oldPowerModifier = t.card.powerModifier;
         t.card.powerModifier += delta;
-        if (t.card.def.power < 0) t.card.def.power = 0;
+        if (getCardPower(t.card) < 0) t.card.powerModifier = -1 * t.card.basePower;
         eventQueue.push({
           triggerId: 'onPowerChange',
           tile: t,
@@ -221,7 +221,7 @@ function destroyCardAtTile(tile: OccupiedTile): OccupiedTile {
 function reapZombieCards(state: GameState, eventQueue: Event[]): boolean {
   let didReap = false;
   for (const tile of allBoardCards(state)) {
-    if (tile.card.def.power === 0) {
+    if (getCardPower(tile.card) === 0) {
       const oldTile = destroyCardAtTile(tile);
       eventQueue.push({
         triggerId: 'onDestroy',

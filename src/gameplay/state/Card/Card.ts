@@ -14,8 +14,8 @@ export type CardDefinition = {
   // "replace" to replace a card on the board
   playRequirement: number | 'replace';
 
-  // score this card contributes to row while on the board
-  power: number;
+  // score this card contributes to row while on the board, before any power modifiers are applied
+  basePower: number;
 
   // effects associated with this card
   effects: CardEffect[];
@@ -29,22 +29,21 @@ export type CardDefinition = {
 
 type CardInstanceId = UUID & { __cardInstanceId: true };
 
-export type CardInstance = {
+export type CardInstance = CardDefinition & {
   instanceId: CardInstanceId;
-  def: CardDefinition;
   powerModifier: number;
 };
 
 export function createCardInstance(cardDef: CardDefinition): CardInstance {
   return {
+    ...cardDef,
     instanceId: uuid() as CardInstanceId,
-    def: cardDef,
     powerModifier: 0,
   };
 }
 
 export function getCardPower(card: CardInstance): number {
-  return card.def.power + card.powerModifier;
+  return card.basePower + card.powerModifier;
 }
 
 export type CardPowerStatus = 'buffed' | 'debuffed' | null;
