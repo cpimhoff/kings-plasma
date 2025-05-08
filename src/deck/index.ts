@@ -1,5 +1,4 @@
-import { CardDefinition, CardInstance } from '@/gameplay';
-import { uuid } from '@/utils';
+import { CardDefinition, CardInstance, createCardInstance } from '@/gameplay';
 
 export type DehydratedCardGroup = {
   cardTypeId: CardDefinition['typeId'];
@@ -28,7 +27,7 @@ export function toCardInstances(hydratedCardGroups: HydratedCardGroup[]): CardIn
     .map((cardGroup) => {
       return new Array(cardGroup.count)
         .fill(0)
-        .map(() => ({ ...cardGroup.cardDef, instanceId: uuid() as CardInstance['instanceId'] }));
+        .map(() => createCardInstance(cardGroup.cardDef));
     })
     .reduce((accum, curr) => [...accum, ...curr], []);
 }
@@ -37,13 +36,13 @@ export function fromCardInstances(cardInstances: CardInstance[]): HydratedCardGr
   const typeIdToIndex: Record<CardDefinition['typeId'], number> = {};
   const hydratedCardGroups: HydratedCardGroup[] = [];
   cardInstances.forEach((cardInstance) => {
-    const { typeId } = cardInstance;
-    const index = typeIdToIndex[cardInstance.typeId] ?? null;
+    const { typeId } = cardInstance.def;
+    const index = typeIdToIndex[typeId] ?? null;
     if (index !== null) {
       hydratedCardGroups[index].count++;
     } else {
       hydratedCardGroups.push({
-        cardDef: cardInstance, // TODO: maybe it would be better to compose these
+        cardDef: cardInstance.def,
         count: 1,
       });
       typeIdToIndex[typeId] = hydratedCardGroups.length - 1;

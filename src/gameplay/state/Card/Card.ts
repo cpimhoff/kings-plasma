@@ -1,4 +1,4 @@
-import { UUID } from '@/utils';
+import { uuid, UUID } from '@/utils';
 import { CardEffect } from './CardEffect';
 import { Vector2, addVector2s, invertVector2 } from '@/utils/vector';
 import { produce } from 'immer';
@@ -29,9 +29,17 @@ export type CardDefinition = {
 
 type CardInstanceId = UUID & { __cardInstanceId: true };
 
-export type CardInstance = CardDefinition & {
+export type CardInstance = {
   instanceId: CardInstanceId;
+  def: CardDefinition;
 };
+
+export function createCardInstance(cardDef: CardDefinition): CardInstance {
+  return {
+    instanceId: uuid() as CardInstanceId,
+    def: cardDef,
+  };
+}
 
 export type CardGridCell = {
   origin: boolean;

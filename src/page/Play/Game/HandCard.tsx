@@ -5,7 +5,7 @@ import { useMulliganStore } from './MulliganStore';
 import { useInteractionStore } from './InteractionStore';
 import { useShallow } from 'zustand/react/shallow';
 
-import { CardDefinition as ICard } from '@/gameplay/state/Card';
+import { CardDefinition } from '@/gameplay/state/Card';
 import {
   CardGradient,
   CardCost,
@@ -19,7 +19,7 @@ import { ControllerPlayerContext } from './ControllerPlayerContext';
 
 interface Props {
   idx: number;
-  card: ICard;
+  card: CardDefinition;
   color: string;
 }
 const HandCard = ({ idx, card, color }: Props) => {

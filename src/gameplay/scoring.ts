@@ -16,7 +16,7 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
     col.forEach((tile, rowIdx) => {
       const { controllerPlayerId: playerId, card } = tile;
       if (card && playerId) {
-        rowResults[rowIdx].scoreByPlayer[playerId] += card.power;
+        rowResults[rowIdx].scoreByPlayer[playerId] += card.def.power;
       }
     });
   });

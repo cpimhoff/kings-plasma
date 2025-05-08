@@ -1,14 +1,14 @@
-import { BoardTile, CardDefinition, GameState } from '../state';
+import { BoardTile, CardInstance, GameState } from '../state';
 
 // TODO: put this somewhere better
-export type ActionSource = BoardTile & { card: CardDefinition };
+export type OccupiedTile = BoardTile & { card: CardInstance };
 
-export function* allBoardCards(state: GameState, destroyedTile?: ActionSource | null) {
+export function* allBoardCards(state: GameState, destroyedTile?: OccupiedTile | null) {
   // first yield the destroyed tile, if there is one
   if (destroyedTile) yield destroyedTile;
   // then iterate over all cards on the board
   for (let tile of allBoardTiles(state)) {
-    if (tile.card) yield tile as ActionSource;
+    if (tile.card) yield tile as OccupiedTile;
   }
 }
 

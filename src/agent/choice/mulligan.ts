@@ -5,7 +5,7 @@ export function mulliganHighRankCards(gameState: GameState, playerId: Player['id
   const handIndexesAndRanks = hand.map((card, handIndex) => {
     return {
       handIndex,
-      rank: getOrdinalForRank(card.playRequirement),
+      rank: getOrdinalForRank(card.def.playRequirement),
     };
   });
   const sortedByRankDescending = handIndexesAndRanks.sort((c1, c2) => {

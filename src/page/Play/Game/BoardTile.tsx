@@ -79,8 +79,8 @@ const BoardTile = ({ position }: Props) => {
         }
         const { card: currentCard } = currentTile;
         const { card: previewCard } = previewTile;
-        if (currentCard && previewCard && currentCard.power !== previewCard.power) {
-          if (previewCard.power < currentCard.power) {
+        if (currentCard && previewCard && currentCard.def.power !== previewCard.def.power) {
+          if (previewCard.def.power < currentCard.def.power) {
             nerfedPower = true;
           } else {
             buffedPower = true;
@@ -90,7 +90,7 @@ const BoardTile = ({ position }: Props) => {
       const { card, pips } = tile;
       const color = getPlayerWithId(state.players, controllerPlayerId).colorCssValue;
       cardNode =
-        (card && <TileCard card={card} color={color} nerfedPower={nerfedPower} buffedPower={buffedPower} />) || null;
+        (card && <TileCard card={card.def} color={color} nerfedPower={nerfedPower} buffedPower={buffedPower} />) || null;
       pipsNode = (pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} />) || null;
     }
     return {
@@ -109,7 +109,7 @@ const BoardTile = ({ position }: Props) => {
     } else {
       const tile = state.board[position.x][position.y];
       const activeCard = activePlayer.hand[activeCardHandIndex];
-      return canPlayerPlaceCardAtTile(activePlayer, activeCard, tile) ? 'ValidDestination' : null;
+      return canPlayerPlaceCardAtTile(activePlayer, activeCard.def, tile) ? 'ValidDestination' : null;
     }
   }, [activeCardHandIndex, isHovered, activePlayer, state]);
 
@@ -120,7 +120,7 @@ const BoardTile = ({ position }: Props) => {
         const color = getPlayerWithId(state.players, tile.controllerPlayerId).colorCssValue;
         return (
           <Popover>
-            <FullCard card={tile.card} color={color} className="relative z-1 w-50" />
+            <FullCard card={tile.card.def} color={color} className="relative z-1 w-50" />
           </Popover>
         );
       }

@@ -1,23 +1,22 @@
-import { GameState, CardDefinition, BoardTile, CardAction, CardTriggerCondition, CardInstance } from '../state';
+import { GameState, CardDefinition, BoardTile, CardAction, CardTriggerCondition, createCardInstance } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
-import { allBoardCards, ActionSource } from './iter';
+import { allBoardCards, OccupiedTile } from './iter';
 import { nextStableInt } from './rng';
-import { uuid } from '@/utils';
 
 type Event = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed;
 export namespace Events {
-  export type CardPlayed = { triggerId: 'onPlay'; tile: ActionSource };
+  export type CardPlayed = { triggerId: 'onPlay'; tile: OccupiedTile };
   export type PowerChanged = {
     triggerId: 'onPowerChange';
     tile: BoardTile;
     changeDirection: 'increasing' | 'decreasing';
   };
-  export type CardDestroyed = { triggerId: 'onDestroy'; tile: ActionSource };
+  export type CardDestroyed = { triggerId: 'onDestroy'; tile: OccupiedTile };
 }
 
 type TriggeredAction = CardAction & {
-  source: ActionSource;
+  source: OccupiedTile;
 };
 
 export function processCardEvents(state: GameState, initialEvent: Events.CardPlayed, ctx: ProcessCtx) {
@@ -50,7 +49,7 @@ function getEventTriggers(state: GameState, event: Event) {
   let destroyedTile = event.triggerId === 'onDestroy' ? event.tile : null;
   let responders = allBoardCards(state, destroyedTile);
   for (const responder of responders) {
-    for (const effect of responder.card.effects) {
+    for (const effect of responder.card.def.effects) {
       if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger)) {
         triggeredActions.push(
           ...effect.actions.map((action) => ({
@@ -66,7 +65,7 @@ function getEventTriggers(state: GameState, event: Event) {
 
 function doesEventSatisfyTriggerCondition(
   event: Event,
-  responder: BoardTile & { card: CardDefinition },
+  responder: OccupiedTile,
   triggerCond: CardTriggerCondition,
 ): boolean {
   // first check if the trigger condition is the same as the event's
@@ -133,8 +132,9 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
       if (action.amount === 0) break;
       const targets = getTileTargets(state, action.source, action);
       for (const t of targets) {
-        t.card.power += action.amount;
-        if (t.card.power < 0) t.card.power = 0;
+        // TODO: don't modify the power of the card definition, add a power modifier on the card instance
+        t.card.def.power += action.amount;
+        if (t.card.def.power < 0) t.card.def.power = 0;
         eventQueue.push({
           triggerId: 'onPowerChange',
           tile: t,
@@ -149,7 +149,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
         action.player === 'allied' ? p.id === actionPlayerId : p.id !== actionPlayerId,
       )!;
       if (!player) break;
-      const card = { ...action.cardDefinition, instanceId: uuid() as CardInstance['instanceId'] };
+      const card = createCardInstance(action.cardDefinition);
       switch (action.into) {
         case 'hand': {
           player.hand.push(card);
@@ -183,7 +183,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
   }
 }
 
-function destroyCardAtTile(tile: ActionSource): ActionSource {
+function destroyCardAtTile(tile: OccupiedTile): OccupiedTile {
   const destroyedCard = tile.card;
   tile.card = null!;
   tile.pips = 1;
@@ -196,7 +196,7 @@ function destroyCardAtTile(tile: ActionSource): ActionSource {
 function reapZombieCards(state: GameState, eventQueue: Event[]): boolean {
   let didReap = false;
   for (const tile of allBoardCards(state)) {
-    if (tile.card.power === 0) {
+    if (tile.card.def.power === 0) {
       const oldTile = destroyCardAtTile(tile);
       eventQueue.push({
         triggerId: 'onDestroy',
@@ -212,7 +212,7 @@ function getTileTargets(
   state: GameState,
   source: BoardTile,
   action: Partial<Pick<CardAction.AddPower, 'tiles' | 'self' | 'allied' | 'opponent'>>,
-): (BoardTile & { card: CardDefinition })[] {
+): OccupiedTile[] {
   // start with the targeted tiles, including self
   const targetTiles = action.tiles
     ? ([

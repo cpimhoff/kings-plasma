@@ -120,7 +120,7 @@ function getRecordForAction(action: Action, players: Player[]) {
   }[action.type];
   let object = null;
   if (action.type === 'playCard') {
-    object = player.hand[action.fromHandIndex].name;
+    object = player.hand[action.fromHandIndex].def.name;
   } else if (action.type === 'mulligan') {
     object = `${action.handIndexes.length} cards`;
   }
