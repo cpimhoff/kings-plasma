@@ -35,23 +35,23 @@ export const useCreatePlayerStore = create<CreatePlayerStore>((set, get) => ({
   },
 
   setDraftPlayerName: (newName) =>
-    set(
-      produce((state) => {
-        state.draftPlayer.name = newName;
+    set((state) =>
+      produce(state, (draft) => {
+        draft.draftPlayer.name = newName;
       }),
     ),
 
   setDraftPlayerColor: (newColor) =>
-    set(
-      produce((state) => {
-        state.draftPlayer.colorCssValue = newColor;
+    set((state) =>
+      produce(state, (draft) => {
+        draft.draftPlayer.colorCssValue = newColor;
       }),
     ),
 
   addCardToDraftPlayerDeck: (cardDef) =>
-    set(
-      produce((state) => {
-        const { deckCardGroups } = state.draftPlayer;
+    set((state) =>
+      produce(state, (draft) => {
+        const { deckCardGroups } = draft.draftPlayer;
         const existingGroup = deckCardGroups.find((g: HydratedCardGroup) => g.cardDef.typeId === cardDef.typeId);
         if (existingGroup) {
           existingGroup.count++;
@@ -59,16 +59,15 @@ export const useCreatePlayerStore = create<CreatePlayerStore>((set, get) => ({
           deckCardGroups.push({
             cardDef,
             count: 1,
-            maxCount: cardDef.isLegendary ? 1 : 3,
           });
         }
       }),
     ),
 
   removeCardFromDraftPlayerDeck: (cardTypeId) =>
-    set(
-      produce((state) => {
-        const { deckCardGroups } = state.draftPlayer;
+    set((state) =>
+      produce(state, (draft) => {
+        const { deckCardGroups } = draft.draftPlayer;
         const existingGroupIndex = deckCardGroups.findIndex((g: HydratedCardGroup) => g.cardDef.typeId === cardTypeId);
         if (existingGroupIndex > -1) {
           const existingGroup = deckCardGroups[existingGroupIndex];
@@ -81,9 +80,9 @@ export const useCreatePlayerStore = create<CreatePlayerStore>((set, get) => ({
     ),
 
   replaceDraftPlayerDeck: (newDeckCardGroups) =>
-    set(
-      produce((state) => {
-        state.draftPlayer.deckCardGroups = newDeckCardGroups;
+    set((state) =>
+      produce(state, (draft) => {
+        draft.draftPlayer.deckCardGroups = newDeckCardGroups;
       }),
     ),
 
