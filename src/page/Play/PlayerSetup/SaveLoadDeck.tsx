@@ -2,7 +2,7 @@ import { useMemo, useCallback, useState } from 'react';
 import { Button } from '@/components';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { useDeckStorage, StoredDeck } from './storage';
+import { useDeckStorage, StoredDeck } from './DeckStorage';
 import { CardDefinition } from '@/gameplay';
 import { MIN_CARDS_IN_DECK } from '@/gameplay/constants';
 import { useCreatePlayerStore } from './CreatePlayerStore';
