@@ -2,16 +2,15 @@ import { useGameplayStore } from './Game/GameplayStore';
 import PlayerSetup from './PlayerSetup/PlayerSetup';
 import Game from './Game/Game';
 import { Button } from '@/components/ui/button';
-import { CHAIN_STATE } from './Game/chain';
 import { ReactNode } from 'react';
 import { useGameModeStore } from './GameModeStore';
 import { useCreatePlayerStore } from './PlayerSetup/CreatePlayerStore';
 import { usePlayerSetupStore } from './PlayerSetup/PlayerSetupStore';
 import { useCardLibraryStore } from './PlayerSetup/CardLibraryStore';
+import DebugMenu from './Debug/DebugMenu';
 
 const Play = () => {
   const gameState = useGameplayStore((state) => state.gameState);
-  const _setDebugState = useGameplayStore((state) => state._setDebugState);
   const gameMode = useGameModeStore((state) => state.gameMode);
   const setGameMode = useGameModeStore((state) => state.setGameMode);
   const resetPlayerCreator = useCreatePlayerStore((state) => state.reset);
@@ -22,12 +21,7 @@ const Play = () => {
     if (gameState) {
       contents = <Game />;
     } else {
-      contents = (
-        <>
-          <Button onClick={() => _setDebugState(JSON.parse(CHAIN_STATE))}>DEBUG</Button>
-          <PlayerSetup />
-        </>
-      );
+      contents = <PlayerSetup />;
     }
   } else {
     contents = (
@@ -60,7 +54,13 @@ const Play = () => {
       </div>
     );
   }
-  return <div>{contents}</div>;
+
+  return (
+    <div>
+      {gameMode && <DebugMenu />}
+      {contents}
+    </div>
+  );
 };
 
 export default Play;

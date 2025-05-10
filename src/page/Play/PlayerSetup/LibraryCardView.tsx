@@ -1,28 +1,17 @@
-import { memo } from 'react';
 import FullCard from '@/components/Card/FullCard';
 import { CardDefinition } from '@/gameplay';
-import SelectableCardWrapper from './SelectableCardWrapper';
-import CardCountWrapper from './CardCountWrapper';
-import { MAX_CARDS_IN_DECK } from '@/gameplay/constants';
 import { useLibraryControlsStore } from './LibraryControlsStore';
-import { useCreatePlayerStore } from './CreatePlayerStore';
 import { useCardLibraryStore } from './CardLibraryStore';
+import { ReactNode } from 'react';
 
-const LibraryCardView = memo(() => {
-  const deckCardGroups = useCreatePlayerStore((s) => s.draftPlayer.deckCardGroups);
-  const deckCardsById = useMemo(() => {
-    return Object.assign(
-      {},
-      ...deckCardGroups.map((cardGroup) => {
-        return {
-          [cardGroup.cardDef.typeId]: cardGroup,
-        };
-      }),
-    );
-  }, [deckCardGroups]);
-  const deckSize = deckCardGroups.reduce((s, g) => s + g.count, 0);
-  const isDeckFull = deckSize >= MAX_CARDS_IN_DECK;
-
+export interface CardWrapperProps {
+  card: CardDefinition;
+  children: ReactNode;
+}
+export interface LibraryCardViewProps {
+  CardWrapper: ({ card, children }: CardWrapperProps) => ReactNode;
+}
+export default function LibraryCardView({ CardWrapper }: LibraryCardViewProps) {
   const { rankFilters, powerRange, sortMethod } = useLibraryControlsStore();
 
   const sortFunction = useCallback<(c1: SortableCard, c2: SortableCard) => number>(
@@ -72,29 +61,18 @@ const LibraryCardView = memo(() => {
       .sort(deferredSortFunction);
   }, [indexedLibrary, rankFilters, powerRange, deferredSortFunction]);
 
-  const addCardToDraftPlayerDeck = useCreatePlayerStore((s) => s.addCardToDraftPlayerDeck);
-
   return (
     <div className="flex flex-wrap justify-center gap-3">
       {filteredSortedLibrary.map((card) => {
-        const deckCardGroup = deckCardsById[card.typeId];
-        const numInDeck = deckCardGroup?.count ?? 0;
-        const maxAllowedInDeck = card.isLegendary ? 1 : 3;
         return (
-          <SelectableCardWrapper
-            key={card.typeId}
-            enabled={!isDeckFull && numInDeck < maxAllowedInDeck}
-            onClick={() => addCardToDraftPlayerDeck(card)}
-          >
-            <CardCountWrapper count={maxAllowedInDeck - numInDeck} maxCount={maxAllowedInDeck} className="grow">
-              <FullCard card={card} color={'var(--player-color)'} className="w-60 grow" />
-            </CardCountWrapper>
-          </SelectableCardWrapper>
+          <CardWrapper key={card.typeId} card={card}>
+            <FullCard card={card} color={'var(--player-color)'} />
+          </CardWrapper>
         );
       })}
     </div>
   );
-});
+};
 
 function getOrdinalForPlayRequirement(pr: CardDefinition['playRequirement']) {
   if (pr === 'replace') {
@@ -102,4 +80,3 @@ function getOrdinalForPlayRequirement(pr: CardDefinition['playRequirement']) {
   }
   return pr;
 }
-export default LibraryCardView;

@@ -9,6 +9,7 @@ import GameBoard from './GameBoard';
 import PlayerHand from './PlayerHand';
 import BoardControls from './BoardControls';
 import ActionLog from './ActionLog';
+import { useDebugStore } from '../Debug/DebugStore';
 
 const GamePhase = () => {
   const gameState = useGameplayStore((state) => state.gameState);
@@ -56,8 +57,11 @@ const GamePhase = () => {
     return charactersByPlayerId[activePlayer.id]?.agent ?? null;
   }, [animating, charactersByPlayerId, activePlayer]);
 
+  const agentPaused = useDebugStore((state) => state.agentPaused);
+
   const didDispatch = useRef(false); // prevent double-firing mulligans in react strict mode
   useEffect(() => {
+    if (agentPaused) return;
     if (activeAgent && !didDispatch.current) {
       didDispatch.current = true;
       const action = activeAgent.chooseAction(gameState!, activePlayer.id);
@@ -65,10 +69,22 @@ const GamePhase = () => {
     } else if (didDispatch.current) {
       didDispatch.current = false;
     }
-  }, [activeAgent, gameState, activePlayer]);
+  }, [agentPaused, activeAgent, gameState, activePlayer]);
 
   const gameMode = useGameModeStore((state) => state.gameMode);
+  const debugPlayerIdx = useDebugStore((state) => {
+    if (state.debugMode && typeof state.selectedPlayerIdx === 'number') {
+      return state.selectedPlayerIdx;
+    }
+    return null;
+  });
   const controllerPlayerContext = useMemo(() => {
+    if (typeof debugPlayerIdx === 'number') {
+      return {
+        controllerPlayer: players[debugPlayerIdx],
+        controlsLocked: false,
+      };
+    }
     if (gameMode === 'local-2p') {
       return {
         controllerPlayer: activePlayer,
@@ -81,7 +97,7 @@ const GamePhase = () => {
       controllerPlayer: nonAgentPlayer,
       controlsLocked: nonAgentPlayer.id !== activePlayer.id,
     };
-  }, [gameMode, activePlayer, players, charactersByPlayerId]);
+  }, [debugPlayerIdx, gameMode, activePlayer, players, charactersByPlayerId]);
 
   return (
     <ControllerPlayerContext.Provider value={controllerPlayerContext}>

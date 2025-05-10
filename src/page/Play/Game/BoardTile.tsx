@@ -6,12 +6,13 @@ import { canPlayerPlaceCardAtTile } from '@/gameplay/validation';
 import { useShallow } from 'zustand/react/shallow';
 import { getPlayerWithId } from '@/gameplay/state/Player';
 import { positionsEqual } from '@/gameplay/state/Board';
-import { Popover } from '@/components/ui/popover';
 import FullCard from '@/components/Card/FullCard';
 
 import TileContainer from './TileContainer';
 import TileCard from './TileCard';
 import TilePips from './TilePips';
+import { useDebugStore } from '../Debug/DebugStore';
+import EditTile from '../Debug/EditTile';
 
 type HighlightState = 'Hovered' | 'ValidDestination' | null;
 
@@ -70,8 +71,7 @@ const BoardTile = ({ position }: Props) => {
       let highlightPips = false;
       const { card, pips } = tile;
       const color = getPlayerWithId(state.players, controllerPlayerId).colorCssValue;
-      cardNode =
-        (card && <TileCard card={card} color={color} />) || null;
+      cardNode = (card && <TileCard card={card} color={color} />) || null;
       pipsNode = (pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} />) || null;
     }
     return {
@@ -94,7 +94,10 @@ const BoardTile = ({ position }: Props) => {
     }
   }, [activeCardHandIndex, isHovered, activePlayer, state]);
 
+  const editMode = useDebugStore((state) => state.editMode);
+
   const previewCard = useMemo(() => {
+    if (editMode) return null;
     if (activeCardHandIndex === null && highlightState === 'Hovered') {
       const tile = state.board[position.x][position.y];
       if (tile.card && tile.controllerPlayerId) {
@@ -107,21 +110,21 @@ const BoardTile = ({ position }: Props) => {
       }
     }
     return null;
-  }, [highlightState]);
+  }, [editMode, highlightState]);
 
-  const overlay = useMemo(
-    () => (
+  const overlay = useMemo(() => {
+    return (
       <div
-        className={cn('absolute', 'w-full', 'h-full', 'top-0', 'opacity-60', {
-          'bg-sky-100': highlightState === 'Hovered',
-          'border border-5 border-yellow-400': highlightState === 'ValidDestination',
+        className={cn('absolute top-0 h-full w-full', {
+          'opacity-60': !editMode,
+          'bg-sky-100': !editMode && highlightState === 'Hovered',
+          'border border-5 border-yellow-400': !editMode && highlightState === 'ValidDestination',
         })}
       >
-        {' '}
+        {editMode ? <EditTile position={position} /> : null}
       </div>
-    ),
-    [highlightState],
-  );
+    );
+  }, [highlightState, editMode]);
 
   const handleHoverIn = useCallback(() => {
     hoverOverBoardPosition(position);

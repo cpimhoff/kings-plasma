@@ -3,6 +3,8 @@ import { GameState, createInitialState } from '@/gameplay/state/GameState';
 import { getPlayerWithId, Player } from '@/gameplay/state/Player';
 import { Action } from '@/gameplay/state/Action';
 import { process } from '@/gameplay/process/process';
+import { BoardPosition, BoardTile } from '@/gameplay';
+import { produce } from 'immer';
 
 type ActionRecord = {
   subject: string;
@@ -21,8 +23,11 @@ interface GameplayStore {
   previewAction: (action: Action) => void;
   clearPreview: () => void;
   dispatchAction: (action: Action) => void;
+  // debug functions
   undo: () => void;
-  _setDebugState: (state: GameState) => void;
+  forceSetGameState: (state: GameState) => void;
+  forceSetBoardTile: (pos: BoardPosition, tile: BoardTile) => void;
+  forceSetPlayerHand: (playerId: Player['id'], hand: Player['hand']) => void;
 }
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
@@ -103,10 +108,25 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
       };
     }),
 
-  _setDebugState: (state) =>
+  forceSetGameState: (state) =>
     set({
       gameState: state,
     }),
+
+  forceSetBoardTile: (pos, tile) =>
+    set((state) =>
+      produce(state, (draft) => {
+        draft.gameState!.board[pos.x][pos.y] = tile;
+      }),
+    ),
+
+  forceSetPlayerHand: (playerId, hand) =>
+    set((state) =>
+      produce(state, (draft) => {
+        const playerIdx = draft.gameState!.players.findIndex((player) => player.id === playerId);
+        draft.gameState!.players[playerIdx].hand = hand;
+      }),
+    ),
 }));
 
 function getRecordForAction(action: Action, players: Player[]) {
