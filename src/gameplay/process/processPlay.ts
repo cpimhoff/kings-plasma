@@ -1,7 +1,6 @@
 import { GameState, Action, Player } from '../state';
 import { ProcessCtx } from './ctx';
 import { discardCardFromHand, drawCardToHand } from './draw';
-import { OccupiedTile } from './iter';
 import { processCardEvents } from './processCardEvents';
 
 export function processPlay(state: GameState, action: Action, ctx: ProcessCtx) {
@@ -15,12 +14,9 @@ function processPlayCard(state: GameState, action: Action.PlayCard, ctx: Process
   const card = discardCardFromHand(player, action.fromHandIndex);
   if (!card) return;
 
-  // put the card on the board
-  const tile = state.board[action.toBoardPosition.x][action.toBoardPosition.y];
-  tile.card = card;
-  tile.controllerPlayerId = action.playerId;
-  tile.pips = 0;
-  processCardEvents(state, { triggerId: 'onPlay', tile: tile as OccupiedTile }, ctx);
+  const position = action.toBoardPosition;
+  const { playerId } = action;
+  processCardEvents(state, { id: 'requestPlayCard', card, position, playerId }, ctx);
 
   markPlayerPassed(state, action.playerId, false);
   nextPlayer(state);

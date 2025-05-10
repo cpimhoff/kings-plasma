@@ -1018,7 +1018,7 @@ export namespace FF7Library {
               { dx: -2, dy: 2 },
             ],
           },
-        })
+        }),
       ),
     ],
     description: `When destroyed, raise the power of allied and enemy cards on affected tiles by 2.`,
@@ -1056,10 +1056,40 @@ export namespace FF7Library {
           },
         ],
         maxActivations: 1,
-      }
+      },
     ],
     description: `When first enhanced, lower the power of enemy cards on affected tiles by 2.`,
-  }
+  };
+
+  export const InsectoidChimera: CardDefinition = {
+    typeId: 'insectoid-chimera' as CardDefinition['typeId'],
+    name: 'Insectoid Chimera',
+    playRequirement: 'replace',
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: -1, dy: 0 },
+      ]),
+    ],
+    description: `Destroy an allied card and replace it.`,
+  };
+
+  export const Gigantoad: CardDefinition = {
+    typeId: 'gigantoad' as CardDefinition['typeId'],
+    name: 'Gigantoad',
+    playRequirement: 'replace',
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+    ],
+    description: `Destroy an allied card and replace it.`,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -1113,4 +1143,6 @@ export const FF7_LIBRARY = [
   FF7Library.Amphidex,
   FF7Library.Frightflower,
   FF7Library.Gagighandi,
+  FF7Library.InsectoidChimera,
+  FF7Library.Gigantoad,
 ];

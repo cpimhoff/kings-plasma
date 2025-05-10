@@ -49,7 +49,7 @@ export namespace CardEffect {
       // a card to a targeted tile only triggers the effect for that new card,
       // and not repeating the effect for existing cards
       ...targets.limitTo.tiles.map<CardEffect>((tile) => ({
-        trigger: { id: 'onPlay',  ...targets, },
+        trigger: { id: 'onPlay', ...targets },
         actions: [{ ...addPowerAction, limitTo: { tiles: [tile] } }],
       })),
       // on destroy remove the effect from all currently affected
@@ -149,11 +149,16 @@ export namespace CardEffect {
     };
   }
 
-  export function addPower(amount: number, targets: CardEffectFilters): CardAction.AddPower {
+  export function addPower(
+    amount: number,
+    targets: CardEffectFilters,
+    scaleBy?: CardAction.AddPower['scaleBy'],
+  ): CardAction.AddPower {
     return {
       id: 'addPower',
       amount,
       ...targets,
+      scaleBy,
     };
   }
 

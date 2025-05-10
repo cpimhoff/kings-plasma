@@ -6,6 +6,9 @@ import {
   getCardPower,
   getCardPowerStatus,
   CardEffect,
+  CardInstance,
+  BoardPosition,
+  Player,
 } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
@@ -13,8 +16,13 @@ import { allBoardCards, OccupiedTile } from './iter';
 import { nextStableInt } from './rng';
 import { CardEffectFilters } from '../state/Card/CardEffectFilters';
 
-type Event = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed;
-export namespace Events {
+namespace Events {
+  export type RequestPlayCard = {
+    id: 'requestPlayCard';
+    card: CardInstance;
+    position: BoardPosition;
+    playerId: Player['id'];
+  };
   export type CardPlayed = { triggerId: 'onPlay'; tile: OccupiedTile };
   export type PowerChanged = {
     triggerId: 'onPowerChange';
@@ -23,13 +31,16 @@ export namespace Events {
   };
   export type CardDestroyed = { triggerId: 'onDestroy'; tile: OccupiedTile };
 }
+type CardEvent = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed;
+type InitialEvent = Events.RequestPlayCard;
 
 type TriggeredAction = CardAction & {
   source: OccupiedTile;
 };
 
-export function processCardEvents(state: GameState, initialEvent: Events.CardPlayed, ctx: ProcessCtx) {
-  const eventQueue: Event[] = [initialEvent];
+export function processCardEvents(state: GameState, initialEvent: InitialEvent, ctx: ProcessCtx) {
+  const eventQueue: CardEvent[] = [];
+  processInitialEvent(state, initialEvent, eventQueue);
   let hasCapturedPreview = false;
   while (eventQueue.length > 0) {
     const event = eventQueue.shift()!;
@@ -52,7 +63,35 @@ export function processCardEvents(state: GameState, initialEvent: Events.CardPla
   // but will differ in player state (because it will be the other player's turn)
 }
 
-function getEventTriggers(state: GameState, event: Event) {
+function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: CardEvent[]) {
+  switch (event.id) {
+    case 'requestPlayCard': {
+      // cards don't respond to this event; we handle it ourselves
+      const { card, position, playerId } = event;
+      const tile = state.board[position.x][position.y];
+      if (tile.card) {
+        // we're destroying the card ourselves, so we have to announce it manually
+        eventQueue.push({
+          triggerId: 'onDestroy',
+          tile: { ...tile } as OccupiedTile,
+        });
+      }
+      // place the card on the board
+      tile.card = card;
+      tile.controllerPlayerId = playerId;
+      tile.pips = 0;
+      // announce
+      const playEvent: Events.CardPlayed = {
+        triggerId: 'onPlay',
+        tile: tile as OccupiedTile,
+      };
+      eventQueue.push(playEvent);
+      break;
+    }
+  }
+}
+
+function getEventTriggers(state: GameState, event: CardEvent) {
   const triggeredActions: TriggeredAction[] = [];
   // destroyed cards aren't on the board anymore but they can still respond to onDestroy events
   let destroyedTile = event.triggerId === 'onDestroy' ? event.tile : null;
@@ -82,7 +121,7 @@ function getEventTriggers(state: GameState, event: Event) {
 }
 
 function doesEventSatisfyTriggerCondition(
-  event: Event,
+  event: CardEvent,
   responder: OccupiedTile,
   triggerCond: CardTriggerCondition,
 ): boolean {
@@ -151,7 +190,7 @@ function doesEventSatisfyTriggerCondition(
   return true;
 }
 
-function processTriggeredCardAction(state: GameState, action: TriggeredAction, eventQueue: Event[]) {
+function processTriggeredCardAction(state: GameState, action: TriggeredAction, eventQueue: CardEvent[]) {
   const actionPlayerId = action.source.controllerPlayerId;
   switch (action.id) {
     case 'addControlledPips': {
@@ -178,7 +217,10 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
     case 'addPower': {
       if (action.amount === 0) break;
       const targets = findMatchingCards(state, action.source, action);
-      const scalingFactor = action.scaleBy ? findMatchingCards(state, action.source, action.scaleBy).length : 1;
+      let scalingFactor = 1;
+      if (action.scaleBy) {
+        scalingFactor = findMatchingCards(state, action.source, action.scaleBy).length;
+      }
       for (const t of targets) {
         const delta = scalingFactor * action.amount;
         const oldPowerModifier = t.card.powerModifier;
@@ -242,7 +284,7 @@ function destroyCardAtTile(tile: OccupiedTile): OccupiedTile {
   return oldTile;
 }
 
-function reapZombieCards(state: GameState, eventQueue: Event[]): boolean {
+function reapZombieCards(state: GameState, eventQueue: CardEvent[]): boolean {
   let didReap = false;
   for (const tile of allBoardCards(state)) {
     if (getCardPower(tile.card) === 0) {
