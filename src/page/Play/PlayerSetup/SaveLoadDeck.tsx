@@ -37,7 +37,7 @@ function StoredDecks() {
   const isValidDeck = useMemo(() => {
     const isValidName = !!deckName && !storedDecks.some((deck) => deck.name === deckName);
     const deckSize = currentDeckCardGroups.reduce((s, g) => s + g.count, 0);
-    return isValidName && deckSize > MIN_CARDS_IN_DECK;
+    return isValidName && deckSize >= MIN_CARDS_IN_DECK;
   }, [deckName, currentDeckCardGroups]);
   const handleSaveCurrentDeck = useCallback(() => {
     if (isValidDeck) {
