@@ -991,6 +991,75 @@ export namespace FF7Library {
     ],
     description: `The first time this card is enhanced, raise the power of allied cards on affected tiles by 3.`,
   };
+
+  export const Frightflower: CardDefinition = {
+    typeId: 'frightflower' as CardDefinition['typeId'],
+    name: 'Frightflower',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: -1, dy: 0 },
+      ]),
+      CardEffect.onThisDestroyed(
+        CardEffect.addPower(+2, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 2 },
+              { dx: 2, dy: 2 },
+              { dx: 2, dy: 0 },
+              { dx: 2, dy: -2 },
+              { dx: 0, dy: -2 },
+              { dx: -2, dy: -2 },
+              { dx: -2, dy: 0 },
+              { dx: -2, dy: 2 },
+            ],
+          },
+        })
+      ),
+    ],
+    description: `When destroyed, raise the power of allied and enemy cards on affected tiles by 2.`,
+  };
+
+  export const Gagighandi: CardDefinition = {
+    typeId: 'gigaghandi' as CardDefinition['typeId'],
+    name: 'Gagighandi',
+    playRequirement: 2,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: 0, dy: -2 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          changeDirection: 'increasing',
+          limitTo: {
+            self: true,
+          },
+        },
+        actions: [
+          {
+            id: 'addPower',
+            amount: -2,
+            limitTo: {
+              tiles: [
+                { dx: 1, dy: -1 },
+                { dx: 1, dy: -2 },
+              ],
+            },
+          },
+        ],
+        maxActivations: 1,
+      }
+    ],
+    description: `When first enhanced, lower the power of enemy cards on affected tiles by 2.`,
+  }
 }
 
 export const FF7_LIBRARY = [
@@ -1042,4 +1111,6 @@ export const FF7_LIBRARY = [
   FF7Library.Chimera,
   FF7Library.Joker,
   FF7Library.Amphidex,
+  FF7Library.Frightflower,
+  FF7Library.Gagighandi,
 ];
