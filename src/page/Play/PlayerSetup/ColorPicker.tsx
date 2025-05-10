@@ -1,6 +1,6 @@
-import { useCallback } from "react";
-import { CirclePicker, ColorResult } from "react-color";
-import { getAvailableColors } from "./color";
+import { useCallback } from 'react';
+import { CirclePicker, ColorResult } from 'react-color';
+import { getAvailableColors } from './color';
 
 interface Props {
   color: string;

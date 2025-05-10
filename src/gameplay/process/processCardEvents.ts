@@ -1,4 +1,12 @@
-import { GameState, CardAction, CardTriggerCondition, createCardInstance, getCardPower, getCardPowerStatus, CardEffect } from '../state';
+import {
+  GameState,
+  CardAction,
+  CardTriggerCondition,
+  createCardInstance,
+  getCardPower,
+  getCardPowerStatus,
+  CardEffect,
+} from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
 import { allBoardCards, OccupiedTile } from './iter';
@@ -104,7 +112,8 @@ function doesEventSatisfyTriggerCondition(
 
   // then check allegiance
   if (triggerCond.allegiance) {
-    const allegiance: CardEffectFilters['allegiance'] = event.tile.controllerPlayerId === responder.controllerPlayerId ? 'allied' : 'opponent';
+    const allegiance: CardEffectFilters['allegiance'] =
+      event.tile.controllerPlayerId === responder.controllerPlayerId ? 'allied' : 'opponent';
     if (triggerCond.allegiance !== allegiance) {
       return false;
     }
@@ -288,5 +297,5 @@ function findMatchingCards(state: GameState, source: OccupiedTile, filters: Card
         return filters.powerStatus[powerStatus];
       }
       return true;
-    })
+    });
 }

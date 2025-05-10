@@ -19,10 +19,13 @@ export default function ChooseCharacter({ onSubmit, selectedCharacterName, initi
   return (
     <div>
       <div className="my-4">
-        <ColorPicker color={color} onSelectColor={(color) => {
-          setColor(color); // we have to track it ourselves too in case the player object hasn't been created yet
-          onChangeColor(color);
-        }} />
+        <ColorPicker
+          color={color}
+          onSelectColor={(color) => {
+            setColor(color); // we have to track it ourselves too in case the player object hasn't been created yet
+            onChangeColor(color);
+          }}
+        />
       </div>
       <div className="flex flex-col gap-5">
         {OPPONENTS.map((character) => {

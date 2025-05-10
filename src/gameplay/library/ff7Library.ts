@@ -96,7 +96,7 @@ export namespace FF7Library {
         CardEffect.addPower(-3, {
           limitTo: {
             tiles: [{ dx: 1, dy: -1 }],
-          }
+          },
         }),
       ),
     ],
@@ -991,7 +991,6 @@ export namespace FF7Library {
     ],
     description: `The first time this card is enhanced, raise the power of allied cards on affected tiles by 3.`,
   };
-
 }
 
 export const FF7_LIBRARY = [

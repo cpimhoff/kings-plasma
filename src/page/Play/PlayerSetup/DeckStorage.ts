@@ -13,10 +13,7 @@ const DEFAULT_VALUE: StoredDeck[] = [];
 const handle = getStorageHandle<StoredDeck[]>(key, DEFAULT_VALUE);
 
 export function useDeckStorage() {
-  const storedDecks: StoredDeck[] = useSyncExternalStore(
-    handle.emitter,
-    handle.get,
-  );
+  const storedDecks: StoredDeck[] = useSyncExternalStore(handle.emitter, handle.get);
   return {
     storedDecks,
     saveDeckToLocalStorage,

@@ -1,5 +1,5 @@
-import { Heuristic } from "./Heuristic";
-import { defeat, ownScore, ownTerritory, relativeTerritory, victory } from "./playPhaseHeuristics";
+import { Heuristic } from './Heuristic';
+import { defeat, ownScore, ownTerritory, relativeTerritory, victory } from './playPhaseHeuristics';
 
 type WeightedHeuristic = {
   heuristic: Heuristic;
@@ -37,4 +37,4 @@ function weigh(weights: WeightedHeuristic[]): Heuristic {
       return sum + curr.weight * curr.heuristic(gameState, playerId);
     }, 0);
   };
-};
+}

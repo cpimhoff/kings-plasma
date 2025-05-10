@@ -1,5 +1,5 @@
-import { CardPowerStatus } from "./Card";
-import { CardEffectFilters } from "./CardEffectFilters";
+import { CardPowerStatus } from './Card';
+import { CardEffectFilters } from './CardEffectFilters';
 
 export type CardTriggerCondition =
   | CardTriggerCondition.OnPlay
@@ -29,6 +29,6 @@ export namespace CardTriggerCondition {
       // do we care about the status triggering on or triggering off
       onOff: 'on' | 'off';
       // e.g.: 'on' + 'enfeebled' = card goes from being neutral/empowered to being enfeebled
-    },
+    };
   };
 }

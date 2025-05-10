@@ -25,9 +25,7 @@ export function hydrateCardGroups(
 export function toCardInstances(hydratedCardGroups: HydratedCardGroup[]): CardInstance[] {
   return hydratedCardGroups
     .map((cardGroup) => {
-      return new Array(cardGroup.count)
-        .fill(0)
-        .map(() => createCardInstance(cardGroup.cardDef));
+      return new Array(cardGroup.count).fill(0).map(() => createCardInstance(cardGroup.cardDef));
     })
     .reduce((accum, curr) => [...accum, ...curr], []);
 }

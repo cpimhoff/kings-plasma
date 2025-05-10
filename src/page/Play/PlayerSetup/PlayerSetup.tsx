@@ -118,7 +118,7 @@ export default function PlayerSetup() {
           );
         }
         const player = players[playerIdx] ?? null;
-        const characterSelection = player && charactersByPlayerId[player.id] || null;
+        const characterSelection = (player && charactersByPlayerId[player.id]) || null;
         const existingColor = player?.colorCssValue ?? null;
         const changeCharacterColor = (newColor: string) => {
           if (player) {
@@ -127,7 +127,7 @@ export default function PlayerSetup() {
               colorCssValue: newColor,
             });
           }
-        }
+        };
         return (
           <ChooseCharacter
             onSubmit={(character, color) => {
@@ -173,7 +173,7 @@ export default function PlayerSetup() {
         <Button disabled={!handleBack} onClick={() => handleBack?.()}>
           Back
         </Button>
-        { headerTitle }
+        {headerTitle}
         <Button disabled={!handleNext} onClick={() => handleNext?.()}>
           Next
         </Button>

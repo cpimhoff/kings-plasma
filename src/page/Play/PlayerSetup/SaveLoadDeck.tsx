@@ -123,7 +123,7 @@ function DeckPreview({ deck, allCardDefsById, color, onLoad, onDelete }: DeckPre
           <ReadOnlyDeck hydratedCardGroups={hydratedCardGroups} color={color} />
         </div>
       </div>
-      <div className="flex flex-col justify-center grow gap-3 mx-3">
+      <div className="mx-3 flex grow flex-col justify-center gap-3">
         <Button onClick={() => onLoad(deck)}>Load</Button>
         <Button onClick={() => onDelete(deck.name)}>Delete</Button>
       </div>

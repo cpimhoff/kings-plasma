@@ -34,8 +34,8 @@ export namespace CardEffect {
     amount: number,
     targets: CardEffectFilters & {
       limitTo: {
-        tiles: Array<Vector2>, // tiles is required
-      }
+        tiles: Array<Vector2>; // tiles is required
+      };
     },
   ): CardEffect[] {
     const addPowerAction = addPower(amount, targets);
@@ -149,10 +149,7 @@ export namespace CardEffect {
     };
   }
 
-  export function addPower(
-    amount: number,
-    targets: CardEffectFilters,
-  ): CardAction.AddPower {
+  export function addPower(amount: number, targets: CardEffectFilters): CardAction.AddPower {
     return {
       id: 'addPower',
       amount,

@@ -71,4 +71,4 @@ function minimaxRecursive(
 
 function getOtherPlayer(players: Player[], playerId: Player['id']): Player {
   return players.find((p) => p.id !== playerId)!;
-};
+}

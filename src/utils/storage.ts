@@ -1,8 +1,8 @@
 type StorageHandle<T> = {
-  get: () => T,
-  set: (t: T) => void,
-  emitter: ((listener: () => void) => (() => void)),
-}
+  get: () => T;
+  set: (t: T) => void;
+  emitter: (listener: () => void) => () => void;
+};
 
 const HANDLES: Record<string, StorageHandle<any>> = {};
 
@@ -11,7 +11,7 @@ const HANDLES: Record<string, StorageHandle<any>> = {};
  * Produces a handle for interacting with the data in localstorage at the given key.
  * Can be used just for getting and setting, but also includes an emitter for use with
  * React.useSyncExternalStore.
- * 
+ *
  * @param key The string key to identify the stored data
  * @param defaultValue The value to use when the stored data is missing
  * @returns A handle unique to the given key

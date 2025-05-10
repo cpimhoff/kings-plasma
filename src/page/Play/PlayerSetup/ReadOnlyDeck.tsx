@@ -10,7 +10,7 @@ interface Props {
 }
 export default function ReadOnlyDeck({ hydratedCardGroups, className, color }: Props) {
   return (
-    <div className={cn("flex", className)}>
+    <div className={cn('flex', className)}>
       {hydratedCardGroups.map(({ cardDef, count }) => {
         return (
           <CardCountWrapper key={cardDef.typeId} count={count} className="w-35 shrink-0">

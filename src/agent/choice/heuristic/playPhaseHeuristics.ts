@@ -12,7 +12,7 @@ export const ownTerritory: Heuristic = (gameState, playerId) => {
 };
 
 export const relativeTerritory: Heuristic = (gameState, playerId) => {
-  const otherPlayerId = gameState.players.find(p => p.id !== playerId)!.id;
+  const otherPlayerId = gameState.players.find((p) => p.id !== playerId)!.id;
   return ownTerritory(gameState, playerId) - ownTerritory(gameState, otherPlayerId);
 };
 

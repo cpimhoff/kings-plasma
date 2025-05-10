@@ -26,7 +26,7 @@ export function resetGameState(oldGameState: GameState): GameState {
       // put all cards back in decks
       while (player.hand.length > 0) {
         moveCardFromHandToDeck(player, 0);
-      };
+      }
       // including cards on the board
       for (let source of allBoardCards(oldGameState)) {
         if (source.controllerPlayerId === player.id && source.card) {
