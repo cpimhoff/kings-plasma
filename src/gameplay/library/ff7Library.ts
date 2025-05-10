@@ -1090,6 +1090,35 @@ export namespace FF7Library {
     ],
     description: `Destroy an allied card and replace it.`,
   };
+
+  export const Maloceros: CardDefinition = {
+    typeId: 'maloceros' as CardDefinition['typeId'],
+    name: 'Maloceros',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 2 },
+        { dx: 1, dy: 0 },
+        { dx: 1, dy: -2 },
+        { dx: -1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onGameEnd',
+          wonRow: true,
+        },
+        actions: [
+          {
+            id: 'addScoreBonusForPlayer',
+            player: 'controller',
+            amount: 10,
+          },
+        ],
+      },
+    ],
+    description: `When you win the lane, receive a score bonus of 10.`,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -1145,4 +1174,5 @@ export const FF7_LIBRARY = [
   FF7Library.Gagighandi,
   FF7Library.InsectoidChimera,
   FF7Library.Gigantoad,
+  FF7Library.Maloceros,
 ];

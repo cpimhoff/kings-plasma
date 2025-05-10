@@ -9,14 +9,16 @@ import {
   CardInstance,
   BoardPosition,
   Player,
+  getPlayerWithId,
 } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
 import { allBoardCards, OccupiedTile } from './iter';
 import { nextStableInt } from './rng';
 import { CardEffectFilters } from '../state/Card/CardEffectFilters';
+import { getRowScores } from '../scoring';
 
-namespace Events {
+export namespace Events {
   export type RequestPlayCard = {
     id: 'requestPlayCard';
     card: CardInstance;
@@ -30,9 +32,10 @@ namespace Events {
     oldPowerModifier: number;
   };
   export type CardDestroyed = { triggerId: 'onDestroy'; tile: OccupiedTile };
+  export type GameEnd = { id: 'gameEnd'; triggerId: 'onGameEnd' };
 }
-type CardEvent = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed;
-type InitialEvent = Events.RequestPlayCard;
+type CardEvent = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed | Events.GameEnd;
+type InitialEvent = Events.RequestPlayCard | Events.GameEnd;
 
 type TriggeredAction = CardAction & {
   source: OccupiedTile;
@@ -88,6 +91,11 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
       eventQueue.push(playEvent);
       break;
     }
+    case 'gameEnd': {
+      // cards can respond to this event
+      eventQueue.push(event);
+      break;
+    }
   }
 }
 
@@ -99,7 +107,7 @@ function getEventTriggers(state: GameState, event: CardEvent) {
   for (const responder of responders) {
     responder.card.effects = responder.card.effects.map<CardEffect>((effect) => {
       if (effect.maxActivations === 0) return effect;
-      if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger)) {
+      if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger, state)) {
         triggeredActions.push(
           ...effect.actions.map((action) => ({
             ...action,
@@ -124,9 +132,21 @@ function doesEventSatisfyTriggerCondition(
   event: CardEvent,
   responder: OccupiedTile,
   triggerCond: CardTriggerCondition,
+  state: GameState,
 ): boolean {
   // first check if the trigger condition is the same as the event's
   if (event.triggerId !== triggerCond.id) return false;
+
+  // onGameEnd is special because it doesn't have the same filter fields, so we handle it upfront
+  if (event.triggerId === 'onGameEnd') {
+    if (triggerCond.id !== 'onGameEnd') return false; // type guard
+    const rowIdx = responder.position.y;
+    const playerId = responder.controllerPlayerId;
+    const rowScores = getRowScores(state);
+    const wonRow = rowScores[rowIdx].winningPlayerId === playerId;
+    return wonRow === triggerCond.wonRow;
+  }
+  if (triggerCond.id === 'onGameEnd') return false; // type guard
 
   // then check limitTo
   if (triggerCond.limitTo) {
@@ -237,7 +257,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
 
     case 'createCardForPlayer': {
       const player = state.players.find((p) =>
-        action.player === 'allied' ? p.id === actionPlayerId : p.id !== actionPlayerId,
+        action.player === 'controller' ? p.id === actionPlayerId : p.id !== actionPlayerId,
       )!;
       if (!player) break;
       const card = createCardInstance(action.cardDefinition);
@@ -265,6 +285,15 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
         const oldTile = destroyCardAtTile(t);
         eventQueue.push({ triggerId: 'onDestroy', tile: oldTile });
       }
+      break;
+    }
+
+    case 'addScoreBonusForPlayer': {
+      const targetPlayer =
+        action.player === 'controller'
+          ? getPlayerWithId(state.players, action.source.controllerPlayerId)
+          : state.players.find((p) => p.id !== action.source.controllerPlayerId)!;
+      targetPlayer.scoreBonus += action.amount;
       break;
     }
 

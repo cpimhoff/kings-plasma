@@ -164,7 +164,7 @@ export namespace CardEffect {
 
   export function createCardForPlayer(
     cardDefinition: CardDefinition,
-    player: 'allied' | 'opponent' = 'allied',
+    player: 'controller' | 'opponent' = 'controller',
     into: 'hand' | 'deck.random' | 'deck.top' = 'hand',
   ): CardAction.CreateCardForPlayer {
     return {

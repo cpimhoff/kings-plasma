@@ -22,7 +22,7 @@ function processPlayCard(state: GameState, action: Action.PlayCard, ctx: Process
   nextPlayer(state);
 }
 
-function processPlayPass(state: GameState, action: Action.Pass, _ctx: ProcessCtx) {
+function processPlayPass(state: GameState, action: Action.Pass, ctx: ProcessCtx) {
   // ensure they are in the passed list
   markPlayerPassed(state, action.playerId, true);
 
@@ -30,6 +30,8 @@ function processPlayPass(state: GameState, action: Action.Pass, _ctx: ProcessCtx
   const allPassed = state.players.every((p) => p.phase.play.passed);
   if (allPassed) {
     state.phase = 'end';
+    // give cards a chance to react to the end of the game
+    processCardEvents(state, { id: 'gameEnd', triggerId: 'onGameEnd' }, ctx);
   } else {
     nextPlayer(state);
   }

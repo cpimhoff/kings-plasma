@@ -123,9 +123,11 @@ export const getCardHasSpecialEffect = (effects: CardDefinition['effects']) => {
 export function withReversedVectors(card: CardDefinition): CardDefinition {
   return produce(card, (draft) => {
     draft.effects = draft.effects?.map((effect) => {
-      let tiles: Array<Vector2> | null = effect.trigger.limitTo?.tiles ?? null;
-      if (tiles) {
-        effect.trigger.limitTo!.tiles = tiles.map((vector: Vector2) => invertVector2(vector));
+      if ('limitTo' in effect.trigger) {
+        let tiles: Array<Vector2> | null = effect.trigger.limitTo?.tiles ?? null;
+        if (tiles) {
+          effect.trigger.limitTo!.tiles = tiles.map((vector: Vector2) => invertVector2(vector));
+        }
       }
       effect.actions = effect.actions.map((action) => {
         if ('limitTo' in action && action.limitTo && 'tiles' in action.limitTo && action.limitTo.tiles) {

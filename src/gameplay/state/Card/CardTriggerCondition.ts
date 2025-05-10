@@ -4,7 +4,8 @@ import { CardEffectFilters } from './CardEffectFilters';
 export type CardTriggerCondition =
   | CardTriggerCondition.OnPlay
   | CardTriggerCondition.OnDeath
-  | CardTriggerCondition.OnPowerChange;
+  | CardTriggerCondition.OnPowerChange
+  | CardTriggerCondition.OnGameEnd;
 
 export namespace CardTriggerCondition {
   /** Triggers once for each time a card is played to the board. */
@@ -30,5 +31,11 @@ export namespace CardTriggerCondition {
       onOff: 'on' | 'off';
       // e.g.: 'on' + 'enfeebled' = card goes from being neutral/empowered to being enfeebled
     };
+  };
+
+  /** Triggers at the start of the 'end' phase. */
+  export type OnGameEnd = {
+    id: 'onGameEnd';
+    wonRow: boolean;
   };
 }

@@ -31,6 +31,7 @@ export function getRowScores(gameState: GameState): ScoreResult[] {
 
 export function getPlayerScores(gameState: GameState): ScoreResult {
   const rowScores = getRowScores(gameState);
+  // sum row scores
   const finalScores: ScoreResult = rowScores.reduce((finalScore, rowScore) => {
     const { scoreByPlayer, winningPlayerId } = rowScore;
     if (winningPlayerId !== null) {
@@ -38,6 +39,11 @@ export function getPlayerScores(gameState: GameState): ScoreResult {
     }
     return finalScore;
   }, getEmptyScores(gameState.players));
+  // apply bonuses
+  gameState.players.forEach((player) => {
+    finalScores.scoreByPlayer[player.id] += player.scoreBonus;
+  });
+  // determine winner
   finalScores.winningPlayerId = getWinningPlayerId(finalScores.scoreByPlayer);
   return finalScores;
 }

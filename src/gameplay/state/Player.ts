@@ -17,6 +17,8 @@ export type Player = {
   // game state
   deck: CardInstance[];
   hand: CardInstance[];
+
+  scoreBonus: number;
 };
 
 export function createPlayer(name: string, colorCssValue: string): Player {
@@ -31,6 +33,7 @@ export function createPlayer(name: string, colorCssValue: string): Player {
       play: { passed: false },
       end: { requestRematch: false },
     },
+    scoreBonus: 0,
   };
 }
 

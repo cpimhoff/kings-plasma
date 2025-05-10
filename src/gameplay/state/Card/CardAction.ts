@@ -6,7 +6,8 @@ export type CardAction =
   | CardAction.AddControlledPips
   | CardAction.AddPower
   | CardAction.ImmediatelyDestroy
-  | CardAction.CreateCardForPlayer;
+  | CardAction.CreateCardForPlayer
+  | CardAction.AddScoreBonusForPlayer;
 
 export namespace CardAction {
   /** Add pips or take control of the board.
@@ -28,6 +29,7 @@ export namespace CardAction {
     scaleBy?: Omit<CardEffectFilters, 'self'>;
   };
 
+  /** Destroys the card(s) that match the filters. */
   export type ImmediatelyDestroy = CardEffectFilters & {
     id: 'immediatelyDestroy';
   };
@@ -38,8 +40,17 @@ export namespace CardAction {
     // the card to create
     cardDefinition: CardDefinition;
     // the player to add the card to the hand of
-    player: 'allied' | 'opponent';
+    player: 'controller' | 'opponent';
     // where to add the card into
     into: 'hand' | 'deck.random' | 'deck.top';
+  };
+
+  /** Modifies the given player's score bonus. */
+  export type AddScoreBonusForPlayer = {
+    id: 'addScoreBonusForPlayer';
+    // the player to receive the bonus
+    player: 'controller' | 'opponent';
+    // the bonus amount
+    amount: number;
   };
 }
