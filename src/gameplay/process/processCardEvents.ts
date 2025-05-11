@@ -25,7 +25,7 @@ export namespace Events {
     position: BoardPosition;
     playerId: Player['id'];
   };
-  export type CardPlayed = { triggerId: 'onPlay'; tile: OccupiedTile };
+  export type CardPlayed = { triggerId: 'onPlay'; tile: OccupiedTile; replacedCard?: CardInstance };
   export type PowerChanged = {
     triggerId: 'onPowerChange';
     tile: OccupiedTile;
@@ -39,6 +39,7 @@ type InitialEvent = Events.RequestPlayCard | Events.GameEnd;
 
 type TriggeredAction = CardAction & {
   source: OccupiedTile;
+  replacedCard?: CardInstance;
 };
 
 export function processCardEvents(state: GameState, initialEvent: InitialEvent, ctx: ProcessCtx) {
@@ -72,12 +73,14 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
       // cards don't respond to this event; we handle it ourselves
       const { card, position, playerId } = event;
       const tile = state.board[position.x][position.y];
+      let replacedCard: CardInstance | null = null;
       if (tile.card) {
         // we're destroying the card ourselves, so we have to announce it manually
         eventQueue.push({
           triggerId: 'onDestroy',
           tile: { ...tile } as OccupiedTile,
         });
+        replacedCard = tile.card;
       }
       // place the card on the board
       tile.card = card;
@@ -88,6 +91,9 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
         triggerId: 'onPlay',
         tile: tile as OccupiedTile,
       };
+      if (replacedCard) {
+        playEvent.replacedCard = replacedCard;
+      }
       eventQueue.push(playEvent);
       break;
     }
@@ -109,10 +115,17 @@ function getEventTriggers(state: GameState, event: CardEvent) {
       if (effect.maxActivations === 0) return effect;
       if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger, state)) {
         triggeredActions.push(
-          ...effect.actions.map((action) => ({
-            ...action,
-            source: responder,
-          })),
+          ...effect.actions.map((action) => {
+            const triggeredAction: TriggeredAction = {
+              ...action,
+              source: responder,
+            };
+            if (event.triggerId === 'onPlay' && event.replacedCard) {
+              // not sure if there's a better way to transmit this information
+              triggeredAction.replacedCard = event.replacedCard;
+            }
+            return triggeredAction;
+          }),
         );
         if (typeof effect.maxActivations === 'number') {
           const newEffect = {
@@ -239,7 +252,16 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
       const targets = findMatchingCards(state, action.source, action);
       let scalingFactor = 1;
       if (action.scaleBy) {
-        scalingFactor = findMatchingCards(state, action.source, action.scaleBy).length;
+        if (action.scaleBy === 'replaced') {
+          if (action.replacedCard) {
+            scalingFactor = getCardPower(action.replacedCard);
+          } else {
+            console.error('Non-replacement card attempted to use scaleBy=replace');
+            // TODO: is there a way we can enforce this with types? (prolly not)
+          }
+        } else {
+          scalingFactor = findMatchingCards(state, action.source, action.scaleBy).length;
+        }
       }
       for (const t of targets) {
         const delta = scalingFactor * action.amount;

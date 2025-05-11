@@ -1294,6 +1294,31 @@ export namespace FF7Library {
     ],
     description: `When allied cards are destroyed, raise this card's power by 1.`,
   };
+
+  export const Griffon: CardDefinition = {
+    typeId: 'griffon' as CardDefinition['typeId'],
+    name: 'Griffon',
+    playRequirement: 'replace',
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          +1,
+          {
+            limitTo: {
+              tiles: [{ dx: 1, dy: 1 }],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power.`,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -1354,4 +1379,5 @@ export const FF7_LIBRARY = [
   FF7Library.GreatMalboro,
   FF7Library.Grangalan,
   FF7Library.Amalgam,
+  FF7Library.Griffon,
 ];

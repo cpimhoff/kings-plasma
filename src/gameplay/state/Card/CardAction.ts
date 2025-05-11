@@ -26,7 +26,7 @@ export namespace CardAction {
     // the amount of power to add -- can be negative for debuffs
     amount: number;
     // if set, scale the amount by the number of cards on the board that match these filters
-    scaleBy?: Omit<CardEffectFilters, 'self'>;
+    scaleBy?: Omit<CardEffectFilters, 'self'> | 'replaced';
   };
 
   /** Destroys the card(s) that match the filters. */
