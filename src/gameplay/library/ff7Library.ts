@@ -1532,6 +1532,459 @@ export namespace FF7Library {
     description: `Enhanced: raise power of allied and enemy cards on affected tiles by 4.
 Enfeebled: lower their power by 4.`,
   };
+
+  export const GiSpecter: CardDefinition = {
+    typeId: 'gi-specter' as CardDefinition['typeId'],
+    name: 'Gi Specter',
+    playRequirement: 'replace',
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          -1,
+          {
+            limitTo: {
+              tiles: [{ dx: 1, dy: -1 }],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power.`,
+  };
+
+  export const Valron: CardDefinition = {
+    typeId: 'valron' as CardDefinition['typeId'],
+    name: 'Valron',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+        { dx: -1, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+2, {
+        allegiance: 'allied',
+        powerStatus: {
+          enfeebled: true,
+        },
+      }),
+    ],
+    description: `Raise power by 2 for each other enfeebled allied card.`,
+  };
+
+  export const Disgorgon: CardDefinition = {
+    typeId: 'disgorgon' as CardDefinition['typeId'],
+    name: 'Disgorgon',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips(
+        [
+          { dx: 1, dy: 1 },
+          { dx: 1, dy: -1 },
+        ],
+        2,
+      ),
+    ],
+    description: `When played, raise position ranks by 2.`,
+  };
+
+  export const Dragon: CardDefinition = {
+    typeId: 'dragon' as CardDefinition['typeId'],
+    name: 'Dragon',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-4, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 0, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of enemy cards on affected tiles by 4.`,
+  };
+
+  export const TwinBrain: CardDefinition = {
+    typeId: 'twin-brain' as CardDefinition['typeId'],
+    name: 'Twin Brain',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips(
+        [
+          { dx: 0, dy: 2 },
+          { dx: 0, dy: -2 },
+        ],
+        2,
+      ),
+    ],
+    description: `When played, raise position ranks by 2.`,
+  };
+
+  export const BlackBat: CardDefinition = {
+    typeId: 'black-bat' as CardDefinition['typeId'],
+    name: 'Black Bat',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: -1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 0, dy: -1 },
+              { dx: -1, dy: 0 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
+  };
+
+  export const BahbaVelamyu: CardDefinition = {
+    typeId: 'bahba-velamyu' as CardDefinition['typeId'],
+    name: 'Bahba Velamyu',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisDestroyed(
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 2 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+              { dx: 1, dy: -2 },
+            ],
+          },
+          allegiance: 'opponent',
+        }),
+      ),
+    ],
+    description: `When destroyed, lower the power of enemy cards on affected tiles by 1.`,
+  };
+
+  export const Rictus: CardDefinition = {
+    typeId: 'rictus' as CardDefinition['typeId'],
+    name: 'Rictus',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        powerStatus: {
+          enfeebled: true,
+        },
+      }),
+    ],
+    description: `Raise power by 1 for each other enfeebled allied and enemy card.`,
+  };
+
+  export const Adjudicator: CardDefinition = {
+    typeId: 'adjudicator' as CardDefinition['typeId'],
+    name: 'Adjudicator',
+    playRequirement: 2,
+    basePower: 1,
+    effects: [
+      ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        powerStatus: {
+          empowered: true,
+          enfeebled: true,
+        },
+      }),
+    ],
+    description: `Raise power by 1 for each other enhanced or enfeebled allied and enemy card.`,
+  };
+
+  export const YinAndYang: CardDefinition = {
+    typeId: 'yin-&-yang' as CardDefinition['typeId'],
+    name: 'Yin & Yang',
+    playRequirement: 'replace',
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          +1,
+          {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 2 },
+                { dx: 0, dy: -2 },
+              ],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power.`,
+  };
+
+  export const DiabolicVariant: CardDefinition = {
+    typeId: 'diabolic-variant' as CardDefinition['typeId'],
+    name: 'Diabolic Variant',
+    playRequirement: 'replace',
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          -1,
+          {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power.`,
+  };
+
+  export const SpecialForcesOperator: CardDefinition = {
+    typeId: 'special-forces-operator' as CardDefinition['typeId'],
+    name: 'Special Forces Operator',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [
+            { dx: 0, dy: 2 },
+            { dx: 0, dy: -2 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+  };
+
+  export const TwoCSoldierOperator: CardDefinition = {
+    typeId: '2-c-soldier-operator' as CardDefinition['typeId'],
+    name: '2-C SOLDIER Operator',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 1, dy: 2 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+3, {
+        limitTo: {
+          tiles: [{ dx: 0, dy: 2 }],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
+  };
+
+  export const Kelzmelzer: CardDefinition = {
+    typeId: 'kelzmelzer' as CardDefinition['typeId'],
+    name: 'Kelzmelzer',
+    playRequirement: 'replace',
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          -1,
+          {
+            limitTo: {
+              tiles: [
+                { dx: 1, dy: 2 },
+                { dx: 1, dy: -2 },
+              ],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power.`,
+  };
+
+  export const PantheraProtector: CardDefinition = {
+    typeId: 'panthera-protector' as CardDefinition['typeId'],
+    name: 'Panthera Protector',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'increasing',
+        },
+        actions: [
+          CardEffect.addPower(+4, {
+            limitTo: {
+              tiles: [{ dx: 1, dy: 0 }],
+            },
+            allegiance: 'allied',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `The first time this card is enchanced, raise the power of allied cards on affected tiles by 4.`,
+  };
+
+  export const Hecteyes: CardDefinition = {
+    typeId: 'hecteyes' as CardDefinition['typeId'],
+    name: 'Hecteyes',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisDestroyed(
+        CardEffect.addPower(+3, {
+          limitTo: {
+            tiles: [
+              { dx: -2, dy: 2 },
+              { dx: 0, dy: 2 },
+              { dx: 2, dy: 2 },
+              { dx: 2, dy: 0 },
+              { dx: 2, dy: -2 },
+              { dx: 0, dy: -2 },
+              { dx: -2, dy: -2 },
+              { dx: -2, dy: 0 },
+            ],
+          },
+          allegiance: 'allied',
+        }),
+      ),
+    ],
+    description: `When destroyed, raise the power of allied cards on affected tile by 3.`,
+  };
+
+  export const FloatingDeath: CardDefinition = {
+    typeId: 'floating-death' as CardDefinition['typeId'],
+    name: 'Floating Death',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: 0, dy: 1 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+              { dx: 0, dy: -1 },
+              { dx: -1, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
+  };
+
+  export const Ironclad: CardDefinition = {
+    typeId: 'ironclad' as CardDefinition['typeId'],
+    name: 'Ironclad',
+    playRequirement: 3,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+3, {
+        powerStatus: {
+          empowered: true,
+        },
+        allegiance: 'opponent',
+      }),
+    ],
+    description: `Raise power by 3 for each enhanced enemy card.`,
+  };
+
+  export const MossGrownAdamantoise: CardDefinition = {
+    typeId: 'moss-grown-adamantoise' as CardDefinition['typeId'],
+    name: 'Moss-Grown Adamantoise',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips(
+        [
+          { dx: -1, dy: 1 },
+          { dx: 0, dy: 1 },
+          { dx: 1, dy: 1 },
+          { dx: -1, dy: -1 },
+          { dx: 0, dy: -1 },
+          { dx: 1, dy: -1 },
+        ],
+        2,
+      ),
+    ],
+    description: `When played, raise position ranks by 3.`,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -1600,4 +2053,23 @@ export const FF7_LIBRARY = [
   FF7Library.Cavestalker,
   FF7Library.StoneGolem,
   FF7Library.TwoFace,
+  FF7Library.GiSpecter,
+  FF7Library.Valron,
+  FF7Library.Disgorgon,
+  FF7Library.Dragon,
+  FF7Library.TwinBrain,
+  FF7Library.BlackBat,
+  FF7Library.BahbaVelamyu,
+  FF7Library.Rictus,
+  FF7Library.Adjudicator,
+  FF7Library.YinAndYang,
+  FF7Library.DiabolicVariant,
+  FF7Library.SpecialForcesOperator,
+  FF7Library.TwoCSoldierOperator,
+  FF7Library.Kelzmelzer,
+  FF7Library.PantheraProtector,
+  FF7Library.Hecteyes,
+  FF7Library.FloatingDeath,
+  FF7Library.Ironclad,
+  FF7Library.MossGrownAdamantoise,
 ];
