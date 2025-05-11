@@ -410,7 +410,7 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
       if (filters.allegiance) {
         return filters.allegiance === 'allied'
           ? t.controllerPlayerId === action.source.controllerPlayerId
-          : t.controllerPlayerId === action.source.controllerPlayerId;
+          : t.controllerPlayerId !== action.source.controllerPlayerId;
       }
       return true;
     })
