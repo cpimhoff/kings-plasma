@@ -12,6 +12,7 @@ import {
   getPlayerWithId,
   CardActionFilters,
   positionsEqual,
+  BoardTile,
 } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
@@ -34,9 +35,21 @@ export namespace Events {
     oldPowerModifier: number;
   };
   export type CardDestroyed = { triggerId: 'onDestroy'; source: OccupiedTile };
+  export type RequestAddPips = {
+    id: 'requestAddPips';
+    source: OccupiedTile;
+    position: BoardPosition;
+    playerId: Player['id'];
+    numPips: number;
+  };
   export type GameEnd = { id: 'gameEnd'; triggerId: 'onGameEnd' };
 }
-type CardEvent = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed | Events.GameEnd;
+type CardEvent =
+  | Events.CardPlayed
+  | Events.PowerChanged
+  | Events.CardDestroyed
+  | Events.GameEnd
+  | Events.RequestAddPips;
 type InitialEvent = Events.RequestPlayCard | Events.GameEnd;
 
 type TriggeredAction = CardAction & {
@@ -107,7 +120,24 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
   }
 }
 
-function getEventTriggers(state: GameState, event: CardEvent) {
+function getEventTriggers(state: GameState, event: CardEvent): TriggeredAction[] {
+  if ('id' in event && event.id === 'requestAddPips') {
+    return [
+      {
+        id: 'addControlledPips',
+        amount: event.numPips,
+        tiles: [
+          {
+            // we have to subtract the vector so it can be re-added later
+            dx: event.position.x - event.source.position.x,
+            dy: event.position.y - event.source.position.y,
+          },
+        ],
+        source: event.source, // the action source is the same as the event source here, since the processor is directly responding to the event
+        event,
+      },
+    ];
+  }
   const triggeredActions: TriggeredAction[] = [];
   // destroyed cards aren't on the board anymore but they can still respond to onDestroy events
   let destroyedTile = event.triggerId === 'onDestroy' ? event.source : null;
@@ -144,7 +174,7 @@ function doesEventSatisfyTriggerCondition(
   state: GameState,
 ): boolean {
   // first check if the trigger condition is the same as the event's
-  if (event.triggerId !== triggerCond.id) return false;
+  if (!('triggerId' in event) || event.triggerId !== triggerCond.id) return false;
 
   // onGameEnd is special because it doesn't have the same filter fields, so we handle it upfront
   if (event.triggerId === 'onGameEnd') {
@@ -233,15 +263,30 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
       for (const t of targets) {
         const tile = state.board?.[t.x]?.[t.y];
         if (!tile) continue; // out of bounds
-        if (tile.card) continue; // nothing to do on already occupied tiles
-        if (
-          // only add pips if not already under enemy control
-          tile.controllerPlayerId === null ||
-          tile.controllerPlayerId === actionPlayerId
-        ) {
-          tile.pips += action.amount;
+        if (tile.card) {
+          // we can't add the pips here now, but the card might be destroyed during the processing of the current event.
+          // we queue up a special event that tells us to retry. this allows cards to not have to worry about the order
+          // in which their effects are defined.
+          if (!('id' in action.event && action.event.id == 'requestAddPips')) {
+            // ^only try this once per event; don't infinite loop
+            eventQueue.unshift({
+              id: 'requestAddPips',
+              position: t,
+              playerId: actionPlayerId,
+              numPips: action.amount,
+              source: action.source,
+            });
+          }
+        } else {
+          if (
+            // only add pips if not already under enemy control
+            tile.controllerPlayerId === null ||
+            tile.controllerPlayerId === actionPlayerId
+          ) {
+            tile.pips += action.amount;
+          }
+          tile.controllerPlayerId = actionPlayerId;
         }
-        tile.controllerPlayerId = actionPlayerId;
       }
       break;
     }
@@ -326,9 +371,11 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
 
 function destroyCardAtTile(tile: OccupiedTile): OccupiedTile {
   const destroyedCard = tile.card;
-  tile.card = null!;
-  tile.pips = 1;
-  const oldTile = produce(tile, (draft) => {
+  const emptyTile: BoardTile = tile;
+  emptyTile.card = null;
+  emptyTile.controllerPlayerId = null;
+  emptyTile.pips = 0;
+  const oldTile: OccupiedTile = produce(tile, (draft) => {
     draft.card = destroyedCard;
   });
   return oldTile;
