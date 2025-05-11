@@ -197,9 +197,12 @@ function doesEventSatisfyTriggerCondition(
       ...event.tile.card,
       powerModifier: event.oldPowerModifier,
     };
+    const oldPower = getCardPower(oldCard);
+    const newPower = getCardPower(event.tile.card);
+    if (oldPower === newPower) {
+      return false;
+    }
     if (triggerCond.changeDirection) {
-      const oldPower = getCardPower(oldCard);
-      const newPower = getCardPower(event.tile.card);
       if (triggerCond.changeDirection !== (newPower - oldPower > 0 ? 'increasing' : 'decreasing')) {
         return false;
       }
