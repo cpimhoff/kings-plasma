@@ -4,7 +4,7 @@ import { useDebugStore } from './DebugStore';
 import { useGameplayStore } from '../Game/GameplayStore';
 import { useShallow } from 'zustand/react/shallow';
 import { createBoard, createPlayer } from '@/gameplay';
-import { getRandomColor } from '../PlayerSetup/color';
+import { getRandomAvailableColor, getRandomColor } from '../PlayerSetup/color';
 import { StableRandom } from '@/utils/random';
 import { useGameModeStore } from '../GameModeStore';
 import { useInteractionStore } from '../Game/InteractionStore';
@@ -34,7 +34,9 @@ export default function DebugMenu() {
 
   const handleSetEmptyGameState = useCallback(() => {
     const board = createBoard({ width: 5, height: 3 });
-    const players = [createPlayer('Lefty', getRandomColor()), createPlayer('Righty', getRandomColor())];
+    const player1 = createPlayer('Lefty', getRandomColor());
+    const player2 = createPlayer('Righty', getRandomAvailableColor(player1.colorCssValue));
+    const players = [player1, player2];
     forceSetGameState({
       phase: 'play',
       board,
