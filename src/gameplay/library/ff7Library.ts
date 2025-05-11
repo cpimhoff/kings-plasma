@@ -1119,6 +1119,181 @@ export namespace FF7Library {
     ],
     description: `When you win the lane, receive a score bonus of 10.`,
   };
+
+  export const Grandhorn: CardDefinition = {
+    typeId: 'grandhorn' as CardDefinition['typeId'],
+    name: 'Grandhorn',
+    playRequirement: 'replace',
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+    ],
+    description: `Destroy an allied card and replace it.`,
+  };
+
+  export const GreatMalboro: CardDefinition = {
+    typeId: 'great-malboro' as CardDefinition['typeId'],
+    name: 'Great Malboro',
+    playRequirement: 3,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 1, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-6, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 6.`,
+  };
+
+  export const Grangalan: CardDefinition = {
+    typeId: 'grangalan' as CardDefinition['typeId'],
+    name: 'Grangalan',
+    playRequirement: 3,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: -1, dy: 0 },
+        { dx: -1, dy: -1 },
+        { dx: 0, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.createCardForPlayer({
+          typeId: 'grangalan-junior' as CardDefinition['typeId'],
+          name: 'Grangalan Junior',
+          playRequirement: 2,
+          basePower: 2,
+          effects: [
+            CardEffect.onThisPlayedAddPips([
+              { dx: -1, dy: 1 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: -1 },
+              { dx: -1, dy: -1 },
+            ]),
+            CardEffect.onThisPlayed(
+              CardEffect.createCardForPlayer({
+                typeId: 'baby-grangalan' as CardDefinition['typeId'],
+                name: 'Baby Grangalan',
+                playRequirement: 1,
+                basePower: 1,
+                effects: [
+                  CardEffect.onThisPlayedAddPips([
+                    { dx: -1, dy: 1 },
+                    { dx: 0, dy: 1 },
+                    { dx: 1, dy: 1 },
+                    { dx: 1, dy: 0 },
+                    { dx: 1, dy: -1 },
+                    { dx: 0, dy: -1 },
+                    { dx: -1, dy: -1 },
+                  ]),
+                  CardEffect.onThisDestroyed(
+                    CardEffect.addPower(5, {
+                      limitTo: {
+                        tiles: [
+                          { dx: -1, dy: 1 },
+                          { dx: 0, dy: 1 },
+                          { dx: 1, dy: 1 },
+                          { dx: 1, dy: 0 },
+                          { dx: 1, dy: -1 },
+                          { dx: 0, dy: -1 },
+                          { dx: -1, dy: -1 },
+                        ],
+                      },
+                    }),
+                  ),
+                ],
+                description: `When destroyed, lower the power of allied and enemy cards on affected tiles by 5.`,
+              }),
+            ),
+          ],
+          description: `When played, add Baby Grangalan to your hand.`,
+        }),
+      ),
+    ],
+    description: `When played, add Grangalan Junior to your hand.`,
+  };
+
+  export const Amalgam: CardDefinition = {
+    typeId: 'amalgam' as CardDefinition['typeId'],
+    name: 'Amalgam',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisDestroyed(
+        CardEffect.createCardForPlayer({
+          typeId: 'resurrected-amalgam' as CardDefinition['typeId'],
+          name: 'Resurrected Amalgam',
+          playRequirement: 1,
+          basePower: 2,
+          effects: [
+            CardEffect.onThisPlayedAddPips([
+              { dx: -1, dy: 0 },
+              { dx: 1, dy: 0 },
+            ]),
+            ...CardEffect.passiveBoardPowerChange(-2, {
+              limitTo: {
+                tiles: [
+                  { dx: -1, dy: 0 },
+                  { dx: 1, dy: 0 },
+                ],
+              },
+            }),
+          ],
+          description: `Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play.`,
+        }),
+      ),
+    ],
+    description: `When destroyed, add Resurrected Amalgam to your hand.`,
+  };
+
+  export const Skeeskee: CardDefinition = {
+    typeId: 'skeeskee' as CardDefinition['typeId'],
+    name: 'Skeeskee',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onDestroy',
+          allegiance: 'allied',
+        },
+        actions: [
+          CardEffect.addPower(1, {
+            limitTo: {
+              self: true,
+            },
+          }),
+        ],
+      },
+    ],
+    description: `When allied cards are destroyed, raise this card's power by 1.`,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -1175,4 +1350,8 @@ export const FF7_LIBRARY = [
   FF7Library.InsectoidChimera,
   FF7Library.Gigantoad,
   FF7Library.Maloceros,
+  FF7Library.Grandhorn,
+  FF7Library.GreatMalboro,
+  FF7Library.Grangalan,
+  FF7Library.Amalgam,
 ];
