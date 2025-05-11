@@ -13,6 +13,7 @@ import TileCard from './TileCard';
 import TilePips from './TilePips';
 import { useDebugStore } from '../Debug/DebugStore';
 import EditTile from '../Debug/EditTile';
+import { CardInstance } from '@/gameplay';
 
 type HighlightState = 'Hovered' | 'ValidDestination' | null;
 
@@ -64,15 +65,41 @@ const BoardTile = ({ position }: Props) => {
     let cardNode = null,
       pipsNode = null;
     const currentTile = state.board[position.x][position.y];
+    const currentColor = currentTile.controllerPlayerId
+      ? getPlayerWithId(state.players, currentTile.controllerPlayerId).colorCssValue
+      : null;
     const previewTile = previewState?.board[position.x][position.y];
-    const tile = previewTile || currentTile;
-    const { controllerPlayerId } = tile;
-    if (controllerPlayerId) {
-      let highlightPips = false;
-      const { card, pips } = tile;
-      const color = getPlayerWithId(state.players, controllerPlayerId).colorCssValue;
-      cardNode = (card && <TileCard card={card} color={color} />) || null;
-      pipsNode = (pips > 0 && <TilePips pips={pips} color={color} highlight={highlightPips} />) || null;
+    if (previewTile) {
+      const previewColor = previewTile.controllerPlayerId
+        ? getPlayerWithId(state.players, previewTile.controllerPlayerId).colorCssValue
+        : null;
+      if (currentTile.controllerPlayerId && currentTile.card && !previewTile.card) {
+        // if the card was destroyed, render it with 0 power, and with any pips on top
+        const destroyedCard: CardInstance = {
+          ...currentTile.card,
+          powerModifier: -1 * currentTile.card.basePower,
+        };
+        cardNode = <TileCard card={destroyedCard} color={currentColor!} />;
+        if (previewTile.controllerPlayerId && previewTile.pips > 0) {
+          pipsNode = <TilePips pips={previewTile.pips} color={previewColor!} highlight />;
+        }
+      } else {
+        // just render the preview card instead of the current card
+        cardNode = previewTile.card && <TileCard card={previewTile.card} color={previewColor!} />;
+        const highlightPips =
+          previewTile.pips !== currentTile.pips || previewTile.controllerPlayerId !== currentTile.controllerPlayerId;
+        pipsNode = previewTile.pips > 0 && (
+          <TilePips pips={previewTile.pips} color={previewColor!} highlight={highlightPips} />
+        );
+      }
+    } else {
+      const { controllerPlayerId } = currentTile;
+      if (controllerPlayerId) {
+        let highlightPips = false;
+        const { card, pips } = currentTile;
+        cardNode = (card && <TileCard card={card} color={currentColor!} />) || null;
+        pipsNode = (pips > 0 && <TilePips pips={pips} color={currentColor!} highlight={highlightPips} />) || null;
+      }
     }
     return {
       occupyingCard: cardNode,
@@ -115,7 +142,7 @@ const BoardTile = ({ position }: Props) => {
   const overlay = useMemo(() => {
     return (
       <div
-        className={cn('absolute top-0 h-full w-full', {
+        className={cn('h-full w-full', {
           'opacity-60': !editMode,
           'bg-sky-100': !editMode && highlightState === 'Hovered',
           'border border-5 border-yellow-400': !editMode && highlightState === 'ValidDestination',
@@ -167,10 +194,12 @@ const BoardTile = ({ position }: Props) => {
         onMouseLeave={() => handleHoverOut()}
         onClick={() => handleClick()}
       >
-        {occupyingPips}
-        {occupyingCard}
-        {previewCard}
-        {overlay}
+        <div className="relative h-full w-full">
+          {occupyingCard && <div className="absolute z-10 h-full w-full">{occupyingCard}</div>}
+          {occupyingPips && <div className="absolute z-20 h-full w-full">{occupyingPips}</div>}
+          <div className="absolute z-30 h-full w-full">{overlay}</div>
+        </div>
+        <div className="relative z-40"> {previewCard} </div>
       </div>
     </TileContainer>
   );

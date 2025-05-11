@@ -61,7 +61,6 @@ type TriggeredAction = CardAction & {
 export function processCardEvents(state: GameState, initialEvent: InitialEvent, ctx: ProcessCtx) {
   const eventQueue: CardEvent[] = [];
   processInitialEvent(state, initialEvent, eventQueue);
-  let hasCapturedPreview = false;
   while (eventQueue.length > 0) {
     const event = eventQueue.shift()!;
     const triggeredActions = getEventTriggers(state, event);
@@ -73,14 +72,11 @@ export function processCardEvents(state: GameState, initialEvent: InitialEvent, 
         ctx.addKeyframe();
       }
     });
-    if (!hasCapturedPreview) {
-      // we capture a special keyframe for rendering previews after processing the initial event
-      ctx.addKeyframe({ preview: true });
-      hasCapturedPreview = true;
-    }
   }
-  // note that the final keyframe will be equal to the final gamestate in board state,
-  // but will differ in player state (because it will be the other player's turn)
+  // we capture a special keyframe for rendering previews.
+  // note that this keyframe will be equal to the final gamestate in board state,
+  // but will differ in player state (because it will be the other player's turn, etc)
+  ctx.addKeyframe({ preview: true });
 }
 
 function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: CardEvent[]) {
