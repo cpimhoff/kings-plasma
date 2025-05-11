@@ -37,8 +37,9 @@ export namespace CardEffect {
         tiles: Array<Vector2>; // tiles is required
       };
     },
+    scaleBy?: CardAction.AddPower['scaleBy'],
   ): CardEffect[] {
-    const addPowerAction = addPower(amount, targets);
+    const addPowerAction = addPower(amount, targets, scaleBy);
     const removePowerAction = { ...addPowerAction, amount: -amount };
 
     return [

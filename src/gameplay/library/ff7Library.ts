@@ -1319,6 +1319,405 @@ export namespace FF7Library {
     ],
     description: `Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power.`,
   };
+
+  export const Basilisk: CardDefinition = {
+    typeId: 'basilisk' as CardDefinition['typeId'],
+    name: 'Basilisk',
+    playRequirement: 3,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+        { dx: -1, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed({
+        id: 'immediatelyDestroy',
+        limitTo: {
+          tiles: [{ dx: 1, dy: -1 }],
+        },
+        allegiance: 'opponent',
+      }),
+    ],
+    description: `When played, destroy enemy cards on affected tiles.`,
+  };
+
+  export const Reapertail: CardDefinition = {
+    typeId: 'reapertail' as CardDefinition['typeId'],
+    name: 'Reapertail',
+    playRequirement: 1,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'decreasing',
+        },
+        actions: [
+          CardEffect.addPower(-2, {
+            limitTo: {
+              tiles: [
+                { dx: 1, dy: 1 },
+                { dx: 1, dy: 2 },
+              ],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enfeebled, lower the power of enemy cards on affected tiles by 2.`,
+  };
+
+  export const Jabberwork: CardDefinition = {
+    typeId: 'jabberwork' as CardDefinition['typeId'],
+    name: 'Jabberwork',
+    playRequirement: 2,
+    basePower: 6,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: 0, dy: 1 },
+              { dx: -1, dy: 0 },
+              { dx: -1, dy: -1 },
+              { dx: 0, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 1`,
+  };
+
+  export const DesertSahagin: CardDefinition = {
+    typeId: 'desert-sahagin' as CardDefinition['typeId'],
+    name: 'Desert Sahagin',
+    playRequirement: 1,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'decreasing',
+        },
+        actions: [
+          CardEffect.addPower(+4, {
+            limitTo: {
+              tiles: [{ dx: 0, dy: -1 }],
+            },
+            allegiance: 'allied',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enfeebled, raise the power of allied cards on affected tiles by 4.`,
+  };
+
+  export const Cavestalker: CardDefinition = {
+    typeId: 'cavestalker' as CardDefinition['typeId'],
+    name: 'Cavestalker',
+    playRequirement: 2,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+        { dx: 0, dy: -2 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'decreasing',
+        },
+        actions: [
+          CardEffect.addPower(-2, {
+            limitTo: {
+              tiles: [
+                { dx: 1, dy: 1 },
+                { dx: 1, dy: 0 },
+                { dx: 1, dy: -1 },
+              ],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enfeebled, lower the power of enemy cards on affected tiles by 2.`,
+  };
+
+  export const StoneGolem: CardDefinition = {
+    typeId: 'stone-golem' as CardDefinition['typeId'],
+    name: 'Stone Golem',
+    playRequirement: 1,
+    basePower: 4,
+    effects: [
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'increasing',
+        },
+        actions: [
+          CardEffect.addPower(-4, {
+            limitTo: {
+              tiles: [{ dx: 1, dy: 0 }],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enhanced, lower the power of enemy cards on affected tiles by 4.`,
+  };
+
+  export const TwoFace: CardDefinition = {
+    typeId: 'two-face' as CardDefinition['typeId'],
+    name: 'Two Face',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+      ]),
+      // when becoming empowered, raise power of existing cards
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerStatusChange: {
+            status: 'empowered',
+            onOff: 'on',
+          },
+        },
+        actions: [
+          CardEffect.addPower(+4, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          }),
+        ],
+      },
+      // while empowered, raise power of newly played cards
+      {
+        trigger: {
+          id: 'onPlay',
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+            ],
+          },
+        },
+        actions: [
+          CardEffect.addPower(
+            +4,
+            {
+              limitTo: {
+                tiles: [
+                  { dx: 0, dy: 1 },
+                  { dx: 0, dy: -1 },
+                ],
+              },
+            },
+            {
+              limitTo: {
+                self: true,
+              },
+              powerStatus: {
+                empowered: true,
+              },
+            },
+          ),
+        ],
+      },
+      // if destroyed while empowered, lower power of existing cards
+      {
+        trigger: {
+          id: 'onDestroy',
+          limitTo: {
+            self: true,
+          },
+          powerStatus: {
+            empowered: true,
+          },
+        },
+        actions: [
+          CardEffect.addPower(-4, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          }),
+        ],
+      },
+      // when becoming un-empowered, lower power of existing cards
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerStatusChange: {
+            status: 'empowered',
+            onOff: 'off',
+          },
+        },
+        actions: [
+          CardEffect.addPower(-4, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          }),
+        ],
+      },
+      // when becoming enfeebled, lower power of existing cards
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerStatusChange: {
+            status: 'enfeebled',
+            onOff: 'on',
+          },
+        },
+        actions: [
+          CardEffect.addPower(-4, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          }),
+        ],
+      },
+      // while enfeebled, lower power of newly played cards
+      {
+        trigger: {
+          id: 'onPlay',
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+            ],
+          },
+        },
+        actions: [
+          CardEffect.addPower(
+            -4,
+            {
+              limitTo: {
+                tiles: [
+                  { dx: 0, dy: 1 },
+                  { dx: 0, dy: -1 },
+                ],
+              },
+            },
+            {
+              limitTo: {
+                self: true,
+              },
+              powerStatus: {
+                enfeebled: true,
+              },
+            },
+          ),
+        ],
+      },
+      // if destroyed while enfeebled, raise power of existing cards
+      {
+        trigger: {
+          id: 'onDestroy',
+          limitTo: {
+            self: true,
+          },
+          powerStatus: {
+            enfeebled: true,
+          },
+        },
+        actions: [
+          CardEffect.addPower(+4, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          }),
+        ],
+      },
+      // when becoming un-enfebled, raise power of existing cards
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerStatusChange: {
+            status: 'enfeebled',
+            onOff: 'off',
+          },
+        },
+        actions: [
+          CardEffect.addPower(+4, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          }),
+        ],
+      },
+    ],
+    description: `Enhanced: raise power of allied and enemy cards on affected tiles by 4.
+Enfeebled: lower their power by 4.`,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -1380,4 +1779,11 @@ export const FF7_LIBRARY = [
   FF7Library.Grangalan,
   FF7Library.Amalgam,
   FF7Library.Griffon,
+  FF7Library.Basilisk,
+  FF7Library.Reapertail,
+  FF7Library.Jabberwork,
+  FF7Library.DesertSahagin,
+  FF7Library.Cavestalker,
+  FF7Library.StoneGolem,
+  FF7Library.TwoFace,
 ];
