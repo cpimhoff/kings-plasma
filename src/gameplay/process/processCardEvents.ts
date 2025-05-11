@@ -10,6 +10,8 @@ import {
   BoardPosition,
   Player,
   getPlayerWithId,
+  CardActionFilters,
+  positionsEqual,
 } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
@@ -25,13 +27,13 @@ export namespace Events {
     position: BoardPosition;
     playerId: Player['id'];
   };
-  export type CardPlayed = { triggerId: 'onPlay'; tile: OccupiedTile; replacedCard?: CardInstance };
+  export type CardPlayed = { triggerId: 'onPlay'; source: OccupiedTile; replacedCard?: CardInstance };
   export type PowerChanged = {
     triggerId: 'onPowerChange';
-    tile: OccupiedTile;
+    source: OccupiedTile;
     oldPowerModifier: number;
   };
-  export type CardDestroyed = { triggerId: 'onDestroy'; tile: OccupiedTile };
+  export type CardDestroyed = { triggerId: 'onDestroy'; source: OccupiedTile };
   export type GameEnd = { id: 'gameEnd'; triggerId: 'onGameEnd' };
 }
 type CardEvent = Events.CardPlayed | Events.PowerChanged | Events.CardDestroyed | Events.GameEnd;
@@ -39,7 +41,7 @@ type InitialEvent = Events.RequestPlayCard | Events.GameEnd;
 
 type TriggeredAction = CardAction & {
   source: OccupiedTile;
-  replacedCard?: CardInstance;
+  event: CardEvent;
 };
 
 export function processCardEvents(state: GameState, initialEvent: InitialEvent, ctx: ProcessCtx) {
@@ -78,7 +80,7 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
         // we're destroying the card ourselves, so we have to announce it manually
         eventQueue.push({
           triggerId: 'onDestroy',
-          tile: { ...tile } as OccupiedTile,
+          source: { ...tile } as OccupiedTile,
         });
         replacedCard = tile.card;
       }
@@ -89,7 +91,7 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
       // announce
       const playEvent: Events.CardPlayed = {
         triggerId: 'onPlay',
-        tile: tile as OccupiedTile,
+        source: tile as OccupiedTile,
       };
       if (replacedCard) {
         playEvent.replacedCard = replacedCard;
@@ -108,24 +110,18 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
 function getEventTriggers(state: GameState, event: CardEvent) {
   const triggeredActions: TriggeredAction[] = [];
   // destroyed cards aren't on the board anymore but they can still respond to onDestroy events
-  let destroyedTile = event.triggerId === 'onDestroy' ? event.tile : null;
+  let destroyedTile = event.triggerId === 'onDestroy' ? event.source : null;
   let responders = allBoardCards(state, destroyedTile);
   for (const responder of responders) {
     responder.card.effects = responder.card.effects.map<CardEffect>((effect) => {
       if (effect.maxActivations === 0) return effect;
       if (doesEventSatisfyTriggerCondition(event, responder, effect.trigger, state)) {
         triggeredActions.push(
-          ...effect.actions.map((action) => {
-            const triggeredAction: TriggeredAction = {
-              ...action,
-              source: responder,
-            };
-            if (event.triggerId === 'onPlay' && event.replacedCard) {
-              // not sure if there's a better way to transmit this information
-              triggeredAction.replacedCard = event.replacedCard;
-            }
-            return triggeredAction;
-          }),
+          ...effect.actions.map((action) => ({
+            ...action,
+            source: responder,
+            event,
+          })),
         );
         if (typeof effect.maxActivations === 'number') {
           const newEffect = {
@@ -165,7 +161,7 @@ function doesEventSatisfyTriggerCondition(
   if (triggerCond.limitTo) {
     const { self, tiles } = triggerCond.limitTo;
     if (self) {
-      if (!(event.tile.position.x === responder.position.x && event.tile.position.y === responder.position.y)) {
+      if (!(event.source.position.x === responder.position.x && event.source.position.y === responder.position.y)) {
         return false;
       }
     }
@@ -173,8 +169,8 @@ function doesEventSatisfyTriggerCondition(
       if (
         !tiles.some(
           (deltaTile) =>
-            responder.position.x + deltaTile.dx === event.tile.position.x &&
-            responder.position.y + deltaTile.dy === event.tile.position.y,
+            responder.position.x + deltaTile.dx === event.source.position.x &&
+            responder.position.y + deltaTile.dy === event.source.position.y,
         )
       ) {
         return false;
@@ -185,7 +181,7 @@ function doesEventSatisfyTriggerCondition(
   // then check allegiance
   if (triggerCond.allegiance) {
     const allegiance: CardEffectFilters['allegiance'] =
-      event.tile.controllerPlayerId === responder.controllerPlayerId ? 'allied' : 'opponent';
+      event.source.controllerPlayerId === responder.controllerPlayerId ? 'allied' : 'opponent';
     if (triggerCond.allegiance !== allegiance) {
       return false;
     }
@@ -194,11 +190,11 @@ function doesEventSatisfyTriggerCondition(
   // then check powerModifier
   if (triggerCond.id === 'onPowerChange' && event.triggerId === 'onPowerChange') {
     const oldCard = {
-      ...event.tile.card,
+      ...event.source.card,
       powerModifier: event.oldPowerModifier,
     };
     const oldPower = getCardPower(oldCard);
-    const newPower = getCardPower(event.tile.card);
+    const newPower = getCardPower(event.source.card);
     if (oldPower === newPower) {
       return false;
     }
@@ -209,7 +205,7 @@ function doesEventSatisfyTriggerCondition(
     }
     if (triggerCond.powerStatusChange) {
       const oldStatus = getCardPowerStatus(oldCard);
-      const newStatus = getCardPowerStatus(event.tile.card);
+      const newStatus = getCardPowerStatus(event.source.card);
       const targetStatus = triggerCond.powerStatusChange.status;
       if (triggerCond.powerStatusChange.onOff === 'on') {
         if (!(newStatus === targetStatus && oldStatus !== targetStatus)) {
@@ -252,18 +248,18 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
 
     case 'addPower': {
       if (action.amount === 0) break;
-      const targets = findMatchingCards(state, action.source, action);
+      const targets = findActionTargets(state, action);
       let scalingFactor = 1;
       if (action.scaleBy) {
         if (action.scaleBy === 'replaced') {
-          if (action.replacedCard) {
-            scalingFactor = getCardPower(action.replacedCard);
+          if ('replacedCard' in action.event && action.event.replacedCard) {
+            scalingFactor = getCardPower(action.event.replacedCard);
           } else {
             console.error('Non-replacement card attempted to use scaleBy=replace');
             // TODO: is there a way we can enforce this with types? (prolly not)
           }
         } else {
-          scalingFactor = findMatchingCards(state, action.source, action.scaleBy).length;
+          scalingFactor = findActionTargets(state, action).length;
         }
       }
       for (const t of targets) {
@@ -273,7 +269,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
         if (getCardPower(t.card) < 0) t.card.powerModifier = -1 * t.card.basePower;
         eventQueue.push({
           triggerId: 'onPowerChange',
-          tile: t,
+          source: t,
           oldPowerModifier,
         });
       }
@@ -305,10 +301,10 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
     }
 
     case 'immediatelyDestroy': {
-      const targets = findMatchingCards(state, action.source, action);
+      const targets = findActionTargets(state, action);
       for (const t of targets) {
         const oldTile = destroyCardAtTile(t);
-        eventQueue.push({ triggerId: 'onDestroy', tile: oldTile });
+        eventQueue.push({ triggerId: 'onDestroy', source: oldTile });
       }
       break;
     }
@@ -345,7 +341,7 @@ function reapZombieCards(state: GameState, eventQueue: CardEvent[]): boolean {
       const oldTile = destroyCardAtTile(tile);
       eventQueue.push({
         triggerId: 'onDestroy',
-        tile: oldTile,
+        source: oldTile,
       });
       didReap = true;
     }
@@ -353,25 +349,56 @@ function reapZombieCards(state: GameState, eventQueue: CardEvent[]): boolean {
   return didReap;
 }
 
-function findMatchingCards(state: GameState, source: OccupiedTile, filters: CardEffectFilters): OccupiedTile[] {
+function findActionTargets(state: GameState, action: TriggeredAction): OccupiedTile[] {
+  let filters: CardActionFilters;
+  switch (action.id) {
+    case 'createCardForPlayer':
+    case 'addScoreBonusForPlayer':
+      // these actions don't use this function
+      return [];
+    case 'addControlledPips':
+      // for now we only support adding pips on specific tiles
+      filters = {
+        limitTo: {
+          tiles: action.tiles,
+        },
+      };
+      break;
+    case 'addPower':
+    case 'immediatelyDestroy':
+      filters = action;
+      break;
+    default:
+      action satisfies never;
+      return [];
+  }
   // first gather cards to filter, using limitTo or falling back to all board cards
-  let targets: OccupiedTile[];
+  let targets: OccupiedTile[] = [];
+  const addTarget = (t: OccupiedTile) => {
+    if (!targets.some((_t) => positionsEqual(t.position, _t.position))) {
+      targets.push(t);
+    }
+  };
   if (filters.limitTo) {
-    const { self, tiles } = filters.limitTo;
+    const { self, tiles, eventSource } = filters.limitTo;
+    if (self) {
+      addTarget(action.source);
+    }
+    if (eventSource && 'source' in action.event) {
+      addTarget(action.event.source);
+    }
     if (tiles) {
-      targets = tiles
+      tiles
         .map((deltaTile) => ({
-          x: source.position.x + deltaTile.dx,
-          y: source.position.y + deltaTile.dy,
+          x: action.source.position.x + deltaTile.dx,
+          y: action.source.position.y + deltaTile.dy,
         }))
         .map((pos) => state.board[pos.x]?.[pos.y])
-        .filter((t) => t?.card) as OccupiedTile[];
-    } else {
-      targets = [];
-    }
-    if (self) {
-      // NOTE: 'tiles' should never specify (0,0), otherwise it will be redundant with 'self'
-      targets.push(source);
+        .filter((t) => t?.card)
+        .map((t) => t as OccupiedTile)
+        .forEach((t) => {
+          addTarget(t);
+        });
     }
   } else {
     targets = Array.from(allBoardCards(state));
@@ -382,8 +409,8 @@ function findMatchingCards(state: GameState, source: OccupiedTile, filters: Card
     .filter((t) => {
       if (filters.allegiance) {
         return filters.allegiance === 'allied'
-          ? t.controllerPlayerId === source.controllerPlayerId
-          : t.controllerPlayerId === source.controllerPlayerId;
+          ? t.controllerPlayerId === action.source.controllerPlayerId
+          : t.controllerPlayerId === action.source.controllerPlayerId;
       }
       return true;
     })

@@ -1512,208 +1512,22 @@ export namespace FF7Library {
         { dx: 0, dy: 1 },
         { dx: 0, dy: -1 },
       ]),
-      // when becoming empowered, raise power of existing cards
-      {
-        trigger: {
-          id: 'onPowerChange',
-          limitTo: {
-            self: true,
-          },
-          powerStatusChange: {
-            status: 'empowered',
-            onOff: 'on',
-          },
+      ...CardEffect.addPowerToTargetsWhileHasPowerStatus(+4, 'empowered', {
+        limitTo: {
+          tiles: [
+            { dx: 0, dy: 1 },
+            { dx: 0, dy: -1 },
+          ],
         },
-        actions: [
-          CardEffect.addPower(+4, {
-            limitTo: {
-              tiles: [
-                { dx: 0, dy: 1 },
-                { dx: 0, dy: -1 },
-              ],
-            },
-          }),
-        ],
-      },
-      // while empowered, raise power of newly played cards
-      {
-        trigger: {
-          id: 'onPlay',
-          limitTo: {
-            tiles: [
-              { dx: 0, dy: 1 },
-              { dx: 0, dy: -1 },
-            ],
-          },
+      }),
+      ...CardEffect.addPowerToTargetsWhileHasPowerStatus(-4, 'enfeebled', {
+        limitTo: {
+          tiles: [
+            { dx: 0, dy: 1 },
+            { dx: 0, dy: -1 },
+          ],
         },
-        actions: [
-          CardEffect.addPower(
-            +4,
-            {
-              limitTo: {
-                tiles: [
-                  { dx: 0, dy: 1 },
-                  { dx: 0, dy: -1 },
-                ],
-              },
-            },
-            {
-              limitTo: {
-                self: true,
-              },
-              powerStatus: {
-                empowered: true,
-              },
-            },
-          ),
-        ],
-      },
-      // if destroyed while empowered, lower power of existing cards
-      {
-        trigger: {
-          id: 'onDestroy',
-          limitTo: {
-            self: true,
-          },
-          powerStatus: {
-            empowered: true,
-          },
-        },
-        actions: [
-          CardEffect.addPower(-4, {
-            limitTo: {
-              tiles: [
-                { dx: 0, dy: 1 },
-                { dx: 0, dy: -1 },
-              ],
-            },
-          }),
-        ],
-      },
-      // when becoming un-empowered, lower power of existing cards
-      {
-        trigger: {
-          id: 'onPowerChange',
-          limitTo: {
-            self: true,
-          },
-          powerStatusChange: {
-            status: 'empowered',
-            onOff: 'off',
-          },
-        },
-        actions: [
-          CardEffect.addPower(-4, {
-            limitTo: {
-              tiles: [
-                { dx: 0, dy: 1 },
-                { dx: 0, dy: -1 },
-              ],
-            },
-          }),
-        ],
-      },
-      // when becoming enfeebled, lower power of existing cards
-      {
-        trigger: {
-          id: 'onPowerChange',
-          limitTo: {
-            self: true,
-          },
-          powerStatusChange: {
-            status: 'enfeebled',
-            onOff: 'on',
-          },
-        },
-        actions: [
-          CardEffect.addPower(-4, {
-            limitTo: {
-              tiles: [
-                { dx: 0, dy: 1 },
-                { dx: 0, dy: -1 },
-              ],
-            },
-          }),
-        ],
-      },
-      // while enfeebled, lower power of newly played cards
-      {
-        trigger: {
-          id: 'onPlay',
-          limitTo: {
-            tiles: [
-              { dx: 0, dy: 1 },
-              { dx: 0, dy: -1 },
-            ],
-          },
-        },
-        actions: [
-          CardEffect.addPower(
-            -4,
-            {
-              limitTo: {
-                tiles: [
-                  { dx: 0, dy: 1 },
-                  { dx: 0, dy: -1 },
-                ],
-              },
-            },
-            {
-              limitTo: {
-                self: true,
-              },
-              powerStatus: {
-                enfeebled: true,
-              },
-            },
-          ),
-        ],
-      },
-      // if destroyed while enfeebled, raise power of existing cards
-      {
-        trigger: {
-          id: 'onDestroy',
-          limitTo: {
-            self: true,
-          },
-          powerStatus: {
-            enfeebled: true,
-          },
-        },
-        actions: [
-          CardEffect.addPower(+4, {
-            limitTo: {
-              tiles: [
-                { dx: 0, dy: 1 },
-                { dx: 0, dy: -1 },
-              ],
-            },
-          }),
-        ],
-      },
-      // when becoming un-enfebled, raise power of existing cards
-      {
-        trigger: {
-          id: 'onPowerChange',
-          limitTo: {
-            self: true,
-          },
-          powerStatusChange: {
-            status: 'enfeebled',
-            onOff: 'off',
-          },
-        },
-        actions: [
-          CardEffect.addPower(+4, {
-            limitTo: {
-              tiles: [
-                { dx: 0, dy: 1 },
-                { dx: 0, dy: -1 },
-              ],
-            },
-          }),
-        ],
-      },
+      }),
     ],
     description: `Enhanced: raise power of allied and enemy cards on affected tiles by 4.
 Enfeebled: lower their power by 4.`,

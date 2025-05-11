@@ -9,6 +9,12 @@ export type CardAction =
   | CardAction.CreateCardForPlayer
   | CardAction.AddScoreBonusForPlayer;
 
+export type CardActionFilters = CardEffectFilters & {
+  limitTo?: CardEffectFilters['limitTo'] & {
+    eventSource?: boolean;
+  };
+};
+
 export namespace CardAction {
   /** Add pips or take control of the board.
    * This is the most common action in the game. */
@@ -21,7 +27,7 @@ export namespace CardAction {
   };
 
   /** Change the power of cards */
-  export type AddPower = CardEffectFilters & {
+  export type AddPower = CardActionFilters & {
     id: 'addPower';
     // the amount of power to add -- can be negative for debuffs
     amount: number;
@@ -30,7 +36,7 @@ export namespace CardAction {
   };
 
   /** Destroys the card(s) that match the filters. */
-  export type ImmediatelyDestroy = CardEffectFilters & {
+  export type ImmediatelyDestroy = CardActionFilters & {
     id: 'immediatelyDestroy';
   };
 

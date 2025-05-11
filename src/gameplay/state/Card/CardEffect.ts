@@ -1,6 +1,6 @@
 import { CardDefinition, CardPowerStatus } from './Card';
 import { Vector2 } from '@/utils/vector';
-import { CardAction } from './CardAction';
+import { CardAction, CardActionFilters } from './CardAction';
 import { CardTriggerCondition } from './CardTriggerCondition';
 import { CardEffectFilters } from './CardEffectFilters';
 
@@ -32,11 +32,7 @@ export namespace CardEffect {
 
   export function passiveBoardPowerChange(
     amount: number,
-    targets: CardEffectFilters & {
-      limitTo: {
-        tiles: Array<Vector2>; // tiles is required
-      };
-    },
+    targets: CardEffectFilters,
     scaleBy?: CardAction.AddPower['scaleBy'],
   ): CardEffect[] {
     const addPowerAction = addPower(amount, targets, scaleBy);
@@ -46,13 +42,16 @@ export namespace CardEffect {
       // on play this card, add the effect to existing cards
       onThisPlayed(addPowerAction),
       // on play other cards to target tiles, add the effect to them
-      // this needs to be a separate effect per tile to ensure that playing
-      // a card to a targeted tile only triggers the effect for that new card,
-      // and not repeating the effect for existing cards
-      ...targets.limitTo.tiles.map<CardEffect>((tile) => ({
+      {
         trigger: { id: 'onPlay', ...targets },
-        actions: [{ ...addPowerAction, limitTo: { tiles: [tile] } }],
-      })),
+        actions: [
+          addPower(amount, {
+            limitTo: {
+              eventSource: true,
+            },
+          }),
+        ],
+      },
       // on destroy remove the effect from all currently affected
       onThisDestroyed(removePowerAction),
     ];
@@ -142,6 +141,81 @@ export namespace CardEffect {
     ];
   }
 
+  export function addPowerToTargetsWhileHasPowerStatus(
+    amount: number,
+    status: CardPowerStatus,
+    targets: CardEffectFilters,
+  ): CardEffect[] {
+    return [
+      // when gaining the status, raise power of existing cards by amount
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerStatusChange: {
+            status,
+            onOff: 'on',
+          },
+        },
+        actions: [CardEffect.addPower(amount, targets)],
+      },
+      // while having the status, raise power of newly played cards by amount
+      {
+        trigger: {
+          id: 'onPlay',
+          ...targets,
+        },
+        actions: [
+          CardEffect.addPower(
+            amount,
+            {
+              limitTo: {
+                eventSource: true,
+              },
+            },
+            {
+              limitTo: {
+                self: true,
+              },
+              powerStatus: {
+                [status]: true,
+              },
+            },
+          ),
+        ],
+      },
+      // if destroyed while having the status, lower power of existing cards by amount
+      {
+        trigger: {
+          id: 'onDestroy',
+          limitTo: {
+            self: true,
+          },
+          powerStatus: {
+            [status]: true,
+          },
+        },
+        actions: [CardEffect.addPower(-1 * amount, targets)],
+      },
+      // when losing the status, lower power of existing cards by amount
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerStatusChange: {
+            status,
+            onOff: 'off',
+          },
+        },
+        actions: [CardEffect.addPower(-1 * amount, targets)],
+      },
+    ];
+  }
+
   export function addPips(tiles: Vector2[], amount: number = 1): CardAction.AddControlledPips {
     return {
       id: 'addControlledPips',
@@ -152,7 +226,7 @@ export namespace CardEffect {
 
   export function addPower(
     amount: number,
-    targets: CardEffectFilters,
+    targets: CardActionFilters,
     scaleBy?: CardAction.AddPower['scaleBy'],
   ): CardAction.AddPower {
     return {
