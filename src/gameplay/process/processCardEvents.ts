@@ -28,13 +28,14 @@ export namespace Events {
     position: BoardPosition;
     playerId: Player['id'];
   };
-  export type CardPlayed = { triggerId: 'onPlay'; source: OccupiedTile; replacedCard?: CardInstance };
+  export type CardPlayed = { id: 'cardPlayed'; triggerId: 'onPlay'; source: OccupiedTile; replacedCard?: CardInstance };
   export type PowerChanged = {
+    id: 'powerChanged';
     triggerId: 'onPowerChange';
     source: OccupiedTile;
     oldPowerModifier: number;
   };
-  export type CardDestroyed = { triggerId: 'onDestroy'; source: OccupiedTile };
+  export type CardDestroyed = { id: 'cardDestroyed'; triggerId: 'onDestroy'; source: OccupiedTile };
   export type RequestAddPips = {
     id: 'requestAddPips';
     source: OccupiedTile;
@@ -92,6 +93,7 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
       if (tile.card) {
         // we're destroying the card ourselves, so we have to announce it manually
         eventQueue.push({
+          id: 'cardDestroyed',
           triggerId: 'onDestroy',
           source: { ...tile } as OccupiedTile,
         });
@@ -103,6 +105,7 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
       tile.pips = 0;
       // announce
       const playEvent: Events.CardPlayed = {
+        id: 'cardPlayed',
         triggerId: 'onPlay',
         source: tile as OccupiedTile,
       };
@@ -121,7 +124,7 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
 }
 
 function getEventTriggers(state: GameState, event: CardEvent): TriggeredAction[] {
-  if ('id' in event && event.id === 'requestAddPips') {
+  if (event.id === 'requestAddPips') {
     return [
       {
         id: 'addControlledPips',
@@ -267,7 +270,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
           // we can't add the pips here now, but the card might be destroyed during the processing of the current event.
           // we queue up a special event that tells us to retry. this allows cards to not have to worry about the order
           // in which their effects are defined.
-          if (!('id' in action.event && action.event.id == 'requestAddPips')) {
+          if (action.event.id !== 'requestAddPips') {
             // ^only try this once per event; don't infinite loop
             eventQueue.unshift({
               id: 'requestAddPips',
@@ -313,6 +316,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
         t.card.powerModifier += delta;
         if (getCardPower(t.card) < 0) t.card.powerModifier = -1 * t.card.basePower;
         eventQueue.push({
+          id: 'powerChanged',
           triggerId: 'onPowerChange',
           source: t,
           oldPowerModifier,
@@ -349,7 +353,7 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
       const targets = findActionTargets(state, action);
       for (const t of targets) {
         const oldTile = destroyCardAtTile(t);
-        eventQueue.push({ triggerId: 'onDestroy', source: oldTile });
+        eventQueue.push({ id: 'cardDestroyed', triggerId: 'onDestroy', source: oldTile });
       }
       break;
     }
@@ -387,6 +391,7 @@ function reapZombieCards(state: GameState, eventQueue: CardEvent[]): boolean {
     if (getCardPower(tile.card) === 0) {
       const oldTile = destroyCardAtTile(tile);
       eventQueue.push({
+        id: 'cardDestroyed',
         triggerId: 'onDestroy',
         source: oldTile,
       });
