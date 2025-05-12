@@ -246,6 +246,12 @@ function doesEventSatisfyTriggerCondition(
         }
       }
     }
+    // then check powerLevel
+    if (typeof triggerCond.powerLevel === 'number') {
+      if (newPower !== triggerCond.powerLevel) {
+        return false;
+      }
+    }
   }
 
   return true;
@@ -466,6 +472,13 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
       if (filters.powerStatus) {
         const powerStatus = getCardPowerStatus(t.card);
         return filters.powerStatus[powerStatus];
+      }
+      return true;
+    })
+    .filter((t) => {
+      if (typeof filters.powerLevel === 'number') {
+        const powerLevel = getCardPower(t.card);
+        return powerLevel === filters.powerLevel;
       }
       return true;
     });

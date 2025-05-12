@@ -1985,6 +1985,44 @@ Enfeebled: lower their power by 4.`,
     ],
     description: `When played, raise position ranks by 3.`,
   };
+
+  export const Cloud: CardDefinition = {
+    typeId: 'cloud' as CardDefinition['typeId'],
+    name: 'Cloud',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          powerLevel: 7,
+        },
+        actions: [
+          CardEffect.addPower(+2, {
+            limitTo: {
+              tiles: [
+                { dx: 1, dy: 0 },
+                { dx: 1, dy: -1 },
+                { dx: 0, dy: -1 },
+                { dx: -1, dy: -1 },
+                { dx: -1, dy: 0 },
+                { dx: -1, dy: 1 },
+                { dx: 0, dy: 1 },
+                { dx: 1, dy: 1 },
+              ],
+            },
+            allegiance: 'allied',
+          }),
+        ],
+      },
+    ],
+    description: `When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -2072,4 +2110,5 @@ export const FF7_LIBRARY = [
   FF7Library.FloatingDeath,
   FF7Library.Ironclad,
   FF7Library.MossGrownAdamantoise,
+  FF7Library.Cloud,
 ];

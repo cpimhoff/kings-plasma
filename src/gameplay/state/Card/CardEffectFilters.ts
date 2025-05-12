@@ -13,4 +13,6 @@ export type CardEffectFilters = {
   allegiance?: 'allied' | 'opponent';
   // if set, filter to cards with the given power statuses
   powerStatus?: Partial<Record<CardPowerStatus, boolean>>;
+  // if set, filter to cards with this exact power level (base plus modifier)
+  powerLevel?: number;
 };
