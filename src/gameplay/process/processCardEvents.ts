@@ -16,7 +16,7 @@ import {
 } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
-import { allBoardCards, OccupiedTile } from './iter';
+import { allBoardCards, allBoardTiles, OccupiedTile } from './iter';
 import { nextStableInt } from './rng';
 import { CardEffectFilters } from '../state/Card/CardEffectFilters';
 import { getRowScores } from '../scoring';
@@ -96,9 +96,7 @@ function processInitialEvent(state: GameState, event: InitialEvent, eventQueue: 
         replacedCard = tile.card;
       }
       // place the card on the board
-      tile.card = card;
-      tile.controllerPlayerId = playerId;
-      tile.pips = 0;
+      placeCardAtTile(card, playerId, tile);
       // announce
       const playEvent: Events.CardPlayed = {
         id: 'cardPlayed',
@@ -369,10 +367,28 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
       break;
     }
 
+    case 'spawnCardsOnCapturedTiles': {
+      const playerId = action.source.controllerPlayerId;
+      for (const tile of allBoardTiles(state)) {
+        if (!tile.card && tile.controllerPlayerId === playerId) {
+          const cardDef = action.cardDefByRank[tile.pips];
+          const newCard = createCardInstance(cardDef);
+          placeCardAtTile(newCard, playerId, tile);
+        }
+      }
+      break;
+    }
+
     default:
       action satisfies never;
       break;
   }
+}
+
+function placeCardAtTile(card: CardInstance, playerId: Player['id'], tile: BoardTile) {
+  tile.card = card;
+  tile.controllerPlayerId = playerId;
+  tile.pips = 0;
 }
 
 function destroyCardAtTile(tile: OccupiedTile): OccupiedTile {
@@ -408,6 +424,7 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
   switch (action.id) {
     case 'createCardForPlayer':
     case 'addScoreBonusForPlayer':
+    case 'spawnCardsOnCapturedTiles':
       // these actions don't use this function
       return [];
     case 'addControlledPips':

@@ -7,7 +7,8 @@ export type CardAction =
   | CardAction.AddPower
   | CardAction.ImmediatelyDestroy
   | CardAction.CreateCardForPlayer
-  | CardAction.AddScoreBonusForPlayer;
+  | CardAction.AddScoreBonusForPlayer
+  | CardAction.SpawnCardsOnCapturedTiles;
 
 export type CardActionFilters = CardEffectFilters & {
   limitTo?: CardEffectFilters['limitTo'] & {
@@ -58,5 +59,12 @@ export namespace CardAction {
     player: 'controller' | 'opponent';
     // the bonus amount
     amount: number;
+  };
+
+  /** Creates cards on the board for the current player at empty captured positions based on the number of pips. */
+  export type SpawnCardsOnCapturedTiles = {
+    id: 'spawnCardsOnCapturedTiles';
+    // mapping between number of pips on a tile and what card definition to use when spawning a card there
+    cardDefByRank: Record<number, CardDefinition>;
   };
 }

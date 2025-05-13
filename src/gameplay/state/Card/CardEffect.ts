@@ -249,4 +249,21 @@ export namespace CardEffect {
       into,
     };
   }
+
+  export function spawnCardsOnCapturedTiles(
+    cardDefFactory: (numPips: number) => CardDefinition,
+  ): CardAction.SpawnCardsOnCapturedTiles {
+    const cardDefByRank = Object.assign(
+      {},
+      ...[1, 2, 3].map((numPips: number) => {
+        return {
+          [numPips]: cardDefFactory(numPips),
+        };
+      }),
+    );
+    return {
+      id: 'spawnCardsOnCapturedTiles',
+      cardDefByRank,
+    };
+  }
 }

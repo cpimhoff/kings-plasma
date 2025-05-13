@@ -2317,6 +2317,29 @@ Enfeebled: lower their power by 4.`,
     description: `Raise power by 2 for each other enhanced allied card.`,
     isLegendary: true,
   };
+
+  export const Shiva: CardDefinition = {
+    typeId: 'shiva' as CardDefinition['typeId'],
+    name: 'Shiva',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.spawnCardsOnCapturedTiles((numPips) => {
+          return {
+            typeId: 'diamond-dust' as CardDefinition['typeId'],
+            name: 'Diamond Dust',
+            playRequirement: 0,
+            basePower: 2 * numPips,
+            effects: [],
+            description: `When spawned, if this replaced 2 Pawns, this gains 2 power. If this replaced 3, this gains 4 power instead.`,
+          };
+        }),
+      ),
+    ],
+    description: `When played, spawn Diamond Dust of power 2, 4, or 6 in empty positions.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -2414,4 +2437,5 @@ export const FF7_LIBRARY = [
   FF7Library.Cid,
   FF7Library.Vincent,
   FF7Library.Ifrit,
+  FF7Library.Shiva,
 ];
