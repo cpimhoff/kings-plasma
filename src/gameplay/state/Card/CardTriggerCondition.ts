@@ -36,6 +36,6 @@ export namespace CardTriggerCondition {
   /** Triggers at the start of the 'end' phase. */
   export type OnGameEnd = {
     id: 'onGameEnd';
-    wonRow: boolean;
+    wonRow?: boolean;
   };
 }

@@ -2024,6 +2024,299 @@ Enfeebled: lower their power by 4.`,
     description: `When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2.`,
     isLegendary: true,
   };
+
+  export const Barret: CardDefinition = {
+    typeId: 'barret' as CardDefinition['typeId'],
+    name: 'Barret',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 0 },
+        { dx: 2, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-8, {
+          limitTo: {
+            tiles: [{ dx: 2, dy: 0 }],
+          },
+          allegiance: 'opponent',
+        }),
+      ),
+    ],
+    description: `When played, lower the power of enemy cards on affected tiles by 8.`,
+    isLegendary: true,
+  };
+
+  export const Tifa: CardDefinition = {
+    typeId: 'tifa' as CardDefinition['typeId'],
+    name: 'Tifa',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: 0, dy: -2 },
+      ]),
+      {
+        trigger: {
+          id: 'onGameEnd',
+          wonRow: true,
+        },
+        actions: [
+          {
+            id: 'addScoreBonusForPlayer',
+            player: 'controller',
+            amount: 5,
+          },
+        ],
+      },
+    ],
+    description: `When you win the lane, receive a score bonus of 5.`,
+    isLegendary: true,
+  };
+
+  export const Aerith: CardDefinition = {
+    typeId: 'aerith' as CardDefinition['typeId'],
+    name: 'Aerith',
+    playRequirement: 2,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+3, {
+        limitTo: {
+          tiles: [
+            { dx: -1, dy: 0 },
+            { dx: 1, dy: 0 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const RedXIII: CardDefinition = {
+    typeId: 'red-xiii' as CardDefinition['typeId'],
+    name: 'Red XIII',
+    playRequirement: 1,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'decreasing',
+        },
+        actions: [
+          CardEffect.addPower(-2, {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 2 },
+                { dx: 2, dy: 2 },
+                { dx: 2, dy: 0 },
+                { dx: 2, dy: -2 },
+                { dx: 0, dy: -2 },
+                { dx: -2, dy: -2 },
+                { dx: -2, dy: 0 },
+                { dx: -2, dy: 2 },
+              ],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enfeebled, lower the power of enemy cards on affected tiles by 2.`,
+    isLegendary: true,
+  };
+
+  export const Yuffie: CardDefinition = {
+    typeId: 'yuffie' as CardDefinition['typeId'],
+    name: 'Yuffie',
+    playRequirement: 'replace',
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: -1, dy: 1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          -1,
+          {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 1, dy: 1 },
+                { dx: 1, dy: 0 },
+                { dx: 1, dy: -1 },
+                { dx: 0, dy: -1 },
+                { dx: -1, dy: -1 },
+                { dx: -1, dy: 1 },
+              ],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power.`,
+    isLegendary: true,
+  };
+
+  export const CaitSith: CardDefinition = {
+    typeId: 'cait-sith' as CardDefinition['typeId'],
+    name: 'Cait Sith',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.createCardForPlayer({
+          typeId: 'moogle' as CardDefinition['typeId'],
+          name: 'Moogle',
+          playRequirement: 2,
+          basePower: 2,
+          effects: [
+            CardEffect.onThisPlayedAddPips([
+              { dx: 0, dy: 1 },
+              { dx: 1, dy: 0 },
+            ]),
+            ...CardEffect.passiveBoardPowerChange(+3, {
+              limitTo: {
+                tiles: [{ dx: -1, dy: 0 }],
+              },
+              allegiance: 'allied',
+            }),
+          ],
+          description: `Raise the power of allied cards on affected tiles by 3 while this card is in play`,
+        }),
+      ),
+    ],
+    description: `When played, add Moogle to your hand.`,
+    isLegendary: true,
+  };
+
+  export const Cid: CardDefinition = {
+    typeId: 'cid' as CardDefinition['typeId'],
+    name: 'Cid',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.createCardForPlayer({
+          typeId: 'the-tiny-bronco' as CardDefinition['typeId'],
+          name: 'The Tiny Bronco',
+          playRequirement: 2,
+          basePower: 2,
+          effects: [
+            CardEffect.onThisPlayedAddPips(
+              [
+                { dx: 0, dy: 1 },
+                { dx: 1, dy: 0 },
+                { dx: 2, dy: 1 },
+              ],
+              2,
+            ),
+          ],
+          description: `When played, raise position ranks by 2.`,
+        }),
+      ),
+    ],
+    description: `When played, add The Tiny Bronco to your hand.`,
+    isLegendary: true,
+  };
+
+  export const Vincent: CardDefinition = {
+    typeId: 'vincent' as CardDefinition['typeId'],
+    name: 'Vincent',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+
+      CardEffect.onThisDestroyed(
+        CardEffect.createCardForPlayer({
+          typeId: 'galian-beast' as CardDefinition['typeId'],
+          name: 'Galian Beast',
+          playRequirement: 2,
+          basePower: 4,
+          effects: [
+            CardEffect.onThisPlayed(
+              CardEffect.addPower(-1, {
+                limitTo: {
+                  tiles: [
+                    { dx: 0, dy: 2 },
+                    { dx: 1, dy: 2 },
+                    { dx: 2, dy: 1 },
+                    { dx: 2, dy: 0 },
+                    { dx: 2, dy: -1 },
+                    { dx: 1, dy: -2 },
+                    { dx: 0, dy: -2 },
+                    { dx: -1, dy: -2 },
+                    { dx: -2, dy: -1 },
+                    { dx: -2, dy: 0 },
+                    { dx: -2, dy: 1 },
+                    { dx: -1, dy: 2 },
+                  ],
+                },
+              }),
+            ),
+          ],
+          description: `When played, lower the power of allied and enemy cards on affected tiles by 1.`,
+        }),
+      ),
+    ],
+    description: `When destroyed, add Galian Beast to your hand.`,
+  };
+
+  export const Ifrit: CardDefinition = {
+    typeId: 'ifrit' as CardDefinition['typeId'],
+    name: 'Ifrit',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+2, {
+        powerStatus: {
+          empowered: true,
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise power by 2 for each other enhanced allied card.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -2112,4 +2405,13 @@ export const FF7_LIBRARY = [
   FF7Library.Ironclad,
   FF7Library.MossGrownAdamantoise,
   FF7Library.Cloud,
+  FF7Library.Barret,
+  FF7Library.Tifa,
+  FF7Library.Aerith,
+  FF7Library.RedXIII,
+  FF7Library.Yuffie,
+  FF7Library.CaitSith,
+  FF7Library.Cid,
+  FF7Library.Vincent,
+  FF7Library.Ifrit,
 ];
