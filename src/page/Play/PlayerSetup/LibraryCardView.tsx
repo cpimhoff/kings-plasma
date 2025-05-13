@@ -2,7 +2,9 @@ import FullCard from '@/components/Card/FullCard';
 import { CardDefinition } from '@/gameplay';
 import { useLibraryControlsStore } from './LibraryControlsStore';
 import { useCardLibraryStore } from './CardLibraryStore';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback, useState, useMemo, useEffect, useTransition } from 'react';
+
+const NUM_CARDS_FOR_PREVIEW = 5;
 
 export interface CardWrapperProps {
   card: CardDefinition;
@@ -61,18 +63,38 @@ export default function LibraryCardView({ CardWrapper }: LibraryCardViewProps) {
       .sort(deferredSortFunction);
   }, [indexedLibrary, rankFilters, powerRange, deferredSortFunction]);
 
+  // it's expensive to render all the cards, so we just render a few of them first
+  // and then fill in the rest below the fold while the user is seeing the initial updates
+  const [hasMounted, setHasMounted] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  useEffect(() => {
+    startTransition(() => {
+      setHasMounted(true);
+    });
+  }, []);
+
+  const cardsToShow = useMemo(() => {
+    if (!hasMounted || isPending) {
+      return filteredSortedLibrary.slice(0, NUM_CARDS_FOR_PREVIEW);
+    }
+    return filteredSortedLibrary;
+  }, [hasMounted, filteredSortedLibrary]);
+
   return (
-    <div className="flex flex-wrap justify-center gap-3">
-      {filteredSortedLibrary.map((card) => {
-        return (
-          <CardWrapper key={card.typeId} card={card}>
-            <FullCard card={card} color={'var(--player-color)'} />
-          </CardWrapper>
-        );
-      })}
+    <div>
+      <div className="flex flex-wrap justify-center gap-3">
+        {cardsToShow.map((card) => {
+          return (
+            <CardWrapper key={card.typeId} card={card}>
+              <FullCard card={card} color={'var(--player-color)'} />
+            </CardWrapper>
+          );
+        })}
+      </div>
+      {isPending && <div>Loading...</div>}
     </div>
   );
-};
+}
 
 function getOrdinalForPlayRequirement(pr: CardDefinition['playRequirement']) {
   if (pr === 'replace') {
