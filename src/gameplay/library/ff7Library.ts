@@ -2332,12 +2332,350 @@ Enfeebled: lower their power by 4.`,
             playRequirement: 0,
             basePower: 2 * numPips,
             effects: [],
+            // this is the description in QB; it's not really accurate to how the card is modeled, but that's ok
             description: `When spawned, if this replaced 2 Pawns, this gains 2 power. If this replaced 3, this gains 4 power instead.`,
           };
         }),
       ),
     ],
     description: `When played, spawn Diamond Dust of power 2, 4, or 6 in empty positions.`,
+    isLegendary: true,
+  };
+
+  export const Ramuh: CardDefinition = {
+    typeId: 'ramuh' as CardDefinition['typeId'],
+    name: 'Ramuh',
+    playRequirement: 3,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 1 },
+        { dx: 2, dy: 2 },
+        { dx: 1, dy: -1 },
+        { dx: 2, dy: -2 },
+        { dx: -1, dy: -1 },
+        { dx: -2, dy: -2 },
+        { dx: -1, dy: 1 },
+        { dx: -2, dy: 2 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-3, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 1 },
+              { dx: 2, dy: 2 },
+              { dx: 1, dy: -1 },
+              { dx: 2, dy: -2 },
+              { dx: -1, dy: -1 },
+              { dx: -2, dy: -2 },
+              { dx: -1, dy: 1 },
+              { dx: -2, dy: 2 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 3.`,
+    isLegendary: true,
+  };
+
+  export const Titan: CardDefinition = {
+    typeId: 'titan' as CardDefinition['typeId'],
+    name: 'Titan',
+    playRequirement: 2,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips(
+        [
+          { dx: 0, dy: 1 },
+          { dx: 1, dy: 0 },
+          { dx: 0, dy: -1 },
+        ],
+        2,
+      ),
+    ],
+    description: `When played, raise position ranks by 2.`,
+    isLegendary: true,
+  };
+
+  export const Kujata: CardDefinition = {
+    typeId: 'kujata' as CardDefinition['typeId'],
+    name: 'Kujata',
+    playRequirement: 3,
+    basePower: 6,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          changeDirection: 'increasing',
+        },
+        actions: [
+          CardEffect.addPower(-5, {
+            limitTo: {
+              tiles: [
+                { dx: -1, dy: 0 },
+                { dx: 1, dy: 1 },
+                { dx: 1, dy: -1 },
+              ],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enhanced, lower the power of enemy cards on affected tiles by 5.`,
+    isLegendary: true,
+  };
+
+  export const Odin: CardDefinition = {
+    typeId: 'odin' as CardDefinition['typeId'],
+    name: 'Odin',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+        { dx: -1, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+2, {
+        powerStatus: {
+          empowered: true,
+        },
+        allegiance: 'opponent',
+      }),
+    ],
+    description: `Raise power by 2 for each enhanced enemy card.`,
+    isLegendary: true,
+  };
+
+  export const Phoenix: CardDefinition = {
+    typeId: 'phoenix' as CardDefinition['typeId'],
+    name: 'Phoenix',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+        { dx: -1, dy: -1 },
+      ]),
+      CardEffect.onThisDestroyed(
+        CardEffect.addPower(+5, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: -1 },
+              { dx: -1, dy: -1 },
+            ],
+          },
+          allegiance: 'allied',
+        }),
+      ),
+    ],
+    description: `When destroyed, raise the power of allied cards on affected tiles by 5.`,
+    isLegendary: true,
+  };
+
+  export const Leviathan: CardDefinition = {
+    typeId: 'leviathan' as CardDefinition['typeId'],
+    name: 'Leviathan',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 2, dy: 0 },
+        { dx: 0, dy: -2 },
+        { dx: -2, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(-3, {
+        limitTo: {
+          tiles: [
+            { dx: -2, dy: 2 },
+            { dx: 0, dy: 2 },
+            { dx: 2, dy: 2 },
+            { dx: 2, dy: 0 },
+            { dx: 2, dy: -2 },
+            { dx: 0, dy: -2 },
+            { dx: -2, dy: -2 },
+            { dx: -2, dy: 0 },
+          ],
+        },
+        allegiance: 'opponent',
+      }),
+    ],
+    description: `Lower the power of enemy cards on affected tiles by 3 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const Alexander: CardDefinition = {
+    typeId: 'alexander' as CardDefinition['typeId'],
+    name: 'Alexander',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+        { dx: -1, dy: 0 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+3, {
+        powerStatus: {
+          enfeebled: true,
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise power by 3 for each other enfeebled allied card.`,
+    isLegendary: true,
+  };
+
+  export const Bahamut: CardDefinition = {
+    typeId: 'bahamut' as CardDefinition['typeId'],
+    name: 'Bahamut',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 1 },
+        { dx: 2, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: -1, dy: 0 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(-5, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 0 },
+              { dx: 2, dy: 0 },
+            ],
+          },
+          allegiance: 'opponent',
+        }),
+      ),
+    ],
+    description: `When played, lower the power of enemy cards on affected tiles by 5.`,
+    isLegendary: true,
+  };
+
+  export const BahamutArisen: CardDefinition = {
+    typeId: 'bahamut-arisen' as CardDefinition['typeId'],
+    name: 'Bahamut Arisen',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.spawnCardsOnCapturedTiles((numPips) => {
+          return {
+            typeId: `elementals-${numPips}` as CardDefinition['typeId'],
+            name: `Elementals ${numPips}`,
+            playRequirement: 0,
+            basePower: 1,
+            effects: [
+              CardEffect.onThisDestroyed(
+                CardEffect.addPower(+numPips, {
+                  limitTo: {
+                    tiles: [
+                      { dx: 0, dy: 1 },
+                      { dx: 1, dy: 1 },
+                      { dx: 1, dy: 0 },
+                      { dx: 1, dy: -1 },
+                      { dx: 0, dy: -1 },
+                      { dx: -1, dy: -1 },
+                      { dx: -1, dy: 0 },
+                      { dx: -1, dy: 1 },
+                    ],
+                  },
+                }),
+              ),
+            ],
+            description: `When destroyed, raise the power of allied and enemy cards on affected tiles by ${numPips}.`,
+          };
+        }),
+      ),
+    ],
+    description: `When played, spawn Elementals—cards that enhance when destroyed—in your empty positions.`,
+  };
+
+  export const Gilgamesh: CardDefinition = {
+    typeId: 'gilgamesh' as CardDefinition['typeId'],
+    name: 'Gilgamesh',
+    playRequirement: 'replace',
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(
+          -1,
+          {
+            limitTo: {
+              tiles: [
+                { dx: -2, dy: 2 },
+                { dx: 2, dy: 2 },
+                { dx: 2, dy: -2 },
+                { dx: -2, dy: -2 },
+              ],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: ``,
+    isLegendary: true,
+  };
+
+  export const ChocoboAndMoogle: CardDefinition = {
+    typeId: 'chocobo-&-moogle' as CardDefinition['typeId'],
+    name: 'Chocobo & Moogle',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 0, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        powerStatus: {
+          empowered: true,
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise power by 1 for each other ehanced allied card.`,
+    isLegendary: true,
+  };
+
+  export const FatChocobo: CardDefinition = {
+    typeId: 'fat-chocobo' as CardDefinition['typeId'],
+    name: 'Fat Chocobo',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 1, dy: 1 },
+        { dx: 2, dy: 0 },
+        { dx: 1, dy: -1 },
+        { dx: 0, dy: -2 },
+        { dx: -1, dy: -1 },
+        { dx: -2, dy: 0 },
+        { dx: -1, dy: 1 },
+      ]),
+    ],
+    description: `Creates a surfeit of positions around it when played.`,
     isLegendary: true,
   };
 }
@@ -2438,4 +2776,16 @@ export const FF7_LIBRARY = [
   FF7Library.Vincent,
   FF7Library.Ifrit,
   FF7Library.Shiva,
+  FF7Library.Ramuh,
+  FF7Library.Titan,
+  FF7Library.Kujata,
+  FF7Library.Odin,
+  FF7Library.Phoenix,
+  FF7Library.Leviathan,
+  FF7Library.Alexander,
+  FF7Library.Bahamut,
+  FF7Library.BahamutArisen,
+  FF7Library.Gilgamesh,
+  FF7Library.ChocoboAndMoogle,
+  FF7Library.FatChocobo,
 ];
