@@ -2678,6 +2678,88 @@ Enfeebled: lower their power by 4.`,
     description: `Creates a surfeit of positions around it when played.`,
     isLegendary: true,
   };
+
+  export const PoshChocobo: CardDefinition = {
+    typeId: 'posh-chocobo' as CardDefinition['typeId'],
+    name: 'Posh Chocobo',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onGameEnd',
+          wonRow: true,
+        },
+        actions: [
+          {
+            id: 'addScoreBonusForPlayer',
+            player: 'controller',
+            amount: +3,
+          },
+        ],
+      },
+    ],
+    description: `When you win the lane, receive a score bonus of 3.`,
+    isLegendary: true,
+  };
+
+  export const MoogleTrio: CardDefinition = {
+    typeId: 'moogle-trio' as CardDefinition['typeId'],
+    name: 'Moogle Trio',
+    playRequirement: 2,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+      ]),
+      CardEffect.onThisPlayed(
+        CardEffect.createCardForPlayer({
+          typeId: 'moogle-mage' as CardDefinition['typeId'],
+          name: 'Moogle Mage',
+          playRequirement: 1,
+          basePower: 1,
+          effects: [
+            CardEffect.onThisPlayedAddPips([{ dx: 2, dy: 2 }]),
+            CardEffect.onThisPlayed(
+              CardEffect.addPower(-4, {
+                limitTo: {
+                  tiles: [{ dx: 2, dy: 2 }],
+                },
+                allegiance: 'opponent',
+              }),
+            ),
+          ],
+          description: `When played, lower the power of enemy cards on affeted tiles by 4.`,
+        }),
+        CardEffect.createCardForPlayer({
+          typeId: 'moogle-bard' as CardDefinition['typeId'],
+          name: 'Moogle Bard',
+          playRequirement: 1,
+          basePower: 1,
+          effects: [
+            CardEffect.onThisPlayedAddPips([{ dx: 1, dy: -1 }]),
+            ...CardEffect.passiveBoardPowerChange(+2, {
+              limitTo: {
+                tiles: [
+                  { dx: 1, dy: -1 },
+                  { dx: 1, dy: -2 },
+                ],
+              },
+              allegiance: 'allied',
+            }),
+          ],
+          description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+        }),
+      ),
+    ],
+    description: `When played, add both Moogle Mage and Moogle Bard to your hand.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -2788,4 +2870,6 @@ export const FF7_LIBRARY = [
   FF7Library.Gilgamesh,
   FF7Library.ChocoboAndMoogle,
   FF7Library.FatChocobo,
+  FF7Library.PoshChocobo,
+  FF7Library.MoogleTrio,
 ];
