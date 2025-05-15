@@ -7,7 +7,7 @@ export type DebugState = {
   state: GameState;
 };
 
-const key = 'decks';
+const key = 'debugStates';
 const DEFAULT_VALUE: DebugState[] = [];
 
 const handle = getStorageHandle<DebugState[]>(key, DEFAULT_VALUE);
