@@ -2760,6 +2760,927 @@ Enfeebled: lower their power by 4.`,
     description: `When played, add both Moogle Mage and Moogle Bard to your hand.`,
     isLegendary: true,
   };
+
+  export const MagicPot: CardDefinition = {
+    typeId: 'magic-pot' as CardDefinition['typeId'],
+    name: 'Magic Pot',
+    playRequirement: 3,
+    basePower: 1,
+    effects: [
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [
+            { dx: -1, dy: 1 },
+            { dx: -1, dy: -1 },
+            { dx: 1, dy: 1 },
+            { dx: 1, dy: -1 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const MateriaGuardian: CardDefinition = {
+    typeId: 'materia-guardian' as CardDefinition['typeId'],
+    name: 'Materia Guardian',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 0, dy: -2 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'decreasing',
+        },
+        actions: [
+          CardEffect.addPower(-6, {
+            limitTo: {
+              tiles: [
+                { dx: -2, dy: 2 },
+                { dx: -2, dy: -2 },
+                { dx: -1, dy: 2 },
+                { dx: -1, dy: -2 },
+                { dx: 1, dy: 2 },
+                { dx: 1, dy: -2 },
+                { dx: 2, dy: 2 },
+                { dx: 2, dy: -2 },
+              ],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enfeebled, lower the power of enemy cards on affected tiles by 6.`,
+    isLegendary: true,
+  };
+
+  export const Midgardsormr: CardDefinition = {
+    typeId: 'midgardsormr' as CardDefinition['typeId'],
+    name: 'Midgardsormr',
+    playRequirement: 3,
+    basePower: 6,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onDestroy',
+        },
+        actions: [
+          CardEffect.addPower(+1, {
+            limitTo: {
+              self: true,
+            },
+          }),
+        ],
+      },
+    ],
+    description: `When allied and enemy cards are destroyed, raise this card's power by 1.`,
+    isLegendary: true,
+  };
+
+  export const MythrilGolem: CardDefinition = {
+    typeId: 'mythril-golem' as CardDefinition['typeId'],
+    name: 'MythrilGolem',
+    playRequirement: 3,
+    basePower: 8,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+    ],
+    description: `Possesses a crystal-hard resolve and an overwhelming amount of power.`,
+    isLegendary: true,
+  };
+
+  export const TerrorOfTheDeep: CardDefinition = {
+    typeId: 'terror-of-the-deep' as CardDefinition['typeId'],
+    name: 'Terror of the Deep',
+    playRequirement: 3,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: -1, dy: 0 },
+        { dx: -1, dy: -1 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 1, dy: -1 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(-1, {
+        limitTo: {
+          tiles: [
+            { dx: -1, dy: 1 },
+            { dx: -1, dy: 0 },
+            { dx: -1, dy: -1 },
+            { dx: 0, dy: 1 },
+            { dx: 0, dy: -1 },
+            { dx: 1, dy: 1 },
+            { dx: 1, dy: 0 },
+            { dx: 1, dy: -1 },
+          ],
+        },
+      }),
+    ],
+    description: `Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const Gastropod: CardDefinition = {
+    typeId: 'gastropod' as CardDefinition['typeId'],
+    name: 'Gastropod',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: -1, dy: -1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'increasing',
+        },
+        actions: [
+          CardEffect.addPower(-4, {
+            limitTo: {
+              tiles: [
+                { dx: -2, dy: 2 },
+                { dx: -2, dy: 1 },
+                { dx: -2, dy: -1 },
+                { dx: -2, dy: -2 },
+                { dx: 2, dy: 2 },
+                { dx: 2, dy: 1 },
+                { dx: 2, dy: -1 },
+                { dx: 2, dy: -2 },
+              ],
+            },
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enhanced, lower the power of allied and enemy cards on affected tiles by 4.`,
+    isLegendary: true,
+  };
+
+  export const CustomValkyrie: CardDefinition = {
+    typeId: 'custom-valkyrie' as CardDefinition['typeId'],
+    name: 'Custom Valkyrie',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: -1, dy: 1 },
+          { dx: -1, dy: -1 },
+          { dx: 1, dy: 1 },
+          { dx: 1, dy: -1 },
+        ]),
+        CardEffect.addPower(-4, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: -1, dy: -1 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 4.`,
+    isLegendary: true,
+  };
+
+  export const Gigatrice: CardDefinition = {
+    typeId: 'gigatrice' as CardDefinition['typeId'],
+    name: 'Gigatrice',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: 0, dy: 2 },
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 },
+          { dx: 0, dy: -2 },
+          { dx: 1, dy: 2 },
+          { dx: 1, dy: -2 },
+        ]),
+        {
+          id: 'immediatelyDestroy',
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 2 },
+              { dx: 1, dy: -2 },
+            ],
+          },
+        },
+      ),
+    ],
+    description: `When played, destroy allied and enemy cards on affected tiles.`,
+    isLegendary: true,
+  };
+
+  export const Dyne: CardDefinition = {
+    typeId: 'dyne' as CardDefinition['typeId'],
+    name: 'Dyne',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: 1, dy: 2 },
+          { dx: 1, dy: -2 },
+          { dx: 2, dy: 1 },
+          { dx: 2, dy: -1 },
+        ]),
+        CardEffect.addPower(-5, {
+          limitTo: {
+            tiles: [
+              { dx: 1, dy: 2 },
+              { dx: 1, dy: -2 },
+              { dx: 2, dy: 1 },
+              { dx: 2, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 5.`,
+    isLegendary: true,
+  };
+
+  export const AnuranSuppressor: CardDefinition = {
+    typeId: 'anuran-suppressor' as CardDefinition['typeId'],
+    name: 'Anuran Suppressor',
+    playRequirement: 2,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: -2 },
+        { dx: 1, dy: 0 },
+        { dx: 1, dy: -2 },
+      ]),
+      {
+        trigger: {
+          id: 'onDestroy',
+          allegiance: 'opponent',
+        },
+        actions: [
+          CardEffect.addPower(+2, {
+            limitTo: {
+              self: true,
+            },
+          }),
+        ],
+      },
+    ],
+    description: `When enemy cards are destroyed, raise this card's power by 2.`,
+    isLegendary: true,
+  };
+
+  export const SpecimenH1024: CardDefinition = {
+    typeId: 'specimen-h1024' as CardDefinition['typeId'],
+    name: 'Specimen H1024',
+    playRequirement: 3,
+    basePower: 6,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+3, {
+        limitTo: {
+          tiles: [
+            { dx: -2, dy: 2 },
+            { dx: -2, dy: 0 },
+            { dx: -2, dy: -2 },
+            { dx: 0, dy: 2 },
+            { dx: 0, dy: -2 },
+            { dx: 2, dy: 2 },
+            { dx: 2, dy: 0 },
+            { dx: 2, dy: -2 },
+          ],
+        },
+      }),
+    ],
+    description: `Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const CrimsonMareMkII: CardDefinition = {
+    typeId: 'crimson-mare-mk-ii' as CardDefinition['typeId'],
+    name: 'Crimson Mare Mk. II',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          changeDirection: 'decreasing',
+        },
+        actions: [
+          CardEffect.addPower(-5, {
+            limitTo: {
+              tiles: [
+                { dx: -1, dy: 0 },
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+                { dx: 1, dy: 0 },
+              ],
+            },
+          }),
+        ],
+        maxActivations: 1,
+      },
+    ],
+    description: `When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5.`,
+    isLegendary: true,
+  };
+
+  export const GiNattak: CardDefinition = {
+    typeId: 'gi-nattak' as CardDefinition['typeId'],
+    name: 'Gi Nattak',
+    playRequirement: 'replace',
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 },
+        ]),
+        CardEffect.addPower(
+          +1,
+          {
+            limitTo: {
+              tiles: [
+                { dx: 0, dy: 1 },
+                { dx: 0, dy: -1 },
+              ],
+            },
+          },
+          'replaced',
+        ),
+      ),
+    ],
+    description: `Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power.`,
+    isLegendary: true,
+  };
+
+  export const ForgottenSpecimen: CardDefinition = {
+    typeId: 'forgottenspecimen' as CardDefinition['typeId'],
+    name: 'ForgottenSpecimen',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 1, dy: 2 },
+        { dx: 1, dy: 1 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+3, {
+        limitTo: {
+          tiles: [
+            { dx: -1, dy: -1 },
+            { dx: -1, dy: -2 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const DonCorneoAndAbzu: CardDefinition = {
+    typeId: 'don-corneo-&-abzu' as CardDefinition['typeId'],
+    name: 'Don Corneo & Abzu',
+    playRequirement: 2,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.createCardForPlayer({
+          typeId: 'cacneo' as CardDefinition['typeId'],
+          name: 'Cacneo',
+          playRequirement: 2,
+          basePower: 2,
+          effects: [
+            CardEffect.onThisPlayedAddPips([
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+            ]),
+            ...CardEffect.passiveBoardPowerChange(+3, {
+              limitTo: {
+                tiles: [
+                  { dx: 1, dy: 2 },
+                  { dx: 1, dy: -2 },
+                ],
+              },
+              allegiance: 'allied',
+            }),
+          ],
+          description: `Raise the power of allied cards on affected tiles by 3 while this card is in play.`,
+        }),
+        CardEffect.createCardForPlayer({
+          typeId: 'donberry' as CardDefinition['typeId'],
+          name: 'Donberry',
+          playRequirement: 2,
+          basePower: 2,
+          effects: [
+            CardEffect.onThisPlayed(CardEffect.addPips([{ dx: 1, dy: 0 }]), {
+              id: 'immediatelyDestroy',
+              limitTo: {
+                tiles: [{ dx: 1, dy: 0 }],
+              },
+              allegiance: 'opponent',
+            }),
+          ],
+          description: `When played, destroy enemy cards on affected tiles`,
+        }),
+      ),
+    ],
+    description: `When played, add both Cacneo and Donberry to your hand.`,
+    isLegendary: true,
+  };
+
+  export const RedDragon: CardDefinition = {
+    typeId: 'red-dragon' as CardDefinition['typeId'],
+    name: 'Red Dragon',
+    playRequirement: 3,
+    basePower: 6,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: 0, dy: 2 },
+          { dx: 0, dy: -2 },
+          { dx: 1, dy: 1 },
+          { dx: 1, dy: -1 },
+          { dx: 2, dy: 0 },
+        ]),
+        CardEffect.addPower(-4, {
+          limitTo: {
+            tiles: [
+              { dx: 0, dy: 2 },
+              { dx: 0, dy: -2 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: -1 },
+              { dx: 2, dy: 0 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied and enemy cards on affected tiles by 4.`,
+    isLegendary: true,
+  };
+
+  export const DemonGate: CardDefinition = {
+    typeId: 'demon-gate' as CardDefinition['typeId'],
+    name: 'Demon Gate',
+    playRequirement: 3,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 1 },
+        { dx: -1, dy: 0 },
+        { dx: -1, dy: -1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: 0 },
+        { dx: 1, dy: -1 },
+      ]),
+      {
+        trigger: {
+          id: 'onDestroy',
+          limitTo: {
+            self: true,
+          },
+        },
+        actions: [
+          CardEffect.addPower(-9, {
+            limitTo: {
+              tiles: [
+                { dx: -1, dy: 1 },
+                { dx: -1, dy: 0 },
+                { dx: -1, dy: -1 },
+                { dx: 1, dy: 1 },
+                { dx: 1, dy: 0 },
+                { dx: 1, dy: -1 },
+              ],
+            },
+            allegiance: 'opponent',
+          }),
+        ],
+      },
+    ],
+    description: `When destroyed, lower the power of enemy cards on affected tiles by 9.`,
+    isLegendary: true,
+  };
+
+  export const Reno: CardDefinition = {
+    typeId: 'reno' as CardDefinition['typeId'],
+    name: 'Reno',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [
+            { dx: -1, dy: -1 },
+            { dx: 0, dy: -2 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const Rude: CardDefinition = {
+    typeId: 'rude' as CardDefinition['typeId'],
+    name: 'Rude',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [
+            { dx: -1, dy: 1 },
+            { dx: 0, dy: 2 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const Elena: CardDefinition = {
+    typeId: 'elena' as CardDefinition['typeId'],
+    name: 'Elena',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'increasing',
+        },
+        actions: [
+          CardEffect.addPower(-99, {
+            limitTo: {
+              tiles: [{ dx: 1, dy: 0 }],
+            },
+          }),
+        ],
+      },
+    ],
+    description: `When first enhanced, lower the power of allied and enemy cards on affected tiles by 99.`,
+    isLegendary: true,
+  };
+
+  export const Tseng: CardDefinition = {
+    typeId: 'tseng' as CardDefinition['typeId'],
+    name: 'Tseng',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onPowerChange',
+          limitTo: {
+            self: true,
+          },
+          changeDirection: 'increasing',
+        },
+        actions: [
+          CardEffect.addPower(+4, {
+            limitTo: {
+              tiles: [{ dx: 2, dy: 0 }],
+            },
+          }),
+        ],
+      },
+    ],
+    description: `The first time this card is enhanced, raise the power of allied cards on affected tiles by 4.`,
+    isLegendary: true,
+  };
+
+  export const Rufus: CardDefinition = {
+    typeId: 'rufus' as CardDefinition['typeId'],
+    name: 'Rufus',
+    playRequirement: 2,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 2 },
+        { dx: -1, dy: 1 },
+        { dx: -1, dy: -1 },
+        { dx: -1, dy: -2 },
+        { dx: 1, dy: 2 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+        { dx: 1, dy: -2 },
+      ]),
+    ],
+    description: `Creates an intimidatingly large number of positions around him when played.`,
+    isLegendary: true,
+  };
+
+  export const Roche: CardDefinition = {
+    typeId: 'roche' as CardDefinition['typeId'],
+    name: 'Roche',
+    playRequirement: 2,
+    basePower: 5,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: -1, dy: 0 },
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 },
+          { dx: 1, dy: 0 },
+        ]),
+        CardEffect.addPower(-1, {
+          limitTo: {
+            tiles: [
+              { dx: -2, dy: 2 },
+              { dx: -2, dy: 0 },
+              { dx: -2, dy: -2 },
+              { dx: -1, dy: 1 },
+              { dx: -1, dy: 0 },
+              { dx: -1, dy: -1 },
+              { dx: 0, dy: 2 },
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+              { dx: 0, dy: -2 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+              { dx: 2, dy: 2 },
+              { dx: 2, dy: 0 },
+              { dx: 2, dy: -2 },
+            ],
+          },
+          allegiance: 'allied',
+        }),
+      ),
+    ],
+    description: `When played, lower the power of allied cards on affected tiles by 1.`,
+    isLegendary: true,
+  };
+
+  export const JSquad: CardDefinition = {
+    typeId: 'j-squad' as CardDefinition['typeId'],
+    name: 'J-Squad',
+    playRequirement: 3,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.spawnCardsOnCapturedTiles((numPips) => {
+          return {
+            typeId: `hype-johnnys-${numPips}` as CardDefinition['typeId'],
+            name: `Hype Johnnys ${numPips}`,
+            playRequirement: 0,
+            basePower: 1,
+            effects: [
+              ...CardEffect.passiveBoardPowerChange(+numPips, {
+                limitTo: {
+                  tiles: [
+                    { dx: -2, dy: 2 },
+                    { dx: -2, dy: 0 },
+                    { dx: -2, dy: -2 },
+                    { dx: 0, dy: 2 },
+                    { dx: 0, dy: -2 },
+                    { dx: 2, dy: 2 },
+                    { dx: 2, dy: 0 },
+                    { dx: 2, dy: -2 },
+                  ],
+                },
+              }),
+            ],
+            description: `Raise the power of allied and enemy cards on affected tiles by ${numPips} while this card is in play.`,
+          };
+        }),
+      ),
+    ],
+    description: `When played, spawn Hype Johnnys—cards that enhance while in play—in your empty positions.`,
+    isLegendary: true,
+  };
+
+  export const ChocoboJockey: CardDefinition = {
+    typeId: 'chocobo-jockey' as CardDefinition['typeId'],
+    name: 'Chocobo Jockey',
+    playRequirement: 2,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
+      {
+        trigger: {
+          id: 'onGameEnd',
+          wonRow: true,
+        },
+        actions: [
+          {
+            id: 'addScoreBonusForPlayer',
+            player: 'controller',
+            amount: +10,
+          },
+        ],
+      },
+    ],
+    description: `When you win the lane, receive a score bonus of 10.`,
+    isLegendary: true,
+  };
+
+  export const SpaceRanger: CardDefinition = {
+    typeId: 'space-ranger' as CardDefinition['typeId'],
+    name: 'Space Ranger',
+    playRequirement: 1,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 2 },
+        { dx: 0, dy: 1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        powerStatus: {
+          empowered: true,
+        },
+        allegiance: 'opponent',
+      }),
+    ],
+    description: `Raise power by 1 for each enhanced enemy card.`,
+    isLegendary: true,
+  };
+
+  export const HauntedHotel: CardDefinition = {
+    typeId: 'hauntedhotel' as CardDefinition['typeId'],
+    name: 'Haunted Hotel',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        limitTo: {
+          tiles: [
+            { dx: 1, dy: 1 },
+            { dx: 1, dy: -1 },
+            { dx: 2, dy: 1 },
+            { dx: 2, dy: -1 },
+          ],
+        },
+        allegiance: 'allied',
+      }),
+    ],
+    description: `Raise the power of allied cards on affected tilles by 2 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const Skywheel: CardDefinition = {
+    typeId: 'skywheel' as CardDefinition['typeId'],
+    name: 'Skywheel',
+    playRequirement: 3,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -2, dy: 1 },
+        { dx: -2, dy: -1 },
+        { dx: -1, dy: 2 },
+        { dx: -1, dy: -2 },
+        { dx: 1, dy: 2 },
+        { dx: 1, dy: -2 },
+        { dx: 2, dy: 1 },
+        { dx: 2, dy: -1 },
+      ]),
+    ],
+    description: `Adds positions in the shape of a certain Gold Saucer attraction.`,
+    isLegendary: true,
+  };
+
+  export const Loveless: CardDefinition = {
+    typeId: 'loveless' as CardDefinition['typeId'],
+    name: 'Loveless',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPower(+1, {
+          limitTo: {
+            tiles: [
+              { dx: -1, dy: 1 },
+              { dx: -1, dy: 0 },
+              { dx: -1, dy: -1 },
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+              { dx: 1, dy: 1 },
+              { dx: 1, dy: 0 },
+              { dx: 1, dy: -1 },
+            ],
+          },
+        }),
+      ),
+    ],
+    description: `When played, raise the power of allied and enemy cards on affected tiles by 1.`,
+    isLegendary: true,
+  };
+
+  export const SaucerSquad: CardDefinition = {
+    typeId: 'saucer-squad' as CardDefinition['typeId'],
+    name: 'Saucer Squad',
+    playRequirement: 2,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 2 },
+        { dx: 1, dy: 0 },
+        { dx: 1, dy: -2 },
+      ]),
+    ],
+    description: `Makes use of its adorable nature to enliven the battlefield.`,
+    isLegendary: true,
+  };
+
+  export const Dio: CardDefinition = {
+    typeId: 'dio' as CardDefinition['typeId'],
+    name: 'Dio',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        powerStatus: {
+          empowered: true,
+        },
+      }),
+    ],
+    description: `Raise power by 1 for each other enhanced allied and enemy card.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -2872,4 +3793,34 @@ export const FF7_LIBRARY = [
   FF7Library.FatChocobo,
   FF7Library.PoshChocobo,
   FF7Library.MoogleTrio,
+  FF7Library.MagicPot,
+  FF7Library.MateriaGuardian,
+  FF7Library.Midgardsormr,
+  FF7Library.MythrilGolem,
+  FF7Library.TerrorOfTheDeep,
+  FF7Library.Gastropod,
+  FF7Library.CustomValkyrie,
+  FF7Library.Gigatrice,
+  FF7Library.Dyne,
+  FF7Library.AnuranSuppressor,
+  FF7Library.SpecimenH1024,
+  FF7Library.CrimsonMareMkII,
+  FF7Library.GiNattak,
+  FF7Library.ForgottenSpecimen,
+  FF7Library.DonCorneoAndAbzu,
+  FF7Library.RedDragon,
+  FF7Library.DemonGate,
+  FF7Library.Reno,
+  FF7Library.Rude,
+  FF7Library.Elena,
+  FF7Library.Tseng,
+  FF7Library.Rufus,
+  FF7Library.Roche,
+  FF7Library.JSquad,
+  FF7Library.ChocoboJockey,
+  FF7Library.SpaceRanger,
+  FF7Library.HauntedHotel,
+  FF7Library.Skywheel,
+  FF7Library.Loveless,
+  FF7Library.SaucerSquad,
 ];
