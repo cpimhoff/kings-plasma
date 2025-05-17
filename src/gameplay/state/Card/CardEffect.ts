@@ -80,6 +80,7 @@ export namespace CardEffect {
     };
     // observe as non-matching cards change status to become matching cards
     const powerStatus = filters.powerStatus || {};
+    const otherFilters = { ...filters, powerStatus: undefined };
     const observePowerStatusEffects: CardEffect[] = Object.keys(powerStatus)
       .map((s) => s as CardPowerStatus)
       .filter((s) => !!powerStatus[s])
@@ -88,6 +89,7 @@ export namespace CardEffect {
           {
             trigger: {
               id: 'onPowerChange',
+              ...otherFilters,
               powerStatusChange: {
                 status,
                 onOff: 'on',
@@ -104,6 +106,7 @@ export namespace CardEffect {
           {
             trigger: {
               id: 'onPowerChange',
+              ...otherFilters,
               powerStatusChange: {
                 status,
                 onOff: 'off',

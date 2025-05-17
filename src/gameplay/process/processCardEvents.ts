@@ -459,17 +459,12 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
       action satisfies never;
       return [];
   }
-  // first gather cards to filter, using 'tiles' or falling back to all board cards
+
+  // first gather cards to filter, using 'onlyTiles' or falling back to all board cards
   let targets: OccupiedTile[] = [];
   const addTarget = (t: OccupiedTile) => {
     if (!targets.some((_t) => positionsEqual(t.position, _t.position))) {
       targets.push(t);
-    }
-  };
-  const removeTarget = (p: BoardPosition) => {
-    const index = targets.findIndex((t) => positionsEqual(t.position, p));
-    if (index > 0) {
-      targets.splice(index, 1);
     }
   };
   if (filters.onlyTiles) {
@@ -496,28 +491,37 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
   } else {
     targets = Array.from(allBoardCards(state));
   }
-  if (filters.excludeTiles) {
-    const { self, list, eventSource } = filters.excludeTiles;
-    if (self) {
-      removeTarget(action.source.position);
-    }
-    if (eventSource && 'source' in action.event) {
-      removeTarget(action.event.source.position);
-    }
-    if (list) {
-      list
-        .map((deltaTile) => ({
-          x: action.source.position.x + deltaTile.dx,
-          y: action.source.position.y + deltaTile.dy,
-        }))
-        .forEach((p) => {
-          removeTarget(p);
-        });
-    }
-  }
 
   // then filter out based on conditions
   return targets
+    .filter((t) => {
+      if (filters.excludeTiles) {
+        const { self, list, eventSource } = filters.excludeTiles;
+        if (self) {
+          if (positionsEqual(action.source.position, t.position)) {
+            return false;
+          }
+        }
+        if (eventSource && 'source' in action.event) {
+          if (positionsEqual(action.event.source.position, t.position)) {
+            return false;
+          }
+        }
+        if (list) {
+          const excluded = list
+            .map((deltaTile) => ({
+              x: action.source.position.x + deltaTile.dx,
+              y: action.source.position.y + deltaTile.dy,
+            }))
+            .some((p) => {
+              return positionsEqual(p, t.position);
+            });
+          if (excluded) {
+            return false;
+          }
+        }
+      }
+    })
     .filter((t) => {
       if (filters.allegiance) {
         return filters.allegiance === 'allied'
