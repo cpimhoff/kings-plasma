@@ -13,6 +13,7 @@ import {
   CardActionFilters,
   positionsEqual,
   BoardTile,
+  addVectorToPosition,
 } from '../state';
 import { produce } from 'immer';
 import { ProcessCtx } from './ctx';
@@ -184,20 +185,35 @@ function doesEventSatisfyTriggerCondition(
   }
   if (triggerCond.id === 'onGameEnd') return false; // type guard
 
-  // then check limitTo
-  if (triggerCond.limitTo) {
-    const { self, tiles } = triggerCond.limitTo;
+  // then check tiles
+  if (triggerCond.onlyTiles) {
+    const { self, list } = triggerCond.onlyTiles;
     if (self) {
-      if (!(event.source.position.x === responder.position.x && event.source.position.y === responder.position.y)) {
+      if (!positionsEqual(event.source.position, responder.position)) {
         return false;
       }
     }
-    if (tiles) {
+    if (list) {
       if (
-        !tiles.some(
-          (deltaTile) =>
-            responder.position.x + deltaTile.dx === event.source.position.x &&
-            responder.position.y + deltaTile.dy === event.source.position.y,
+        !list.some((deltaTile) =>
+          positionsEqual(event.source.position, addVectorToPosition(responder.position, deltaTile)),
+        )
+      ) {
+        return false;
+      }
+    }
+  }
+  if (triggerCond.excludeTiles) {
+    const { self, list } = triggerCond.excludeTiles;
+    if (self) {
+      if (positionsEqual(event.source.position, responder.position)) {
+        return false;
+      }
+    }
+    if (list) {
+      if (
+        list.some((deltaTile) =>
+          positionsEqual(event.source.position, addVectorToPosition(responder.position, deltaTile)),
         )
       ) {
         return false;
@@ -430,8 +446,8 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
     case 'addControlledPips':
       // for now we only support adding pips on specific tiles
       filters = {
-        limitTo: {
-          tiles: action.tiles,
+        onlyTiles: {
+          list: action.tiles,
         },
       };
       break;
@@ -443,23 +459,29 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
       action satisfies never;
       return [];
   }
-  // first gather cards to filter, using limitTo or falling back to all board cards
+  // first gather cards to filter, using 'tiles' or falling back to all board cards
   let targets: OccupiedTile[] = [];
   const addTarget = (t: OccupiedTile) => {
     if (!targets.some((_t) => positionsEqual(t.position, _t.position))) {
       targets.push(t);
     }
   };
-  if (filters.limitTo) {
-    const { self, tiles, eventSource } = filters.limitTo;
+  const removeTarget = (p: BoardPosition) => {
+    const index = targets.findIndex((t) => positionsEqual(t.position, p));
+    if (index > 0) {
+      targets.splice(index, 1);
+    }
+  };
+  if (filters.onlyTiles) {
+    const { self, list, eventSource } = filters.onlyTiles;
     if (self) {
       addTarget(action.source);
     }
     if (eventSource && 'source' in action.event) {
       addTarget(action.event.source);
     }
-    if (tiles) {
-      tiles
+    if (list) {
+      list
         .map((deltaTile) => ({
           x: action.source.position.x + deltaTile.dx,
           y: action.source.position.y + deltaTile.dy,
@@ -473,6 +495,25 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
     }
   } else {
     targets = Array.from(allBoardCards(state));
+  }
+  if (filters.excludeTiles) {
+    const { self, list, eventSource } = filters.excludeTiles;
+    if (self) {
+      removeTarget(action.source.position);
+    }
+    if (eventSource && 'source' in action.event) {
+      removeTarget(action.event.source.position);
+    }
+    if (list) {
+      list
+        .map((deltaTile) => ({
+          x: action.source.position.x + deltaTile.dx,
+          y: action.source.position.y + deltaTile.dy,
+        }))
+        .forEach((p) => {
+          removeTarget(p);
+        });
+    }
   }
 
   // then filter out based on conditions

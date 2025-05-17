@@ -1,3 +1,4 @@
+import { Vector2 } from '@/utils/vector';
 import { CardInstance } from './Card';
 import { Player } from './Player';
 
@@ -12,6 +13,13 @@ export type BoardPosition = {
 
 export function positionsEqual(pos1: BoardPosition, pos2: BoardPosition) {
   return pos1.x === pos2.x && pos1.y === pos2.y;
+}
+
+export function addVectorToPosition(pos: BoardPosition, vec: Vector2): BoardPosition {
+  return {
+    x: pos.x + vec.dx,
+    y: pos.y + vec.dy,
+  };
 }
 
 export type BoardTile = {

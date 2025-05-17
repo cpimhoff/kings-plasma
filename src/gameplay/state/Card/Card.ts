@@ -77,9 +77,9 @@ export function getGridForCardEffects(effects: CardDefinition['effects']): CardG
       if ('tiles' in action && action.tiles) {
         // addControlledPips
         tiles = action.tiles;
-      } else if ('limitTo' in action && action.limitTo && 'tiles' in action.limitTo && action.limitTo.tiles) {
+      } else if ('onlyTiles' in action && action.onlyTiles && 'list' in action.onlyTiles && action.onlyTiles.list) {
         // addPower, immediatelyDestroy
-        tiles = action.limitTo.tiles;
+        tiles = action.onlyTiles.list;
       } else {
         tiles = [];
       }
@@ -123,15 +123,15 @@ export const getCardHasSpecialEffect = (effects: CardDefinition['effects']) => {
 export function withReversedVectors(card: CardDefinition): CardDefinition {
   return produce(card, (draft) => {
     draft.effects = draft.effects?.map((effect) => {
-      if ('limitTo' in effect.trigger) {
-        let tiles: Array<Vector2> | null = effect.trigger.limitTo?.tiles ?? null;
+      if ('onlyTiles' in effect.trigger) {
+        let tiles: Array<Vector2> | null = effect.trigger.onlyTiles?.list ?? null;
         if (tiles) {
-          effect.trigger.limitTo!.tiles = tiles.map((vector: Vector2) => invertVector2(vector));
+          effect.trigger.onlyTiles!.list = tiles.map((vector: Vector2) => invertVector2(vector));
         }
       }
       effect.actions = effect.actions.map((action) => {
-        if ('limitTo' in action && action.limitTo && 'tiles' in action.limitTo && action.limitTo.tiles) {
-          action.limitTo.tiles = action.limitTo.tiles.map((tile: Vector2) => invertVector2(tile));
+        if ('onlyTiles' in action && action.onlyTiles && 'list' in action.onlyTiles && action.onlyTiles.list) {
+          action.onlyTiles.list = action.onlyTiles.list.map((tile: Vector2) => invertVector2(tile));
         }
         if ('cardDefinition' in action) {
           action.cardDefinition = withReversedVectors(action.cardDefinition);

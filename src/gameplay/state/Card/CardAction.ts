@@ -1,6 +1,6 @@
 import { Vector2 } from '@/utils/vector';
 import { CardDefinition } from './Card';
-import { CardEffectFilters } from './CardEffectFilters';
+import { CardEffectFilters, TileSelector } from './CardEffectFilters';
 
 export type CardAction =
   | CardAction.AddControlledPips
@@ -10,10 +10,14 @@ export type CardAction =
   | CardAction.AddScoreBonusForPlayer
   | CardAction.SpawnCardsOnCapturedTiles;
 
+type CardActionTileSelector = TileSelector & {
+  // match the card that emitted the event that triggered us
+  eventSource?: boolean;
+};
+
 export type CardActionFilters = CardEffectFilters & {
-  limitTo?: CardEffectFilters['limitTo'] & {
-    eventSource?: boolean;
-  };
+  onlyTiles?: CardActionTileSelector;
+  excludeTiles?: CardActionTileSelector;
 };
 
 export namespace CardAction {

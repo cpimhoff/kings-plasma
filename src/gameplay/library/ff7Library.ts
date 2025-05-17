@@ -44,8 +44,8 @@ export namespace FF7Library {
     effects: [
       CardEffect.onThisPlayed(
         CardEffect.addPower(-4, {
-          limitTo: {
-            tiles: [{ dx: 2, dy: 0 }],
+          onlyTiles: {
+            list: [{ dx: 2, dy: 0 }],
           },
           allegiance: 'opponent',
         }),
@@ -94,8 +94,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-3, {
-          limitTo: {
-            tiles: [{ dx: 1, dy: -1 }],
+          onlyTiles: {
+            list: [{ dx: 1, dy: -1 }],
           },
         }),
       ),
@@ -140,8 +140,8 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+1, {
-        limitTo: {
-          tiles: [{ dx: 0, dy: -1 }],
+        onlyTiles: {
+          list: [{ dx: 0, dy: -1 }],
         },
         allegiance: 'allied',
       }),
@@ -202,8 +202,8 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+3, {
-        limitTo: {
-          tiles: [{ dx: 1, dy: -2 }],
+        onlyTiles: {
+          list: [{ dx: 1, dy: -2 }],
         },
         allegiance: 'allied',
       }),
@@ -223,8 +223,8 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [{ dx: 0, dy: 1 }],
+        onlyTiles: {
+          list: [{ dx: 0, dy: 1 }],
         },
         allegiance: 'allied',
       }),
@@ -338,8 +338,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-3, {
-          limitTo: {
-            tiles: [{ dx: 1, dy: 0 }],
+          onlyTiles: {
+            list: [{ dx: 1, dy: 0 }],
           },
           allegiance: 'opponent',
         }),
@@ -371,8 +371,8 @@ export namespace FF7Library {
     effects: [
       CardEffect.onThisPlayed(
         CardEffect.addPower(-3, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 2, dy: 2 },
               { dx: 2, dy: -2 },
             ],
@@ -410,8 +410,8 @@ export namespace FF7Library {
         { dx: 1, dy: -1 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+3, {
-        limitTo: {
-          tiles: [{ dx: -1, dy: 0 }],
+        onlyTiles: {
+          list: [{ dx: -1, dy: 0 }],
         },
         allegiance: 'allied',
       }),
@@ -430,8 +430,8 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 1, dy: 0 },
             { dx: 0, dy: -2 },
           ],
@@ -455,8 +455,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 1 },
               { dx: 0, dy: -1 },
             ],
@@ -479,8 +479,8 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.passiveBoardPowerChange(-1, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 0, dy: 1 },
             { dx: 1, dy: 1 },
             { dx: 0, dy: -1 },
@@ -503,8 +503,8 @@ export namespace FF7Library {
         { dx: 0, dy: -2 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+1, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 0, dy: 1 },
             { dx: 0, dy: -1 },
           ],
@@ -528,8 +528,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-3, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 0 },
               { dx: 1, dy: -1 },
             ],
@@ -556,8 +556,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(-3, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: -1, dy: 0 },
               { dx: -1, dy: -1 },
@@ -581,8 +581,8 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [{ dx: 0, dy: -1 }],
+        onlyTiles: {
+          list: [{ dx: 0, dy: -1 }],
         },
         allegiance: 'allied',
       }),
@@ -607,7 +607,7 @@ export namespace FF7Library {
           {
             id: 'addPower',
             amount: +1,
-            limitTo: {
+            onlyTiles: {
               self: true,
             },
           },
@@ -629,8 +629,8 @@ export namespace FF7Library {
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+4, {
-        limitTo: {
-          tiles: [{ dx: 0, dy: 1 }],
+        onlyTiles: {
+          list: [{ dx: 0, dy: 1 }],
         },
         allegiance: 'allied',
       }),
@@ -651,8 +651,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-2, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: -1 },
               { dx: 1, dy: -2 },
             ],
@@ -672,7 +672,7 @@ export namespace FF7Library {
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       {
         trigger: { id: 'onDestroy', allegiance: 'allied' },
-        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +2 }],
+        actions: [{ id: 'addPower', onlyTiles: { self: true }, amount: +2 }],
       },
     ],
     description: `When allied cards are destroyed, raise this card's power by 2.`,
@@ -690,8 +690,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(+3, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 1 },
               { dx: 1, dy: 0 },
             ],
@@ -715,8 +715,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(-4, {
-          limitTo: {
-            tiles: [{ dx: 2, dy: 0 }],
+          onlyTiles: {
+            list: [{ dx: 2, dy: 0 }],
           },
         }),
       ),
@@ -736,7 +736,7 @@ export namespace FF7Library {
       ]),
       {
         trigger: { id: 'onPlay', allegiance: 'opponent' }, // TODO: what about enemy cards played by enemy cards?
-        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +1 }],
+        actions: [{ id: 'addPower', onlyTiles: { self: true }, amount: +1 }],
       },
     ],
     description: `When enemy cards are played from hand, raise this card's power by 1.`,
@@ -751,8 +751,8 @@ export namespace FF7Library {
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       CardEffect.onThisPlayed({
         id: 'immediatelyDestroy',
-        limitTo: {
-          tiles: [{ dx: 1, dy: 0 }],
+        onlyTiles: {
+          list: [{ dx: 1, dy: 0 }],
         },
       }),
     ],
@@ -807,8 +807,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(-4, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: 0, dy: 1 },
               { dx: 1, dy: 1 },
@@ -853,7 +853,7 @@ export namespace FF7Library {
       ]),
       {
         trigger: { id: 'onDestroy', allegiance: 'opponent' },
-        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +1 }],
+        actions: [{ id: 'addPower', onlyTiles: { self: true }, amount: +1 }],
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 1.`,
@@ -872,7 +872,7 @@ export namespace FF7Library {
       ]),
       {
         trigger: { id: 'onDestroy', allegiance: 'opponent' },
-        actions: [{ id: 'addPower', limitTo: { self: true }, amount: +2 }],
+        actions: [{ id: 'addPower', onlyTiles: { self: true }, amount: +2 }],
       },
     ],
     description: `When enemy cards are destroyed, raise this card's power by 2.`,
@@ -892,8 +892,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 2 },
               { dx: 1, dy: 2 },
               { dx: 0, dy: -2 },
@@ -944,7 +944,7 @@ export namespace FF7Library {
         actions: [
           {
             id: 'addPower',
-            limitTo: {
+            onlyTiles: {
               self: true,
             },
             amount: +1,
@@ -968,7 +968,7 @@ export namespace FF7Library {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'increasing',
@@ -976,8 +976,8 @@ export namespace FF7Library {
         actions: [
           {
             id: 'addPower',
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 0, dy: 1 },
                 { dx: 0, dy: 2 },
               ],
@@ -1006,8 +1006,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(+2, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 2 },
               { dx: 2, dy: 2 },
               { dx: 2, dy: 0 },
@@ -1039,7 +1039,7 @@ export namespace FF7Library {
         trigger: {
           id: 'onPowerChange',
           changeDirection: 'increasing',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
         },
@@ -1047,8 +1047,8 @@ export namespace FF7Library {
           {
             id: 'addPower',
             amount: -2,
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 1, dy: -1 },
                 { dx: 1, dy: -2 },
               ],
@@ -1147,8 +1147,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-6, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 1 },
               { dx: 1, dy: 0 },
               { dx: 1, dy: -1 },
@@ -1205,8 +1205,8 @@ export namespace FF7Library {
                   ]),
                   CardEffect.onThisDestroyed(
                     CardEffect.addPower(5, {
-                      limitTo: {
-                        tiles: [
+                      onlyTiles: {
+                        list: [
                           { dx: -1, dy: 1 },
                           { dx: 0, dy: 1 },
                           { dx: 1, dy: 1 },
@@ -1252,8 +1252,8 @@ export namespace FF7Library {
               { dx: 1, dy: 0 },
             ]),
             ...CardEffect.passiveBoardPowerChange(-2, {
-              limitTo: {
-                tiles: [
+              onlyTiles: {
+                list: [
                   { dx: -1, dy: 0 },
                   { dx: 1, dy: 0 },
                 ],
@@ -1285,7 +1285,7 @@ export namespace FF7Library {
         },
         actions: [
           CardEffect.addPower(1, {
-            limitTo: {
+            onlyTiles: {
               self: true,
             },
           }),
@@ -1309,8 +1309,8 @@ export namespace FF7Library {
         CardEffect.addPower(
           +1,
           {
-            limitTo: {
-              tiles: [{ dx: 1, dy: 1 }],
+            onlyTiles: {
+              list: [{ dx: 1, dy: 1 }],
             },
           },
           'replaced',
@@ -1333,8 +1333,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed({
         id: 'immediatelyDestroy',
-        limitTo: {
-          tiles: [{ dx: 1, dy: -1 }],
+        onlyTiles: {
+          list: [{ dx: 1, dy: -1 }],
         },
         allegiance: 'opponent',
       }),
@@ -1355,15 +1355,15 @@ export namespace FF7Library {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'decreasing',
         },
         actions: [
           CardEffect.addPower(-2, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 1, dy: 1 },
                 { dx: 1, dy: 2 },
               ],
@@ -1389,8 +1389,8 @@ export namespace FF7Library {
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: 0, dy: 1 },
               { dx: -1, dy: 0 },
@@ -1417,15 +1417,15 @@ export namespace FF7Library {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'decreasing',
         },
         actions: [
           CardEffect.addPower(+4, {
-            limitTo: {
-              tiles: [{ dx: 0, dy: -1 }],
+            onlyTiles: {
+              list: [{ dx: 0, dy: -1 }],
             },
             allegiance: 'allied',
           }),
@@ -1451,15 +1451,15 @@ export namespace FF7Library {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'decreasing',
         },
         actions: [
           CardEffect.addPower(-2, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 1, dy: 1 },
                 { dx: 1, dy: 0 },
                 { dx: 1, dy: -1 },
@@ -1483,15 +1483,15 @@ export namespace FF7Library {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'increasing',
         },
         actions: [
           CardEffect.addPower(-4, {
-            limitTo: {
-              tiles: [{ dx: 1, dy: 0 }],
+            onlyTiles: {
+              list: [{ dx: 1, dy: 0 }],
             },
             allegiance: 'opponent',
           }),
@@ -1513,16 +1513,16 @@ export namespace FF7Library {
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.addPowerToTargetsWhileHasPowerStatus(+4, 'empowered', {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 0, dy: 1 },
             { dx: 0, dy: -1 },
           ],
         },
       }),
       ...CardEffect.addPowerToTargetsWhileHasPowerStatus(-4, 'enfeebled', {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 0, dy: 1 },
             { dx: 0, dy: -1 },
           ],
@@ -1547,8 +1547,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           -1,
           {
-            limitTo: {
-              tiles: [{ dx: 1, dy: -1 }],
+            onlyTiles: {
+              list: [{ dx: 1, dy: -1 }],
             },
           },
           'replaced',
@@ -1571,6 +1571,9 @@ Enfeebled: lower their power by 4.`,
         { dx: -1, dy: -1 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(+2, {
+        excludeTiles: {
+          self: true,
+        },
         allegiance: 'allied',
         powerStatus: {
           enfeebled: true,
@@ -1610,8 +1613,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-4, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 1 },
               { dx: 1, dy: 0 },
               { dx: 0, dy: -1 },
@@ -1654,8 +1657,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 1 },
               { dx: 1, dy: 0 },
               { dx: 0, dy: -1 },
@@ -1681,8 +1684,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 2 },
               { dx: 1, dy: 1 },
               { dx: 1, dy: 0 },
@@ -1709,6 +1712,9 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        excludeTiles: {
+          self: true,
+        },
         powerStatus: {
           enfeebled: true,
         },
@@ -1724,6 +1730,9 @@ Enfeebled: lower their power by 4.`,
     basePower: 1,
     effects: [
       ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        excludeTiles: {
+          self: true,
+        },
         powerStatus: {
           empowered: true,
           enfeebled: true,
@@ -1747,8 +1756,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           +1,
           {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 0, dy: 2 },
                 { dx: 0, dy: -2 },
               ],
@@ -1775,8 +1784,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           -1,
           {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 0, dy: 1 },
                 { dx: 0, dy: -1 },
               ],
@@ -1797,8 +1806,8 @@ Enfeebled: lower their power by 4.`,
     effects: [
       CardEffect.onThisPlayedAddPips([{ dx: 1, dy: 0 }]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 0, dy: 2 },
             { dx: 0, dy: -2 },
           ],
@@ -1821,8 +1830,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+3, {
-        limitTo: {
-          tiles: [{ dx: 0, dy: 2 }],
+        onlyTiles: {
+          list: [{ dx: 0, dy: 2 }],
         },
         allegiance: 'allied',
       }),
@@ -1845,8 +1854,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           -1,
           {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 1, dy: 2 },
                 { dx: 1, dy: -2 },
               ],
@@ -1874,15 +1883,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'increasing',
         },
         actions: [
           CardEffect.addPower(+4, {
-            limitTo: {
-              tiles: [{ dx: 1, dy: 0 }],
+            onlyTiles: {
+              list: [{ dx: 1, dy: 0 }],
             },
             allegiance: 'allied',
           }),
@@ -1901,8 +1910,8 @@ Enfeebled: lower their power by 4.`,
     effects: [
       CardEffect.onThisDestroyed(
         CardEffect.addPower(+3, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -2, dy: 2 },
               { dx: 0, dy: 2 },
               { dx: 2, dy: 2 },
@@ -1928,8 +1937,8 @@ Enfeebled: lower their power by 4.`,
     effects: [
       CardEffect.onThisPlayed(
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: 0, dy: 1 },
               { dx: 1, dy: 1 },
@@ -1997,15 +2006,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           powerLevel: 7,
         },
         actions: [
           CardEffect.addPower(+2, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 1, dy: 0 },
                 { dx: 1, dy: -1 },
                 { dx: 0, dy: -1 },
@@ -2037,8 +2046,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-8, {
-          limitTo: {
-            tiles: [{ dx: 2, dy: 0 }],
+          onlyTiles: {
+            list: [{ dx: 2, dy: 0 }],
           },
           allegiance: 'opponent',
         }),
@@ -2088,8 +2097,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+3, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -1, dy: 0 },
             { dx: 1, dy: 0 },
           ],
@@ -2114,15 +2123,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'decreasing',
         },
         actions: [
           CardEffect.addPower(-2, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 0, dy: 2 },
                 { dx: 2, dy: 2 },
                 { dx: 2, dy: 0 },
@@ -2159,8 +2168,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           -1,
           {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 0, dy: 1 },
                 { dx: 1, dy: 1 },
                 { dx: 1, dy: 0 },
@@ -2202,8 +2211,8 @@ Enfeebled: lower their power by 4.`,
               { dx: 1, dy: 0 },
             ]),
             ...CardEffect.passiveBoardPowerChange(+3, {
-              limitTo: {
-                tiles: [{ dx: -1, dy: 0 }],
+              onlyTiles: {
+                list: [{ dx: -1, dy: 0 }],
               },
               allegiance: 'allied',
             }),
@@ -2271,8 +2280,8 @@ Enfeebled: lower their power by 4.`,
           effects: [
             CardEffect.onThisPlayed(
               CardEffect.addPower(-1, {
-                limitTo: {
-                  tiles: [
+                onlyTiles: {
+                  list: [
                     { dx: 0, dy: 2 },
                     { dx: 1, dy: 2 },
                     { dx: 2, dy: 1 },
@@ -2308,6 +2317,9 @@ Enfeebled: lower their power by 4.`,
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(+2, {
+        excludeTiles: {
+          self: true,
+        },
         powerStatus: {
           empowered: true,
         },
@@ -2360,8 +2372,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-3, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 1 },
               { dx: 2, dy: 2 },
               { dx: 1, dy: -1 },
@@ -2416,8 +2428,8 @@ Enfeebled: lower their power by 4.`,
         },
         actions: [
           CardEffect.addPower(-5, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: -1, dy: 0 },
                 { dx: 1, dy: 1 },
                 { dx: 1, dy: -1 },
@@ -2470,8 +2482,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisDestroyed(
         CardEffect.addPower(+5, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: 1, dy: 1 },
               { dx: 1, dy: -1 },
@@ -2499,8 +2511,8 @@ Enfeebled: lower their power by 4.`,
         { dx: -2, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(-3, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -2, dy: 2 },
             { dx: 0, dy: 2 },
             { dx: 2, dy: 2 },
@@ -2531,6 +2543,9 @@ Enfeebled: lower their power by 4.`,
         { dx: -1, dy: 0 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(+3, {
+        excludeTiles: {
+          self: true,
+        },
         powerStatus: {
           enfeebled: true,
         },
@@ -2556,8 +2571,8 @@ Enfeebled: lower their power by 4.`,
       ]),
       CardEffect.onThisPlayed(
         CardEffect.addPower(-5, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 0 },
               { dx: 2, dy: 0 },
             ],
@@ -2586,8 +2601,8 @@ Enfeebled: lower their power by 4.`,
             effects: [
               CardEffect.onThisDestroyed(
                 CardEffect.addPower(+numPips, {
-                  limitTo: {
-                    tiles: [
+                  onlyTiles: {
+                    list: [
                       { dx: 0, dy: 1 },
                       { dx: 1, dy: 1 },
                       { dx: 1, dy: 0 },
@@ -2619,8 +2634,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           -1,
           {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: -2, dy: 2 },
                 { dx: 2, dy: 2 },
                 { dx: 2, dy: -2 },
@@ -2648,6 +2663,9 @@ Enfeebled: lower their power by 4.`,
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        excludeTiles: {
+          self: true,
+        },
         powerStatus: {
           empowered: true,
         },
@@ -2727,8 +2745,8 @@ Enfeebled: lower their power by 4.`,
             CardEffect.onThisPlayedAddPips([{ dx: 2, dy: 2 }]),
             CardEffect.onThisPlayed(
               CardEffect.addPower(-4, {
-                limitTo: {
-                  tiles: [{ dx: 2, dy: 2 }],
+                onlyTiles: {
+                  list: [{ dx: 2, dy: 2 }],
                 },
                 allegiance: 'opponent',
               }),
@@ -2744,8 +2762,8 @@ Enfeebled: lower their power by 4.`,
           effects: [
             CardEffect.onThisPlayedAddPips([{ dx: 1, dy: -1 }]),
             ...CardEffect.passiveBoardPowerChange(+2, {
-              limitTo: {
-                tiles: [
+              onlyTiles: {
+                list: [
                   { dx: 1, dy: -1 },
                   { dx: 1, dy: -2 },
                 ],
@@ -2768,8 +2786,8 @@ Enfeebled: lower their power by 4.`,
     basePower: 1,
     effects: [
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -1, dy: 1 },
             { dx: -1, dy: -1 },
             { dx: 1, dy: 1 },
@@ -2799,15 +2817,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'decreasing',
         },
         actions: [
           CardEffect.addPower(-6, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: -2, dy: 2 },
                 { dx: -2, dy: -2 },
                 { dx: -1, dy: 2 },
@@ -2845,7 +2863,7 @@ Enfeebled: lower their power by 4.`,
         },
         actions: [
           CardEffect.addPower(+1, {
-            limitTo: {
+            onlyTiles: {
               self: true,
             },
           }),
@@ -2889,8 +2907,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: -1 },
       ]),
       ...CardEffect.passiveBoardPowerChange(-1, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -1, dy: 1 },
             { dx: -1, dy: 0 },
             { dx: -1, dy: -1 },
@@ -2922,15 +2940,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'increasing',
         },
         actions: [
           CardEffect.addPower(-4, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: -2, dy: 2 },
                 { dx: -2, dy: 1 },
                 { dx: -2, dy: -1 },
@@ -2964,8 +2982,8 @@ Enfeebled: lower their power by 4.`,
           { dx: 1, dy: -1 },
         ]),
         CardEffect.addPower(-4, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: -1, dy: -1 },
               { dx: 1, dy: 1 },
@@ -2996,8 +3014,8 @@ Enfeebled: lower their power by 4.`,
         ]),
         {
           id: 'immediatelyDestroy',
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 2 },
               { dx: 1, dy: -2 },
             ],
@@ -3023,8 +3041,8 @@ Enfeebled: lower their power by 4.`,
           { dx: 2, dy: -1 },
         ]),
         CardEffect.addPower(-5, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 1, dy: 2 },
               { dx: 1, dy: -2 },
               { dx: 2, dy: 1 },
@@ -3056,7 +3074,7 @@ Enfeebled: lower their power by 4.`,
         },
         actions: [
           CardEffect.addPower(+2, {
-            limitTo: {
+            onlyTiles: {
               self: true,
             },
           }),
@@ -3080,8 +3098,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+3, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -2, dy: 2 },
             { dx: -2, dy: 0 },
             { dx: -2, dy: -2 },
@@ -3117,8 +3135,8 @@ Enfeebled: lower their power by 4.`,
         },
         actions: [
           CardEffect.addPower(-5, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: -1, dy: 0 },
                 { dx: 0, dy: 1 },
                 { dx: 0, dy: -1 },
@@ -3148,8 +3166,8 @@ Enfeebled: lower their power by 4.`,
         CardEffect.addPower(
           +1,
           {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: 0, dy: 1 },
                 { dx: 0, dy: -1 },
               ],
@@ -3174,8 +3192,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 1 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+3, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -1, dy: -1 },
             { dx: -1, dy: -2 },
           ],
@@ -3206,8 +3224,8 @@ Enfeebled: lower their power by 4.`,
               { dx: 1, dy: -1 },
             ]),
             ...CardEffect.passiveBoardPowerChange(+3, {
-              limitTo: {
-                tiles: [
+              onlyTiles: {
+                list: [
                   { dx: 1, dy: 2 },
                   { dx: 1, dy: -2 },
                 ],
@@ -3225,8 +3243,8 @@ Enfeebled: lower their power by 4.`,
           effects: [
             CardEffect.onThisPlayed(CardEffect.addPips([{ dx: 1, dy: 0 }]), {
               id: 'immediatelyDestroy',
-              limitTo: {
-                tiles: [{ dx: 1, dy: 0 }],
+              onlyTiles: {
+                list: [{ dx: 1, dy: 0 }],
               },
               allegiance: 'opponent',
             }),
@@ -3254,8 +3272,8 @@ Enfeebled: lower their power by 4.`,
           { dx: 2, dy: 0 },
         ]),
         CardEffect.addPower(-4, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: 0, dy: 2 },
               { dx: 0, dy: -2 },
               { dx: 1, dy: 1 },
@@ -3287,14 +3305,14 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onDestroy',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
         },
         actions: [
           CardEffect.addPower(-9, {
-            limitTo: {
-              tiles: [
+            onlyTiles: {
+              list: [
                 { dx: -1, dy: 1 },
                 { dx: -1, dy: 0 },
                 { dx: -1, dy: -1 },
@@ -3323,8 +3341,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -1, dy: -1 },
             { dx: 0, dy: -2 },
           ],
@@ -3347,8 +3365,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: -1, dy: 1 },
             { dx: 0, dy: 2 },
           ],
@@ -3370,15 +3388,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'increasing',
         },
         actions: [
           CardEffect.addPower(-99, {
-            limitTo: {
-              tiles: [{ dx: 1, dy: 0 }],
+            onlyTiles: {
+              list: [{ dx: 1, dy: 0 }],
             },
           }),
         ],
@@ -3402,15 +3420,15 @@ Enfeebled: lower their power by 4.`,
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           changeDirection: 'increasing',
         },
         actions: [
           CardEffect.addPower(+4, {
-            limitTo: {
-              tiles: [{ dx: 2, dy: 0 }],
+            onlyTiles: {
+              list: [{ dx: 2, dy: 0 }],
             },
           }),
         ],
@@ -3455,8 +3473,8 @@ Enfeebled: lower their power by 4.`,
           { dx: 1, dy: 0 },
         ]),
         CardEffect.addPower(-1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -2, dy: 2 },
               { dx: -2, dy: 0 },
               { dx: -2, dy: -2 },
@@ -3498,8 +3516,8 @@ Enfeebled: lower their power by 4.`,
             basePower: 1,
             effects: [
               ...CardEffect.passiveBoardPowerChange(+numPips, {
-                limitTo: {
-                  tiles: [
+                onlyTiles: {
+                  list: [
                     { dx: -2, dy: 2 },
                     { dx: -2, dy: 0 },
                     { dx: -2, dy: -2 },
@@ -3579,8 +3597,8 @@ Enfeebled: lower their power by 4.`,
         { dx: 0, dy: -1 },
       ]),
       ...CardEffect.passiveBoardPowerChange(+2, {
-        limitTo: {
-          tiles: [
+        onlyTiles: {
+          list: [
             { dx: 1, dy: 1 },
             { dx: 1, dy: -1 },
             { dx: 2, dy: 1 },
@@ -3623,8 +3641,8 @@ Enfeebled: lower their power by 4.`,
     effects: [
       CardEffect.onThisPlayed(
         CardEffect.addPower(+1, {
-          limitTo: {
-            tiles: [
+          onlyTiles: {
+            list: [
               { dx: -1, dy: 1 },
               { dx: -1, dy: 0 },
               { dx: -1, dy: -1 },
@@ -3673,6 +3691,9 @@ Enfeebled: lower their power by 4.`,
         { dx: 1, dy: 0 },
       ]),
       ...CardEffect.scalePowerByNumMatchingCards(+1, {
+        excludeTiles: {
+          self: true,
+        },
         powerStatus: {
           empowered: true,
         },

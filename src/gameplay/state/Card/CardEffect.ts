@@ -18,14 +18,14 @@ export namespace CardEffect {
 
   export function onThisPlayed(...actions: CardAction[]): CardEffect {
     return {
-      trigger: { id: 'onPlay', limitTo: { self: true } },
+      trigger: { id: 'onPlay', onlyTiles: { self: true } },
       actions,
     };
   }
 
   export function onThisDestroyed(...actions: CardAction[]): CardEffect {
     return {
-      trigger: { id: 'onDestroy', limitTo: { self: true } },
+      trigger: { id: 'onDestroy', onlyTiles: { self: true } },
       actions,
     };
   }
@@ -46,7 +46,7 @@ export namespace CardEffect {
         trigger: { id: 'onPlay', ...targets },
         actions: [
           addPower(amount, {
-            limitTo: {
+            onlyTiles: {
               eventSource: true,
             },
           }),
@@ -73,7 +73,7 @@ export namespace CardEffect {
       actions: [
         {
           id: 'addPower',
-          limitTo: { self: true },
+          onlyTiles: { self: true },
           amount: baseAmount,
         },
       ],
@@ -151,7 +151,7 @@ export namespace CardEffect {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           powerStatusChange: {
@@ -171,12 +171,12 @@ export namespace CardEffect {
           CardEffect.addPower(
             amount,
             {
-              limitTo: {
+              onlyTiles: {
                 eventSource: true,
               },
             },
             {
-              limitTo: {
+              onlyTiles: {
                 self: true,
               },
               powerStatus: {
@@ -190,7 +190,7 @@ export namespace CardEffect {
       {
         trigger: {
           id: 'onDestroy',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           powerStatus: {
@@ -203,7 +203,7 @@ export namespace CardEffect {
       {
         trigger: {
           id: 'onPowerChange',
-          limitTo: {
+          onlyTiles: {
             self: true,
           },
           powerStatusChange: {
