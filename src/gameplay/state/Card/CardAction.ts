@@ -8,6 +8,7 @@ export type CardAction =
   | CardAction.ImmediatelyDestroy
   | CardAction.CreateCardForPlayer
   | CardAction.AddScoreBonusForPlayer
+  | CardAction.FoldRowScores
   | CardAction.SpawnCardsOnCapturedTiles;
 
 type CardActionTileSelector = TileSelector & {
@@ -63,6 +64,11 @@ export namespace CardAction {
     player: 'controller' | 'opponent';
     // the bonus amount
     amount: number;
+  };
+
+  /** For each lane, add's the loser's row score to the winner's score bonus. */
+  export type FoldRowScores = {
+    id: 'foldRowScores';
   };
 
   /** Creates cards on the board for the current player at empty captured positions based on the number of pips. */

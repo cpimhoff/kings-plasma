@@ -383,6 +383,16 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
       break;
     }
 
+    case 'foldRowScores': {
+      getRowScores(state).forEach(({ scoreByPlayer, winningPlayerId }) => {
+        if (winningPlayerId) {
+          const rowLoserPlayer = state.players.find((p) => p.id !== winningPlayerId)!;
+          rowLoserPlayer.scoreBonus += scoreByPlayer[winningPlayerId];
+        }
+      });
+      break;
+    }
+
     case 'spawnCardsOnCapturedTiles': {
       const playerId = action.source.controllerPlayerId;
       for (const tile of allBoardTiles(state)) {
@@ -440,6 +450,7 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
   switch (action.id) {
     case 'createCardForPlayer':
     case 'addScoreBonusForPlayer':
+    case 'foldRowScores':
     case 'spawnCardsOnCapturedTiles':
       // these actions don't use this function
       return [];

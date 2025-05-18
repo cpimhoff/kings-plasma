@@ -3702,6 +3702,33 @@ Enfeebled: lower their power by 4.`,
     description: `Raise power by 1 for each other enhanced allied and enemy card.`,
     isLegendary: true,
   };
+
+  export const UltimatePartyAnimal: CardDefinition = {
+    typeId: 'ultimate-party-animal' as CardDefinition['typeId'],
+    name: 'Ultimate Party Animal',
+    playRequirement: 1,
+    basePower: 1,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      {
+        trigger: {
+          id: 'onGameEnd',
+        },
+        actions: [
+          {
+            id: 'foldRowScores',
+          },
+        ],
+      },
+    ],
+    description: `If this card is in play when the round ends, the loser of each lane's score is added to the victor's.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -3844,4 +3871,5 @@ export const FF7_LIBRARY = [
   FF7Library.Skywheel,
   FF7Library.Loveless,
   FF7Library.SaucerSquad,
+  FF7Library.UltimatePartyAnimal,
 ];
