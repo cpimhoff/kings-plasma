@@ -3729,6 +3729,88 @@ Enfeebled: lower their power by 4.`,
     description: `If this card is in play when the round ends, the loser of each lane's score is added to the victor's.`,
     isLegendary: true,
   };
+
+  export const Sephiroth: CardDefinition = {
+    typeId: 'sephiroth' as CardDefinition['typeId'],
+    name: 'Sephiroth',
+    playRequirement: 3,
+    basePower: 4,
+    effects: [
+      CardEffect.onThisPlayed(
+        CardEffect.addPips([
+          { dx: -1, dy: 0 },
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 },
+          { dx: 1, dy: 0 },
+        ]),
+        {
+          id: 'immediatelyDestroy',
+          onlyTiles: {
+            list: [
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+            ],
+          },
+          allegiance: 'opponent',
+        },
+      ),
+    ],
+    description: `When played, destroy enemy cards on affected tiles.`,
+    isLegendary: true,
+  };
+
+  export const EmeraldWitch: CardDefinition = {
+    typeId: 'emerald-witch' as CardDefinition['typeId'],
+    name: 'EmeraldWitch',
+    playRequirement: 2,
+    basePower: 2,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0 },
+      ]),
+      ...CardEffect.passiveBoardPowerChange(+2, {
+        onlyTiles: {
+          list: [
+            { dx: -2, dy: 0 },
+            { dx: -1, dy: 1 },
+            { dx: -1, dy: -1 },
+            { dx: 0, dy: 2 },
+            { dx: 0, dy: -2 },
+            { dx: 1, dy: 1 },
+            { dx: 1, dy: -1 },
+            { dx: 2, dy: 0 },
+          ],
+        },
+      }),
+    ],
+    description: `Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play.`,
+    isLegendary: true,
+  };
+
+  export const ShadowplasmaKing: CardDefinition = {
+    typeId: 'shadowplasma-king' as CardDefinition['typeId'],
+    name: 'Shadowplasma King',
+    playRequirement: 3,
+    basePower: 3,
+    effects: [
+      CardEffect.onThisPlayedAddPips([
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+        { dx: 1, dy: 1 },
+        { dx: 1, dy: -1 },
+      ]),
+      ...CardEffect.scalePowerByNumMatchingCards(+3, {
+        powerStatus: {
+          enfeebled: true,
+        },
+      }),
+    ],
+    description: `Raise power by 3 for each other enfeebled allied card and enemy card.`,
+    isLegendary: true,
+  };
 }
 
 export const FF7_LIBRARY = [
@@ -3872,4 +3954,7 @@ export const FF7_LIBRARY = [
   FF7Library.Loveless,
   FF7Library.SaucerSquad,
   FF7Library.UltimatePartyAnimal,
+  FF7Library.Sephiroth,
+  FF7Library.EmeraldWitch,
+  FF7Library.ShadowplasmaKing,
 ];
