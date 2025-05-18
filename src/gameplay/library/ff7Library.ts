@@ -3761,7 +3761,7 @@ Enfeebled: lower their power by 4.`,
 
   export const EmeraldWitch: CardDefinition = {
     typeId: 'emerald-witch' as CardDefinition['typeId'],
-    name: 'EmeraldWitch',
+    name: 'Emerald Witch',
     playRequirement: 2,
     basePower: 2,
     effects: [
