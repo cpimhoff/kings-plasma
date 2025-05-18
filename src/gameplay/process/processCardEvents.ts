@@ -532,6 +532,7 @@ function findActionTargets(state: GameState, action: TriggeredAction): OccupiedT
           }
         }
       }
+      return true;
     })
     .filter((t) => {
       if (filters.allegiance) {
