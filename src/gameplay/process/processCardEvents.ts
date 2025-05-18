@@ -386,8 +386,9 @@ function processTriggeredCardAction(state: GameState, action: TriggeredAction, e
     case 'foldRowScores': {
       getRowScores(state).forEach(({ scoreByPlayer, winningPlayerId }) => {
         if (winningPlayerId) {
-          const rowLoserPlayer = state.players.find((p) => p.id !== winningPlayerId)!;
-          rowLoserPlayer.scoreBonus += scoreByPlayer[winningPlayerId];
+          const rowWinnerPlayer = getPlayerWithId(state.players, winningPlayerId);
+          const rowLoserPlayerId = state.players.find((p) => p.id !== winningPlayerId)!.id;
+          rowWinnerPlayer.scoreBonus += scoreByPlayer[rowLoserPlayerId];
         }
       });
       break;
